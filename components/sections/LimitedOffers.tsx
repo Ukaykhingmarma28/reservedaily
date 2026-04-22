@@ -120,7 +120,6 @@ export function LimitedOffers() {
             </div>
             <h2
               className="ff text-[clamp(28px,7vw,38px)] lg:text-[clamp(36px,3.8vw,54px)] font-normal text-ink tracking-[-0.02em] leading-[1.02] mb-0 lg:mb-3.5"
-              style={{ fontVariationSettings: '"opsz" 144' }}
             >
               Flash offers, <span className="ff text-moss">handpicked</span>.
             </h2>
@@ -162,7 +161,6 @@ export function LimitedOffers() {
               </div>
               <h3
                 className="ff text-[34px] font-normal text-cream tracking-[-0.025em] leading-[1.02] mb-3.5"
-                style={{ fontVariationSettings: '"opsz" 144' }}
               >
                 Flash offers,
                 <br />

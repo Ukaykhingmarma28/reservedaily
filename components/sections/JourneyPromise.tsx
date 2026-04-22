@@ -26,7 +26,6 @@ export function JourneyPromise() {
             </div>
             <h2
               className="ff text-[clamp(28px,7vw,38px)] lg:text-[clamp(40px,4vw,58px)] font-normal text-ink tracking-[-0.025em] leading-tight text-balance"
-              style={{ fontVariationSettings: '"opsz" 144' }}
             >
               Your wellness <span className="ff text-moss">recovery</span> partner.
             </h2>
@@ -63,7 +62,6 @@ export function JourneyPromise() {
             <div className="relative z-[1] shrink-0">
               <div
                 className="ff text-[52px] font-normal tracking-[-0.04em] leading-[0.9]"
-                style={{ fontVariationSettings: '"opsz" 144' }}
               >
                 99
                 <span className="text-[0.45em] align-top ml-0.5">%</span>
@@ -91,7 +89,6 @@ export function JourneyPromise() {
               <div>
                 <div
                   className="ff text-[17px] font-normal tracking-[-0.02em] text-ink leading-[1.15] mb-1.5"
-                  style={{ fontVariationSettings: '"opsz" 144' }}
                 >
                   {p.t}
                 </div>
@@ -113,7 +110,6 @@ export function JourneyPromise() {
               </div>
               <div
                 className="ff text-[22px] font-normal tracking-[-0.02em] text-ink leading-[1.15]"
-                style={{ fontVariationSettings: '"opsz" 144' }}
               >
                 {p.t}
               </div>
@@ -147,7 +143,6 @@ export function JourneyPromise() {
               </div>
               <div
                 className="ff text-[clamp(64px,5vw,80px)] font-normal tracking-[-0.04em] leading-[0.9]"
-                style={{ fontVariationSettings: '"opsz" 144' }}
               >
                 99
                 <span className="text-[0.45em] align-top ml-0.5">%</span>

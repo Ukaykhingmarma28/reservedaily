@@ -18,7 +18,6 @@ export function TrustStats() {
           >
             <div
               className="ff text-[clamp(36px,3vw,48px)] font-normal tracking-[-0.03em] leading-none text-ink"
-              style={{ fontVariationSettings: '"opsz" 144' }}
             >
               {s.n}
             </div>

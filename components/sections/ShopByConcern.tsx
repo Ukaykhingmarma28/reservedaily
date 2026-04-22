@@ -137,6 +137,19 @@ function SpinningDNA() {
 type Concern = { name: string; count: number; match: string };
 type Group = { group: string; short: string; Icon: React.ComponentType<{ size?: number }>; concerns: Concern[] };
 
+const CLICKS_KEY = "rd-concern-clicks";
+
+function getClickCounts(): Record<string, number> {
+  try { return JSON.parse(localStorage.getItem(CLICKS_KEY) || "{}"); }
+  catch { return {}; }
+}
+
+function trackClick(name: string) {
+  const counts = getClickCounts();
+  counts[name] = (counts[name] || 0) + 1;
+  localStorage.setItem(CLICKS_KEY, JSON.stringify(counts));
+}
+
 const groups: Group[] = [
   {
     group: "Anti Aging & Aesthetics",
@@ -219,8 +232,30 @@ const groups: Group[] = [
 ];
 
 export function ShopByConcern() {
-  const [active, setActive] = useState(0);
-  const cur = groups[active];
+  const [sortedConcerns, setSortedConcerns] = useState<Concern[]>(() =>
+    groups.flatMap((g) => g.concerns)
+  );
+  const [query, setQuery] = useState("");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const counts = getClickCounts();
+    if (Object.keys(counts).length > 0) {
+      const all = groups.flatMap((g) => g.concerns);
+      all.sort((a, b) => (counts[b.name] || 0) - (counts[a.name] || 0));
+      setSortedConcerns(all);
+    }
+    setIsMobile(window.innerWidth < 1024);
+  }, []);
+
+  const filtered = query.trim()
+    ? sortedConcerns.filter((c) =>
+        c.name.toLowerCase().includes(query.toLowerCase()) ||
+        c.match.toLowerCase().includes(query.toLowerCase())
+      )
+    : sortedConcerns;
+
+  const displayed = filtered.slice(0, 18);
 
   return (
     <section className="relative bg-cream border-b border-line-2 overflow-hidden">
@@ -253,92 +288,70 @@ export function ShopByConcern() {
           </circle>
         ))}
       </svg>
-      <div className="relative z-[1] max-w-[1400px] mx-auto px-6 md:px-10 py-10 lg:py-16">
-        <div className="flex flex-col items-center text-center mb-6 lg:mb-9 gap-4 lg:gap-5">
-          <div>
-            <div className="text-[11px] text-moss tracking-[0.18em] uppercase font-semibold mb-4">
-             , Shop by concern
-            </div>
-            <h2
-              className="ff text-[clamp(28px,7vw,38px)] lg:text-[clamp(38px,4vw,58px)] font-normal text-ink tracking-[-0.025em] leading-[1.02]"
-              style={{ fontVariationSettings: '"opsz" 144' }}
-            >
-              Tell us what&apos;s on your mind.
-              <br />
-              <span className="ff text-moss">We&apos;ll show you the path.</span>
-            </h2>
-          </div>
-          <div className="flex items-center bg-paper border border-line px-3 py-2.5 lg:px-5 lg:py-3.5 gap-2 lg:gap-3 w-full lg:w-[560px]">
+
+      <div className="relative z-[1] max-w-[1400px] mx-auto px-6 md:px-10 py-8 lg:py-20">
+        <div className="flex flex-col items-center text-center mb-5 lg:mb-12 gap-3 lg:gap-6">
+          <h2
+            className="ff text-[22px] lg:text-[clamp(38px,4vw,58px)] font-normal text-ink tracking-[-0.025em] leading-[1.1]"
+          >
+            What&apos;s on your mind?
+            <br className="hidden lg:block" />
+            <span className="lg:hidden"> </span>
+            <span className="ff text-moss">We&apos;ll show you the path.</span>
+          </h2>
+
+          <div className="flex items-center bg-paper border border-line px-3 py-2.5 lg:px-6 lg:py-4 gap-2 lg:gap-3 w-full max-w-[680px] shadow-sm focus-within:border-moss transition-colors">
             <span className="text-muted">
               <Search size={18} />
             </span>
             <input
-              placeholder="Search your concern, hair loss, anxiety, dark spots, joint pain..."
-              className="flex-1 border-none bg-transparent outline-none text-sm text-ink placeholder:text-muted"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="e.g. hair loss, anxiety, joint pain..."
+              className="flex-1 border-none bg-transparent outline-none text-sm lg:text-base text-ink placeholder:text-muted"
             />
-            <button className="bg-moss text-cream border-none px-3 py-1.5 lg:px-[18px] lg:py-2 text-[10px] lg:text-[11px] font-semibold tracking-[0.1em] cursor-pointer flex items-center gap-1 lg:gap-1.5">
-              FIND <ArrowRight />
-            </button>
+            {query && (
+              <button
+                onClick={() => setQuery("")}
+                className="text-muted hover:text-ink bg-transparent border-none cursor-pointer text-lg leading-none p-0"
+              >
+                &times;
+              </button>
+            )}
           </div>
         </div>
 
-        <div className="flex gap-2 lg:gap-0 overflow-x-auto mb-7 border-b-0 lg:border-b lg:border-line-2 justify-start lg:justify-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-2 lg:pb-0">
-          {groups.map((g, i) => {
-            const Icon = g.Icon;
-            const isActive = active === i;
-            return (
-              <button
-                key={g.group}
-                onClick={() => setActive(i)}
-                className={`cursor-pointer flex items-center transition-colors whitespace-nowrap snap-start px-3 py-2 lg:px-6 lg:pt-3.5 lg:pb-[18px] text-xs lg:text-sm gap-1.5 lg:gap-2.5 rounded-full lg:rounded-none border lg:border-none lg:border-b-2 lg:-mb-px ${
-                  isActive
-                    ? "bg-moss text-cream lg:bg-transparent lg:text-ink font-semibold border-moss lg:border-moss"
-                    : "bg-transparent text-muted font-medium border-line lg:border-transparent"
-                }`}
+        <div className="flex flex-col items-center">
+          <div className="text-[10px] lg:text-xs text-muted font-semibold tracking-[0.12em] uppercase mb-3 lg:mb-4">
+            {query ? `${filtered.length} results` : "Popular"}
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-1.5 lg:gap-2.5 max-w-[900px]">
+            {filtered.slice(0, query ? 18 : isMobile ? 8 : 18).map((c) => (
+              <a
+                key={c.name}
+                href="#"
+                onClick={() => trackClick(c.name)}
+                className="inline-flex items-center gap-1 lg:gap-2 px-3 py-2 lg:px-5 lg:py-3 bg-paper border border-line text-[12px] lg:text-sm font-medium text-ink no-underline whitespace-nowrap transition-all hover:border-moss hover:bg-sage/40 hover:shadow-sm"
               >
-                <span className={isActive ? "text-cream lg:text-moss" : "text-muted"}>
-                  <Icon />
-                </span>
-                <span className="lg:hidden">{g.short}</span>
-                <span className="hidden lg:inline">{g.group}</span>
-                <span className="hidden lg:inline text-[11px] text-muted font-medium">{g.concerns.length}</span>
-              </button>
-            );
-          })}
-        </div>
+                {c.name}
+                <span className="hidden lg:inline text-[11px] text-muted font-normal">{c.count}</span>
+              </a>
+            ))}
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-line-2 border border-line-2">
-          {cur.concerns.map((c) => (
+          <div className="mt-4 lg:mt-8 flex justify-center">
             <a
-              key={c.name}
               href="#"
-              className="bg-cream px-5 py-4 lg:px-6 lg:py-[22px] no-underline text-inherit flex items-center transition-colors min-h-[72px] hover:bg-paper cursor-pointer"
+              className="text-[12px] lg:text-[13px] text-ink font-semibold no-underline border-b border-ink pb-0.5 flex items-center gap-2 hover:text-moss hover:border-moss transition-colors"
             >
-              <div className="flex justify-between items-center w-full h-full">
-                <div className="flex-1 min-w-0">
-                  <h3 className="ff text-lg lg:text-xl font-medium text-ink tracking-[-0.01em] leading-tight m-0">
-                    {c.name}
-                  </h3>
-                  <p className="lg:hidden text-[11px] text-muted mt-0.5 m-0 truncate">
-                    {c.match}
-                  </p>
-                </div>
-                <span className="text-[11px] text-muted whitespace-nowrap ml-4">{c.count} options</span>
-                <span className="text-moss ml-3">
-                  <ArrowRight />
-                </span>
-              </div>
+              VIEW ALL CONCERNS <ArrowRight />
             </a>
-          ))}
-        </div>
+          </div>
 
-        <div className="mt-6 lg:mt-7 flex justify-center">
-          <a
-            href="#"
-            className="text-[13px] text-ink font-semibold no-underline border-b border-ink pb-0.5 flex items-center gap-2"
-          >
-            VIEW ALL 70+ CONCERNS <ArrowRight />
-          </a>
+          {filtered.length === 0 && (
+            <p className="text-sm text-muted mt-2">No concerns match your search. Try a different term.</p>
+          )}
         </div>
       </div>
     </section>

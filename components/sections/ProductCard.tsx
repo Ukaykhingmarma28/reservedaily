@@ -16,8 +16,8 @@ export function ProductCard({ p }: { p: Product }) {
   const displayMeta = v?.meta ?? (isBookable ? p.duration : p.size);
 
   return (
-    <article className="snap-start flex flex-col border border-line-2 p-1.5 lg:p-2.5 bg-paper min-w-0 lg:min-w-[280px] w-full">
-      <div className="aspect-[5/4] bg-cream relative mb-1.5 lg:mb-2.5 overflow-hidden">
+    <article className="snap-start flex flex-col border border-line-2 p-1 lg:p-2.5 bg-paper min-w-0 lg:min-w-[280px] w-full">
+      <div className="aspect-[4/3] lg:aspect-[5/4] bg-cream relative mb-1 lg:mb-2.5 overflow-hidden">
         <div className="absolute inset-0">
           <ArtComp color={p.color} bg="var(--color-cream)" />
         </div>
@@ -43,9 +43,9 @@ export function ProductCard({ p }: { p: Product }) {
         <span className="truncate">{p.location}</span>
       </div>
 
-      <h3 className="ff text-[13px] lg:text-[17px] font-medium text-ink tracking-[-0.01em] mb-1 lg:mb-1.5 leading-tight line-clamp-2">{p.name}</h3>
+      <h3 className="ff text-[11px] lg:text-[17px] font-medium text-ink tracking-[-0.01em] mb-0.5 lg:mb-1.5 leading-tight line-clamp-2">{p.name}</h3>
 
-      <div className="flex items-center gap-1 lg:gap-1.5 mb-1.5 lg:mb-2.5 text-[10px] lg:text-xs text-ink-2">
+      <div className="flex items-center gap-1 lg:gap-1.5 mb-1 lg:mb-2.5 text-[9px] lg:text-xs text-ink-2">
         <span className="text-rust flex gap-px">
           {Array.from({ length: 5 }).map((_, j) => (
             <Star key={j} />
@@ -79,14 +79,14 @@ export function ProductCard({ p }: { p: Product }) {
         </div>
       )}
 
-      <div className="mt-auto pt-2 lg:pt-2.5 border-t border-line-2">
+      <div className="mt-auto pt-1.5 lg:pt-2.5 border-t border-line-2">
         <div className="flex items-end justify-between gap-2.5">
           <div>
-            <div className="text-[8px] lg:text-[9px] text-muted tracking-[0.1em] uppercase mb-px">
+            <div className="text-[7px] lg:text-[9px] text-muted tracking-[0.1em] uppercase mb-px">
               {isBookable ? "From" : "Price"}
             </div>
             <div className="flex items-baseline gap-1 lg:gap-1.5">
-              <span className="ff text-base lg:text-xl font-medium text-ink tracking-[-0.01em] whitespace-nowrap">{displayPrice}</span>
+              <span className="ff text-sm lg:text-xl font-medium text-ink tracking-[-0.01em] whitespace-nowrap">{displayPrice}</span>
               {displayWas && <span className="text-[10px] lg:text-[11px] text-muted line-through hidden lg:inline">{displayWas}</span>}
             </div>
           </div>
@@ -100,7 +100,7 @@ export function ProductCard({ p }: { p: Product }) {
           </button>
         </div>
         <button
-          className={`lg:hidden w-full mt-2 py-2 text-[9px] font-semibold tracking-[0.1em] uppercase cursor-pointer flex items-center justify-center gap-1.5 border transition-colors ${
+          className={`lg:hidden w-full mt-1.5 py-1.5 text-[8px] font-semibold tracking-[0.1em] uppercase cursor-pointer flex items-center justify-center gap-1 border transition-colors ${
             isBookable ? "bg-ink text-cream border-ink" : "bg-transparent text-ink border-ink"
           }`}
         >

@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Figtree, Inter } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
+const figtree = Figtree({
   variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  style: "normal",
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -50,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="en" className={`${figtree.variable} ${inter.variable}`}>
       <body className="min-h-screen bg-cream text-ink antialiased">{children}</body>
     </html>
   );

@@ -1,10 +1,65 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { Cart, Heart, Menu, Search } from "@/components/ui/icons";
 import { CategoriesDropdown } from "./CategoriesDropdown";
 import { MobileMenu } from "./MobileMenu";
+
+function LoginButton() {
+  const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const el = dialogRef.current;
+    if (!el) return;
+    if (open) el.showModal();
+    else el.close();
+  }, [open]);
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="bg-ink text-cream border-none px-[18px] py-2.5 text-xs font-semibold cursor-pointer tracking-[0.03em] rounded-[2px]"
+      >
+        LOGIN
+      </button>
+      <dialog
+        ref={dialogRef}
+        onClose={() => setOpen(false)}
+        className="fixed inset-0 z-[100] m-auto w-[90vw] max-w-[400px] border border-line bg-paper p-0 backdrop:bg-ink/40"
+      >
+        <div className="p-6 lg:p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="ff text-lg lg:text-xl font-medium text-ink m-0">Login</h3>
+            <button
+              onClick={() => setOpen(false)}
+              className="w-8 h-8 flex items-center justify-center bg-transparent border border-line text-ink cursor-pointer hover:bg-sage/40 transition-colors"
+            >
+              &times;
+            </button>
+          </div>
+          <p className="text-sm text-muted mb-6 m-0">Choose how you&apos;d like to sign in</p>
+          <div className="flex flex-col gap-3">
+            <a
+              href="#"
+              className="flex items-center justify-center gap-2 w-full py-3.5 bg-ink text-cream text-sm font-semibold tracking-[0.04em] no-underline transition-colors hover:bg-moss"
+            >
+              Login as Member
+            </a>
+            <a
+              href="#"
+              className="flex items-center justify-center gap-2 w-full py-3.5 bg-transparent text-ink text-sm font-semibold tracking-[0.04em] border border-ink no-underline transition-colors hover:bg-ink hover:text-cream"
+            >
+              Login as Merchant
+            </a>
+          </div>
+        </div>
+      </dialog>
+    </>
+  );
+}
 
 export function Nav() {
   const cartCount = 0;
@@ -107,9 +162,7 @@ export function Nav() {
             <span className="w-px h-3 bg-line" />
             <span className="ff text-ink font-medium text-sm tracking-[-0.01em]">{cartTotal}</span>
           </a>
-          <button className="bg-ink text-cream border-none px-[18px] py-2.5 text-xs font-semibold cursor-pointer tracking-[0.03em] rounded-[2px]">
-            SIGN IN
-          </button>
+          <LoginButton />
         </div>
       </div>
 

@@ -62,7 +62,6 @@ export function Journal() {
             </div>
             <h2
               className="ff text-[clamp(28px,7vw,38px)] lg:text-[clamp(40px,4vw,58px)] font-normal tracking-[-0.025em] leading-tight text-ink text-balance m-0"
-              style={{ fontVariationSettings: '"opsz" 144' }}
             >
               Field notes on <span className="ff text-moss">feeling better</span>.
             </h2>
@@ -118,7 +117,6 @@ export function Journal() {
                 </div>
                 <h3
                   className="ff text-[17px] lg:text-xl font-normal tracking-[-0.02em] leading-[1.2] text-ink text-balance m-0"
-                  style={{ fontVariationSettings: '"opsz" 144' }}
                 >
                   {p.t}
                 </h3>

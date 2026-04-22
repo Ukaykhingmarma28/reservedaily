@@ -172,6 +172,29 @@ export function Menu({ size = 18, ...p }: IconProps) {
   );
 }
 
+export function Spa({ size = 16, ...p }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" {...base(size)} {...p}>
+      <path
+        d="M12 21c-4-4-8-7.5-8-11a8 8 0 0116 0c0 3.5-4 7-8 11z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 13c-2-2-4-3.5-4-5.5a4 4 0 018 0c0 2-2 3.5-4 5.5z"
+        stroke="currentColor"
+        strokeWidth="1.4"
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function Close({ size = 18, ...p }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" {...base(size)} {...p}>

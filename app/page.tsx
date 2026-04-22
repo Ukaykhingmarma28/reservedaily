@@ -5,10 +5,10 @@ import { Hero } from "@/components/sections/Hero";
 import { Marquee } from "@/components/sections/Marquee";
 import { ShopByConcern } from "@/components/sections/ShopByConcern";
 import { ShopByCategory } from "@/components/sections/ShopByCategory";
-import { VitalAI } from "@/components/sections/VitalAI";
 import { FeaturedTreatments } from "@/components/sections/FeaturedTreatments";
 import { LimitedOffers } from "@/components/sections/LimitedOffers";
 import { FeaturedApothecary } from "@/components/sections/FeaturedApothecary";
+import { NewArrivals } from "@/components/sections/NewArrivals";
 import { JourneyPromise } from "@/components/sections/JourneyPromise";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { TrustStats } from "@/components/sections/TrustStats";
@@ -26,10 +26,10 @@ export default function Home() {
       <Marquee />
       <ShopByConcern />
       <ShopByCategory />
-      <VitalAI />
       <FeaturedTreatments />
       <LimitedOffers />
       <FeaturedApothecary />
+      <NewArrivals />
       <JourneyPromise />
       <Testimonials />
       <TrustStats />

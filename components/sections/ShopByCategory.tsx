@@ -1,111 +1,106 @@
-import { ArrowRight, Bolt, Brain, Dna, Droplet, Heart, Leaf } from "@/components/ui/icons";
-import { CellArt } from "@/components/illustrations/CellArt";
-import { LeafArt } from "@/components/illustrations/LeafArt";
+"use client";
+
+import { useRef } from "react";
+import { ArrowRight, Bolt, Brain, Dna, Droplet, Heart, Leaf, Spa } from "@/components/ui/icons";
 
 type Cat = {
   name: string;
-  count: number;
-  price: string;
   Icon: React.ComponentType<{ size?: number }>;
-  bg: string;
   acc: string;
-  art: "cell" | "leaf";
 };
 
 const cats: Cat[] = [
-  { name: "Regen & Functional Care", count: 38, price: "from RM 2,000", Icon: Dna, bg: "#dfe7ec", acc: "var(--color-moss)", art: "cell" },
-  { name: "Anti Aging & Aesthetics", count: 52, price: "from RM 1,200", Icon: Leaf, bg: "#eceff3", acc: "var(--color-rust)", art: "leaf" },
-  { name: "Health Check & Body Insights", count: 24, price: "from RM 200", Icon: Droplet, bg: "#d4dde3", acc: "var(--color-moss)", art: "cell" },
-  { name: "Pain Relief & Body Recovery", count: 31, price: "from RM 300", Icon: Heart, bg: "#e3e8eb", acc: "var(--color-berry)", art: "leaf" },
-  { name: "Health Product & Supplements", count: 29, price: "from RM 49", Icon: Bolt, bg: "#d6dee3", acc: "var(--color-moss)", art: "cell" },
-  { name: "Mind & Mood Balance", count: 20, price: "from RM 150", Icon: Brain, bg: "#c8d3db", acc: "var(--color-moss)", art: "leaf" },
+  { name: "Regen & Functional", Icon: Dna, acc: "var(--color-moss)" },
+  { name: "Anti Aging", Icon: Leaf, acc: "var(--color-moss)" },
+  { name: "Health Check", Icon: Droplet, acc: "var(--color-moss)" },
+  { name: "Pain Relief", Icon: Heart, acc: "var(--color-moss)" },
+  { name: "Supplements", Icon: Bolt, acc: "var(--color-moss)" },
+  { name: "Mind & Mood", Icon: Brain, acc: "var(--color-moss)" },
+  { name: "Spa", Icon: Spa, acc: "var(--color-moss)" },
+];
+
+const tags = [
+  "Immune Support", "Joint Care", "Gut Health", "Brain & Cognitive",
+  "Hormonal Balance", "Skin & Hair", "Sleep", "Detox & Cleanse",
+  "Energy & Stamina", "Heart Health", "Blood Sugar",
 ];
 
 export function ShopByCategory() {
+  const tagRef = useRef<HTMLDivElement>(null);
+  const scrollTags = (dir: 1 | -1) => {
+    const el = tagRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * 200, behavior: "smooth" });
+  };
+
   return (
-    <section className="py-14 lg:py-24 px-6 md:px-10 border-b border-line-2 bg-paper">
+    <section className="py-10 lg:py-16 px-6 md:px-10 border-b border-line-2 bg-paper">
       <div className="max-w-[1400px] mx-auto">
-        <div className="flex flex-col lg:flex-row justify-between lg:items-end mb-8 lg:mb-12 gap-4 lg:gap-10">
-          <div className="flex-1 min-w-0">
-            <div className="text-[11px] text-moss tracking-[0.16em] uppercase font-semibold mb-3.5">
-             , Shop by category
-            </div>
-            <h2
-              className="ff text-[clamp(28px,7vw,38px)] lg:text-[clamp(38px,3.8vw,54px)] font-normal text-ink tracking-[-0.02em] leading-[1.05] m-0"
-              style={{ fontVariationSettings: '"opsz" 144' }}
-            >
-              Six pathways, <span className="ff">one you.</span>
-            </h2>
-          </div>
-          <a
-            href="#"
-            className="text-[13px] text-ink font-semibold no-underline border-b border-ink pb-0.5 flex items-center gap-1.5 whitespace-nowrap self-start lg:self-auto"
-          >
-            BROWSE ALL SERVICES <ArrowRight />
-          </a>
-        </div>
+        <h2
+          className="ff text-[20px] lg:text-[28px] font-normal text-ink tracking-[-0.02em] leading-tight mb-6 lg:mb-8"
+        >
+          Shop by category
+        </h2>
 
-        {/* Mobile: icon grid */}
-        <div className="grid grid-cols-3 gap-y-6 gap-x-4 lg:hidden">
+        {/* Category circles */}
+        <div className="flex gap-4 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden pb-4 lg:pb-6 lg:grid lg:grid-cols-7 lg:gap-x-4 lg:gap-y-6 lg:overflow-visible snap-x snap-mandatory">
           {cats.map((c) => {
-            const Icon = c.Icon;
-            return (
-              <a key={c.name} href="#" className="flex flex-col items-center gap-2.5 no-underline text-inherit">
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center"
-                  style={{ background: c.bg }}
-                >
-                  <span style={{ color: c.acc }}>
-                    <Icon size={24} />
-                  </span>
-                </div>
-                <span className="text-[12px] font-medium text-ink text-center leading-tight">{c.name}</span>
-              </a>
-            );
-          })}
-        </div>
-
-        {/* Desktop: card grid */}
-        <div className="hidden lg:grid grid-cols-3 gap-px bg-line">
-          {cats.map((c, i) => {
-            const ArtComp = c.art === "cell" ? CellArt : LeafArt;
             const Icon = c.Icon;
             return (
               <a
                 key={c.name}
                 href="#"
-                className="p-7 no-underline text-inherit flex flex-col relative transition-colors cursor-pointer hover:bg-cream group"
-                style={{ background: c.bg }}
+                className="flex flex-col items-center gap-2.5 lg:gap-3 no-underline text-inherit group shrink-0 w-[72px] lg:w-auto snap-start"
               >
-                <div className="flex justify-between items-start mb-3">
-                  <span style={{ color: c.acc }}>
-                    <Icon size={22} />
-                  </span>
-                  <span className="text-[11px] text-muted tracking-[0.08em]">
-                    {String(i + 1).padStart(2, "0")} / 06
+                <div className="w-[72px] h-[72px] lg:w-28 lg:h-28 rounded-full bg-sage flex items-center justify-center transition-colors group-hover:bg-sage-2">
+                  <span style={{ color: c.acc }} className="transition-transform group-hover:scale-110">
+                    <Icon size={28} />
                   </span>
                 </div>
-                <div className="h-[150px] -mx-7 mb-[18px] relative overflow-hidden">
-                  <div className="absolute inset-0">
-                    <ArtComp color={c.acc} bg="transparent" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="ff text-[22px] font-medium text-ink tracking-[-0.015em] mb-2 leading-tight">
-                    {c.name}
-                  </h3>
-                  <div className="flex justify-between items-center mt-2.5">
-                    <span className="text-xs text-ink-2">
-                      {c.count} services · {c.price}
-                    </span>
-                    <span style={{ color: c.acc }}>
-                      <ArrowRight />
-                    </span>
-                  </div>
-                </div>
+                <span className="text-[11px] lg:text-[13px] font-medium text-ink text-center leading-tight">
+                  {c.name}
+                </span>
               </a>
             );
           })}
+        </div>
+
+        {/* Sub-category pill row */}
+        <div className="relative mt-2 lg:mt-4">
+          <button
+            onClick={() => scrollTags(-1)}
+            aria-label="Previous"
+            className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-paper border border-line items-center justify-center cursor-pointer text-ink shadow-sm hover:border-ink transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden>
+              <path d="M10 3l-5 5 5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+
+          <div
+            ref={tagRef}
+            className="flex gap-2 lg:gap-2.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mx-10"
+          >
+            {tags.map((t) => (
+              <a
+                key={t}
+                href="#"
+                className="shrink-0 px-4 lg:px-5 py-2 lg:py-2.5 rounded-full bg-sage/60 text-[11px] lg:text-[12px] font-medium text-ink tracking-[0.02em] no-underline whitespace-nowrap transition-colors hover:bg-sage-2"
+              >
+                {t}
+              </a>
+            ))}
+          </div>
+
+          <button
+            onClick={() => scrollTags(1)}
+            aria-label="Next"
+            className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-paper border border-line items-center justify-center cursor-pointer text-ink shadow-sm hover:border-ink transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden>
+              <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
       </div>
     </section>

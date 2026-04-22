@@ -32,7 +32,6 @@ export function CTA() {
             </div>
             <h2
               className="ff text-[clamp(36px,9vw,48px)] lg:text-[clamp(48px,5.5vw,86px)] font-normal tracking-[-0.03em] leading-[0.96] text-ink text-balance m-0 max-w-[900px]"
-              style={{ fontVariationSettings: '"opsz" 144' }}
             >
               Your first <span className="ff text-moss">consult</span>
               <br />
@@ -68,7 +67,6 @@ export function CTA() {
               </div>
               <div
                 className="ff text-[22px] lg:text-[clamp(28px,2.6vw,38px)] font-normal tracking-[-0.025em] leading-[1.05] mb-1.5 lg:mb-2.5"
-                style={{ fontVariationSettings: '"opsz" 144' }}
               >
                 Book a free <span className="ff text-butter">consultation</span>
               </div>
@@ -91,7 +89,6 @@ export function CTA() {
               </div>
               <div
                 className="ff text-[22px] lg:text-[clamp(28px,2.6vw,38px)] font-normal tracking-[-0.025em] leading-[1.05] mb-1.5 lg:mb-2.5"
-                style={{ fontVariationSettings: '"opsz" 144' }}
               >
                 Create your <span className="ff text-moss">account</span>
               </div>

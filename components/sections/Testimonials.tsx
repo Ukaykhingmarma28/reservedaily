@@ -95,7 +95,6 @@ export function Testimonials() {
             </div>
             <h2
               className="ff text-[clamp(28px,7vw,38px)] lg:text-[clamp(40px,4vw,58px)] font-normal tracking-[-0.025em] leading-tight text-ink text-balance"
-              style={{ fontVariationSettings: '"opsz" 144' }}
             >
               What our members <span className="ff text-moss">are saying</span>.
             </h2>
@@ -103,7 +102,6 @@ export function Testimonials() {
           <div className="flex items-center gap-3 lg:gap-4 lg:pb-1">
             <div
               className="ff text-[32px] lg:text-[40px] font-normal leading-none text-ink tracking-[-0.025em]"
-              style={{ fontVariationSettings: '"opsz" 144' }}
             >
               {avgRating}
               <span className="text-muted text-[0.45em]">/5</span>
@@ -130,7 +128,6 @@ export function Testimonials() {
             </div>
             <p
               className="ff text-[17px] font-normal tracking-[-0.01em] leading-[1.4] text-ink m-0 mb-5"
-              style={{ fontVariationSettings: '"opsz" 144' }}
             >
               <span className="ff text-moss">&ldquo;</span>
               {c.q}
@@ -165,7 +162,6 @@ export function Testimonials() {
               </div>
               <p
                 className="ff text-[clamp(19px,1.5vw,24px)] font-normal tracking-[-0.01em] leading-[1.4] text-ink m-0"
-                style={{ fontVariationSettings: '"opsz" 144' }}
               >
                 <span className="ff text-moss">&ldquo;</span>
                 {c.q}

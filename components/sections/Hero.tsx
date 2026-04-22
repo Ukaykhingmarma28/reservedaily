@@ -98,7 +98,6 @@ export function Hero() {
           <h1
             key={`t${i}`}
             className="ff text-[clamp(52px,6.2vw,94px)] font-normal leading-[0.95] tracking-[-0.03em] text-cream mb-8 [animation:rd-hero-fade_0.9s_ease_both]"
-            style={{ fontVariationSettings: '"opsz" 144' }}
           >
             {s.title[0]}
             <br />
