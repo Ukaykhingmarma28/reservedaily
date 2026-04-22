@@ -1,26 +1,106 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Design tokens — source of truth: HTML/index.html:16-32 */
+  --color-cream: #ffffff;
+  --color-paper: #f4f6f8;
+  --color-sage: #e6eef1;
+  --color-sage-2: #cfdde4;
+  --color-moss: #1a2659;
+  --color-moss-2: #2d3a7a;
+  --color-ink: #141a3a;
+  --color-ink-2: #3a4063;
+  --color-muted: #8b92a4;
+  --color-line: #d8dde4;
+  --color-line-2: #ebeef2;
+  --color-rust: #f0a028;
+  --color-rust-soft: #f5b855;
+  --color-butter: #50c8dc;
+  --color-berry: #148c50;
+
+  --color-background: var(--color-cream);
+  --color-foreground: var(--color-ink);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-fraunces);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--color-moss);
+  color: var(--color-cream);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 4px;
+}
+
+.ff {
+  font-family: var(--font-fraunces), "Times New Roman", serif;
+  font-variation-settings: "opsz" 72;
+}
+
+@keyframes rd-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes rd-hero-fade {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rd-pj-grid-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 80px 80px; }
+}
+
+@keyframes rd-pj-pulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.08); }
+}
+
+@keyframes rd-rev-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes rd-dna-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes rd-drawer-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes rd-drawer-slide {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
