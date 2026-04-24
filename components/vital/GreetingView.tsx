@@ -43,8 +43,8 @@ export function GreetingView({
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 lg:py-14 relative overflow-hidden">
-      <div className="relative z-10 flex flex-col items-center text-center max-w-[520px] w-full gap-6">
+    <div className="flex-1 flex flex-col items-center px-6 py-8 lg:py-14 relative overflow-y-auto">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-[520px] w-full gap-6 my-auto">
         {/* Glass orb */}
         <div
           className="w-[68px] h-[68px] rounded-full relative"

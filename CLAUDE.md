@@ -12,13 +12,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev      # next dev — local dev server on :3000
-npm run build    # next build — production build
-npm run start    # next start — serve the production build
-npm run lint     # eslint (flat config at eslint.config.mjs)
+npm run dev          # next dev --turbopack — local dev server on :3000 (binds 0.0.0.0)
+npm run dev:network  # same but without Turbopack (for debugging Turbopack-specific issues)
+npm run build        # next build — production build (standalone output)
+npm run start        # next start — serve the production build
+npm run lint         # eslint (flat config at eslint.config.mjs)
 ```
 
-No test runner is configured.
+No test runner is configured. Docker: `docker compose up --build` for production-like local run.
 
 ## Architecture
 
@@ -26,18 +27,21 @@ No test runner is configured.
 
 - Routes live directly under `app/` — no `pages/` dir, no `src/` wrapper.
 - `app/layout.tsx` is the root layout (loads Inter + Fraunces fonts via `next/font/google`).
-- `app/page.tsx` is the homepage — assembles 17 section components in order (AnnouncementBar through Footer). No other routes exist yet.
+- `app/page.tsx` is the homepage — assembles section components in order (AnnouncementBar through Footer).
+- `app/vital/` is the Vital AI chat page — single `ChatShell` component with its own layout for metadata.
 - Path alias `@/*` maps to repo root, so imports look like `@/components/sections/Nav`.
 
 ### Component layers
 
-- **`components/ui/`** — Primitives (Button, Card, Container, Badge, SearchInput, ScrollRail, icons, etc.). These accept props and render no data of their own.
-- **`components/sections/`** — Page-level sections (Nav, Hero, Footer, ProductCard, Testimonials, etc.). Each section is self-contained and typically reads from `lib/data.ts`.
-- **`components/illustrations/`** — Decorative SVG art components (BottleArt, LeafArt, CellArt, etc.).
+- **`components/ui/`** — Primitives (Button, Card, Container, Badge, SearchInput, ScrollRail, icons, etc.). Mostly server components. Accept props, render no data of their own.
+- **`components/sections/`** — Page-level sections (Nav, Hero, Footer, ProductCard, Testimonials, etc.). Each section is self-contained and typically reads from `lib/data.ts`. Most use `"use client"` for interactivity (carousels, dropdowns, touch/swipe).
+- **`components/vital/`** — Vital AI chat interface (ChatShell, GreetingView, MessageList, ChatInput, Sidebar, and message-type cards). All client components. ChatShell uses `useReducer` with a state machine driving conversation phases.
+- **`components/illustrations/`** — Decorative SVG art components. Accept `{ color, bg, className }` props.
 
 ### Data
 
-- `lib/data.ts` is the single data source — exports typed arrays for categories, navigation links, and section content. No API/database yet.
+- `lib/data.ts` — typed arrays for categories, products, navigation links, and section content. No API/database yet.
+- `lib/vital/` — Vital AI logic: `types.ts` (discriminated union message types, 9 conversation phases), `mock-engine.ts` (state machine that generates responses per phase), `mock-data.ts` (mock biomarkers, wellness paths, booking slots, Q&A).
 
 ### Tailwind v4 (CSS-first)
 
@@ -47,20 +51,22 @@ No test runner is configured.
 
 ### Design tokens (defined in globals.css @theme)
 
-- **Colors**: `cream`, `paper`, `sage`/`sage-2`, `moss`/`moss-2`, `ink`/`ink-2`, `muted`, `line`/`line-2`, `rust`/`rust-soft`, `butter`, `berry`. Background defaults to cream, foreground to ink.
-- **Fonts**: Inter (`--font-inter`, body sans) and Fraunces (`--font-fraunces`, display serif with variable optical size). Utility classes `.ff` and `.ff-italic` apply Fraunces.
-- **Animations**: `rd-marquee`, `rd-hero-fade`, `rd-pj-grid-drift`, `rd-pj-pulse`, `rd-rev-fade`, `rd-dna-spin`, `rd-drawer-fade`, `rd-drawer-slide`. All prefixed `rd-`.
+- **Colors**: `cream` (#fff), `paper`, `sage`/`sage-2`, `moss`/`moss-2`, `ink`/`ink-2`, `muted`, `line`/`line-2`, `rust`/`rust-soft`, `butter`, `berry`. Background defaults to cream, foreground to ink.
+- **Fonts**: Inter (`--font-sans`, body) and Fraunces/Figtree (`--font-display`, headings). Utility class `.ff` applies the display font.
+- **Animations**: All keyframes prefixed `rd-` (e.g. `rd-marquee`, `rd-hero-fade`, `rd-dna-spin`, `rd-drawer-slide`, `rd-typing-dot`, `rd-fade-up`, `rd-vital-pulse`, `rd-msg-in`). Defined in globals.css.
 
 ### Layout
 
 - `Container` component provides 4 max-width presets: `narrow` (960px), `default` (1200px), `wide` (1400px), `full` (1760px). Padding is `px-6` / `md:px-10`.
 - Mobile breakpoint is `lg:` (1024px) — the Nav uses dual layouts: `flex lg:hidden` for mobile, `hidden lg:grid` for desktop.
+- Vital AI uses `h-dvh` for full viewport height with flex column layout.
 
 ### Config
 
-- `next.config.ts` sets `turbopack.root` to `__dirname` (required — ancestor `package.json` at `/home/maklu/Codes/` causes resolution issues without it) and allows Unsplash remote images.
+- `next.config.ts`: `output: "standalone"` for Docker, `turbopack.root: __dirname` (works around ancestor `package.json` resolution issues), `remotePatterns` for Unsplash images.
 - ESLint flat config at `eslint.config.mjs` composes `core-web-vitals` + `typescript` presets. Add global ignores to the existing `globalIgnores([...])` call.
+- Dockerfile: multi-stage Node 22 Alpine build. `docker-compose.yml` maps port 3000.
 
 ### Known gotcha
 
-The parent directory `/home/maklu/Codes/` contains a stray `package.json` and `node_modules/` that can intercept Node module resolution. The `turbopack.root` setting in `next.config.ts` works around this for the dev server. If you encounter resolution errors for installed packages, this ancestor `package.json` is likely the cause.
+An ancestor directory may contain a stray `package.json` and `node_modules/` that can intercept Node module resolution. The `turbopack.root` setting in `next.config.ts` works around this for the dev server. If you encounter resolution errors for installed packages, this ancestor `package.json` is likely the cause.
