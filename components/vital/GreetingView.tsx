@@ -121,7 +121,7 @@ export function GreetingView({
               onChange={(e) => setText(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask me anything about your health..."
-              className="flex-1 bg-transparent border-none outline-none text-[13px] text-ink placeholder:text-muted/50"
+              className="flex-1 bg-transparent border-none outline-none text-base lg:text-[13px] text-ink placeholder:text-muted/50"
             />
             <button
               onClick={handleSend}

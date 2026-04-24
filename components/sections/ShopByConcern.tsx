@@ -308,7 +308,7 @@ export function ShopByConcern() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="e.g. hair loss, anxiety, joint pain..."
-              className="flex-1 border-none bg-transparent outline-none text-sm lg:text-base text-ink placeholder:text-muted"
+              className="flex-1 border-none bg-transparent outline-none text-base lg:text-sm text-ink placeholder:text-muted"
             />
             {query && (
               <button

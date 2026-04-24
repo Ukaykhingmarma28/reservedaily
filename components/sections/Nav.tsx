@@ -83,7 +83,7 @@ export function Nav() {
           </span>
           <input
             placeholder="Search"
-            className="flex-1 min-w-0 border-none bg-transparent outline-none text-sm text-ink placeholder:text-muted"
+            className="flex-1 min-w-0 border-none bg-transparent outline-none text-base lg:text-sm text-ink placeholder:text-muted"
           />
         </div>
         <a
@@ -119,7 +119,7 @@ export function Nav() {
           </span>
           <input
             placeholder="Search treatments, providers, or supplements..."
-            className="flex-1 border-none bg-transparent outline-none text-sm text-ink placeholder:text-muted"
+            className="flex-1 border-none bg-transparent outline-none text-base lg:text-sm text-ink placeholder:text-muted"
           />
           <kbd className="text-[10px] text-muted border border-line px-1.5 py-0.5 rounded-[2px] tracking-[0.04em] font-sans">
             ⌘K

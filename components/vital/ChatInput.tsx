@@ -62,7 +62,7 @@ export function ChatInput({
             disabled={disabled}
             placeholder="Reply..."
             rows={1}
-            className="w-full resize-none bg-transparent border-none outline-none text-[14px] text-ink placeholder:text-muted/40 leading-relaxed disabled:opacity-30 mb-1"
+            className="w-full resize-none bg-transparent border-none outline-none text-base lg:text-[14px] text-ink placeholder:text-muted/40 leading-relaxed disabled:opacity-30 mb-1"
           />
           <div className="flex items-center justify-between">
             <button

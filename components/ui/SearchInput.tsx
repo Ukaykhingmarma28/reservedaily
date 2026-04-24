@@ -34,7 +34,7 @@ export function SearchInput({
         ref={ref}
         defaultValue={defaultValue}
         placeholder={placeholder}
-        className="flex-1 bg-transparent border-none outline-none text-sm text-ink placeholder:text-muted"
+        className="flex-1 bg-transparent border-none outline-none text-base lg:text-sm text-ink placeholder:text-muted"
       />
       {kbd && (
         <kbd className="text-[10px] text-muted border border-line px-1.5 py-0.5 rounded-[2px] tracking-[0.04em] font-sans">
