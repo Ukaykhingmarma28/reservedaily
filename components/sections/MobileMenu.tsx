@@ -229,12 +229,12 @@ export function MobileMenu({ open, onClose }: Props) {
             <>
               <div className="px-5 py-5 flex flex-col gap-2.5 border-b border-line-2">
                 <a
-                  href="#vital"
+                  href="/vital"
                   onClick={onClose}
-                  className="inline-flex items-center justify-center gap-2 no-underline bg-ink text-cream px-4 py-3 text-[13px] font-semibold tracking-[0.04em] rounded-[2px]"
+                  className="inline-flex items-center justify-center gap-2 no-underline bg-ink text-cream px-4 py-3 text-[15px] font-semibold tracking-[0.04em] rounded-[2px]"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-butter" />
-                  Vital AI
+                  Telehealth Vital AI
                 </a>
                 <MobileLoginButton />
               </div>
@@ -245,7 +245,7 @@ export function MobileMenu({ open, onClose }: Props) {
                     key={l}
                     href="#"
                     onClick={onClose}
-                    className="flex items-center justify-between py-3.5 text-[15px] text-ink font-medium no-underline border-b border-line-2 last:border-b-0"
+                    className="flex items-center justify-between py-3.5 text-base text-ink font-medium no-underline border-b border-line-2 last:border-b-0"
                   >
                     <span>{l}</span>
                     <span className="text-muted">
@@ -273,7 +273,7 @@ export function MobileMenu({ open, onClose }: Props) {
                           <span className="text-moss w-4 flex justify-center">
                             <Icon />
                           </span>
-                          <span className="text-[14px] text-ink font-medium">{c.name}</span>
+                          <span className="text-[15px] text-ink font-medium">{c.name}</span>
                         </span>
                         <span
                           className={`text-ink-2 transition-transform ${isOpen ? "rotate-180" : ""}`}
@@ -288,7 +288,7 @@ export function MobileMenu({ open, onClose }: Props) {
                               key={s}
                               href="#"
                               onClick={onClose}
-                              className="text-[13px] text-ink-2 no-underline py-2 flex items-center gap-2"
+                              className="text-sm text-ink-2 no-underline py-2 flex items-center gap-2"
                             >
                               <span className="w-[3px] h-[3px] rounded-full bg-moss" />
                               {s}
@@ -306,7 +306,7 @@ export function MobileMenu({ open, onClose }: Props) {
                   href="#"
                   onClick={onClose}
                   aria-label="Wishlist"
-                  className="flex items-center justify-between py-2 text-[14px] text-ink font-medium no-underline"
+                  className="flex items-center justify-between py-2 text-[15px] text-ink font-medium no-underline"
                 >
                   <span className="flex items-center gap-3">
                     <span className="relative inline-flex items-center justify-center w-5 h-5">
@@ -326,7 +326,7 @@ export function MobileMenu({ open, onClose }: Props) {
               <div className="px-5 py-4">
                 <button
                   onClick={() => setPrefsOpen(true)}
-                  className="flex items-center gap-2 bg-transparent border-none text-ink-2 text-[13px] cursor-pointer p-0"
+                  className="flex items-center gap-2 bg-transparent border-none text-ink-2 text-sm cursor-pointer p-0"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />

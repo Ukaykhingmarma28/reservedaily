@@ -128,11 +128,11 @@ export function Nav() {
 
         <div className="flex gap-[18px] items-center">
           <a
-            href="#vital"
+            href="/vital"
             className="inline-flex items-center gap-2 no-underline bg-ink text-cream px-3.5 py-2 text-xs font-semibold tracking-[0.04em] rounded-[2px]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-butter" />
-            Vital AI
+            Telehealth Vital AI
           </a>
           <a
             href="#"
