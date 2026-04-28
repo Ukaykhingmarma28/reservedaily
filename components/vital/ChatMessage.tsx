@@ -12,12 +12,14 @@ export function ChatMessage({
   message,
   onSelectWellnessPath,
   onSelectProduct,
+  onExplainProduct,
   onSelectBookingSlot,
   onConfirmPayment,
 }: {
   message: ChatMessageType;
   onSelectWellnessPath: (pathId: WellnessPathId) => void;
   onSelectProduct: (rec: RecommendedProduct) => void;
+  onExplainProduct: (rec: RecommendedProduct) => void;
   onSelectBookingSlot: (slotId: string) => void;
   onConfirmPayment: () => void;
 }) {
@@ -64,6 +66,7 @@ export function ChatMessage({
             message={message}
             onSelectWellnessPath={onSelectWellnessPath}
             onSelectProduct={onSelectProduct}
+            onExplainProduct={onExplainProduct}
             onSelectBookingSlot={onSelectBookingSlot}
             onConfirmPayment={onConfirmPayment}
           />
@@ -81,12 +84,14 @@ function MessageContent({
   message,
   onSelectWellnessPath,
   onSelectProduct,
+  onExplainProduct,
   onSelectBookingSlot,
   onConfirmPayment,
 }: {
   message: ChatMessageType;
   onSelectWellnessPath: (pathId: WellnessPathId) => void;
   onSelectProduct: (rec: RecommendedProduct) => void;
+  onExplainProduct: (rec: RecommendedProduct) => void;
   onSelectBookingSlot: (slotId: string) => void;
   onConfirmPayment: () => void;
 }) {
@@ -106,7 +111,7 @@ function MessageContent({
       return <WellnessPathSelector payload={payload} onSelect={onSelectWellnessPath} />;
 
     case "product-recommendations":
-      return <ProductRecommendation payload={payload} onSelectProduct={onSelectProduct} />;
+      return <ProductRecommendation payload={payload} onSelectProduct={onSelectProduct} onExplainProduct={onExplainProduct} />;
 
     case "booking-form":
       return <BookingForm payload={payload} onSelectSlot={onSelectBookingSlot} />;

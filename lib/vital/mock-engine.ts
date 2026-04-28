@@ -10,8 +10,6 @@ import {
   UPLOAD_INSTRUCTIONS,
   FREE_CHAT_WELCOME,
   BROWSE_TREATMENTS_WELCOME,
-  NURSE_BOOKING_WELCOME,
-  DOCTOR_BOOKING_WELCOME,
   ANALYSIS_SUMMARY,
   MOCK_BIOMARKERS,
   MOCK_WELLNESS_PATHS,
@@ -39,6 +37,31 @@ function assistantText(text: string): ChatMessage {
 
 function delay(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+function generateExplanation(product: Product, reason: string): string {
+  const isBookable = product.type === "bookable";
+  const price = product.variations?.[0]?.price ?? product.price ?? "";
+  const meta = isBookable ? product.duration : product.size;
+
+  let explanation = `Here's why ${product.name} is a strong match for your profile:\n\n`;
+  explanation += `${reason}\n\n`;
+
+  if (isBookable) {
+    explanation += `This is a clinical treatment (${meta}) at ${product.provider}, ${product.location}. `;
+    explanation += `Clinical treatments deliver nutrients directly into your bloodstream, bypassing digestive absorption for near-100% bioavailability — significantly faster results than oral supplements.\n\n`;
+  } else {
+    explanation += `This is a daily supplement (${meta}) that you take at home for ongoing maintenance. `;
+    explanation += `While clinical treatments provide immediate correction, supplements maintain your levels long-term between sessions.\n\n`;
+  }
+
+  explanation += `Pricing starts at ${price}. `;
+  if (product.rating >= 4.5) {
+    explanation += `It's rated ${product.rating}/5 across ${product.reviews} verified reviews. `;
+  }
+  explanation += `Would you like to proceed with this, or would you prefer to see other options?`;
+
+  return explanation;
 }
 
 function matchQA(text: string): string {
@@ -97,13 +120,20 @@ export async function generateResponse(
           timestamp: new Date(),
           payload: {
             kind: "booking-form",
-            prompt: NURSE_BOOKING_WELCOME,
+            prompt: "Select a convenient time and your nurse will come to your location.",
             productName: "On-Demand Nurse Visit",
+            serviceInfo: {
+              providerType: "nurse",
+              description: "A certified nurse visits your home, hotel, or office to provide professional healthcare services.",
+              includes: ["IV drip therapy & vitamin injections", "Blood draw & sample collection", "Wound care & basic treatments", "Health monitoring & vitals check"],
+              price: "From RM 250",
+              duration: "45–60 min",
+            },
             slots: MOCK_NURSE_SLOTS,
           },
         };
         return {
-          messages: [assistantText("Let me find available nurses for you."), bookingMsg],
+          messages: [bookingMsg],
           nextPhase: "booking",
         };
       }
@@ -116,13 +146,20 @@ export async function generateResponse(
           timestamp: new Date(),
           payload: {
             kind: "booking-form",
-            prompt: DOCTOR_BOOKING_WELCOME,
+            prompt: "Select a convenient time and your doctor will come to your location.",
             productName: "On-Demand Doctor Visit",
+            serviceInfo: {
+              providerType: "doctor",
+              description: "A licensed doctor visits your home, hotel, or office for consultations, prescriptions, and treatments.",
+              includes: ["General health consultation", "Prescription & medication management", "Blood panel review & health screening", "Specialist referrals if needed"],
+              price: "From RM 350",
+              duration: "30–45 min",
+            },
             slots: MOCK_DOCTOR_SLOTS,
           },
         };
         return {
-          messages: [assistantText("Let me find available doctors for you."), bookingMsg],
+          messages: [bookingMsg],
           nextPhase: "booking",
         };
       }
@@ -141,8 +178,8 @@ export async function generateResponse(
             kind: "analysis",
             summary: ANALYSIS_SUMMARY,
             biomarkers: MOCK_BIOMARKERS,
-            deficiencies: ["Vitamin D", "Iron (Ferritin)", "Vitamin B12"],
-            overallScore: 68,
+            deficiencies: ["Diabetes (HbA1c)", "High LDL Cholesterol", "Kidney Function (eGFR)"],
+            overallScore: 52,
           },
         };
         const pathsMsg: ChatMessage = {
@@ -153,7 +190,7 @@ export async function generateResponse(
           payload: {
             kind: "wellness-paths",
             prompt:
-              "Based on your results, I'd recommend focusing on Energy & Vitality or Immune Boost. Which wellness path interests you?",
+              "Based on your results, I'd recommend focusing on Health Check & Body Insights or Health Products & Supplements to address your metabolic and cardiovascular markers. Which wellness path interests you?",
             paths: MOCK_WELLNESS_PATHS,
           },
         };
@@ -214,6 +251,15 @@ export async function generateResponse(
     }
 
     case "recommendations": {
+      if (action.type === "explain-product") {
+        const { product, reason } = action.product;
+        await delay(1500);
+        const explanation = generateExplanation(product, reason);
+        return {
+          messages: [assistantText(explanation)],
+          nextPhase: "recommendations",
+        };
+      }
       if (action.type === "select-product") {
         const { product } = action.product;
         const price = parseFloat(product.price?.replace(/[^0-9.]/g, "") ?? "0");
@@ -288,6 +334,7 @@ export async function generateResponse(
 
         const isNurse = slot.id.startsWith("ns");
         const isDoctor = slot.id.startsWith("ds");
+
         const product: Product = _state.selectedProduct?.product ?? {
           id: isNurse ? "on-demand-nurse" : isDoctor ? "on-demand-doctor" : "treatment",
           type: "bookable" as const,

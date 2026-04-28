@@ -151,6 +151,14 @@ export function ChevronDown({ size = 10, ...p }: IconProps) {
   );
 }
 
+export function ChevronLeft({ size = 10, ...p }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" {...base(size)} {...p}>
+      <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
 export function ChevronRight({ size = 10, ...p }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" {...base(size)} {...p}>

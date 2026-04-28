@@ -18,85 +18,118 @@ export const FREE_CHAT_WELCOME =
 export const BROWSE_TREATMENTS_WELCOME =
   "Let's find the right treatment for you. Select a wellness path below to see personalised recommendations.";
 
-export const NURSE_BOOKING_WELCOME =
-  "Our on-demand nurses are certified professionals who come to your home or hotel. Select a convenient time slot below:";
-
-export const DOCTOR_BOOKING_WELCOME =
-  "Our on-demand doctors provide consultations and treatments at your location. Select a convenient time slot below:";
 
 export const ANALYSIS_SUMMARY =
-  "Based on your blood panel, I've identified a few areas that need attention. Your Vitamin D and iron levels are below optimal range, and there's mild inflammation indicated by elevated hs-CRP. The good news — your thyroid function, blood sugar control, and most other markers look solid. Let's focus on addressing the deficiencies.";
+  "Your blood panel reveals three interconnected areas of concern. HbA1c at 6.7% confirms diabetes, with fasting glucose also elevated at 6.8 mmol/L. Your lipid profile shows significantly raised total cholesterol (7.19) and LDL (5.2) — both well above target, especially for a diabetic patient. Your eGFR at 55 mL/min indicates Stage 3a chronic kidney disease, with creatinine confirming reduced clearance. Haemoglobin is mildly low at 13.4, which can be linked to kidney function. The positive news — electrolytes, liver enzymes, hepatitis screening, and PSA are all normal. This profile needs proactive management to protect your kidneys and cardiovascular system.";
 
 export const MOCK_BIOMARKERS: BiomarkerResult[] = [
   {
-    name: "Vitamin D",
-    value: 18,
-    unit: "ng/mL",
-    referenceRange: { low: 30, high: 100 },
-    status: "low",
-    explanation:
-      "Below optimal range. Low Vitamin D is linked to fatigue, weak bones, and reduced immunity.",
-  },
-  {
-    name: "hs-CRP",
-    value: 3.8,
-    unit: "mg/L",
-    referenceRange: { low: 0, high: 1.0 },
+    name: "HbA1c",
+    value: 6.7,
+    unit: "%",
+    referenceRange: { low: 4.0, high: 6.0 },
     status: "high",
     explanation:
-      "Elevated — indicates systemic inflammation. May be linked to diet, stress, or underlying conditions.",
-  },
-  {
-    name: "Ferritin",
-    value: 12,
-    unit: "ng/mL",
-    referenceRange: { low: 20, high: 200 },
-    status: "low",
-    explanation:
-      "Low iron stores. Can cause fatigue, hair loss, and reduced exercise tolerance.",
-  },
-  {
-    name: "HbA1c",
-    value: 5.2,
-    unit: "%",
-    referenceRange: { low: 4.0, high: 5.6 },
-    status: "normal",
-    explanation:
-      "Within normal range. Good blood sugar control over the past 3 months.",
-  },
-  {
-    name: "TSH",
-    value: 2.1,
-    unit: "mIU/L",
-    referenceRange: { low: 0.4, high: 4.0 },
-    status: "normal",
-    explanation: "Thyroid function is normal. No concerns here.",
-  },
-  {
-    name: "Vitamin B12",
-    value: 180,
-    unit: "pg/mL",
-    referenceRange: { low: 200, high: 900 },
-    status: "low",
-    explanation:
-      "Slightly below range. Low B12 can cause fatigue, numbness, and cognitive fog.",
+      "Above the diabetes threshold of 6.5%. Indicates average blood sugar has been elevated over the past 2–3 months, consistent with Type 2 diabetes. Requires active management through diet, exercise, and possibly medication.",
   },
   {
     name: "Total Cholesterol",
-    value: 210,
-    unit: "mg/dL",
-    referenceRange: { low: 0, high: 200 },
+    value: 7.19,
+    unit: "mmol/L",
+    referenceRange: { low: 0, high: 5.2 },
     status: "high",
     explanation:
-      "Mildly elevated. Consider dietary adjustments and recheck in 3 months.",
+      "Significantly elevated at nearly 1.4× the desirable upper limit. Combined with high LDL, this substantially increases cardiovascular risk — particularly important given the diabetic status.",
   },
   {
-    name: "Cortisol (AM)",
-    value: 16,
-    unit: "mcg/dL",
-    referenceRange: { low: 6, high: 23 },
+    name: "LDL Cholesterol",
+    value: 5.2,
+    unit: "mmol/L",
+    referenceRange: { low: 0, high: 2.6 },
+    status: "high",
+    explanation:
+      "Twice the optimal threshold. LDL is the primary driver of atherosclerotic plaque formation. For a diabetic patient, guidelines recommend aggressive LDL reduction below 1.8 mmol/L.",
+  },
+  {
+    name: "eGFR",
+    value: 55,
+    unit: "mL/min",
+    referenceRange: { low: 90, high: 120 },
+    status: "low",
+    explanation:
+      "Estimated at Stage 3a chronic kidney disease. Kidney filtration is moderately reduced. This needs monitoring every 3–6 months as both diabetes and high cholesterol accelerate kidney decline.",
+  },
+  {
+    name: "Creatinine",
+    value: 119,
+    unit: "µmol/L",
+    referenceRange: { low: 64, high: 104 },
+    status: "high",
+    explanation:
+      "Elevated above the reference range, confirming reduced kidney clearance. Consistent with the low eGFR finding and warrants nephrology follow-up.",
+  },
+  {
+    name: "Fasting Glucose",
+    value: 6.8,
+    unit: "mmol/L",
+    referenceRange: { low: 3.5, high: 6.0 },
+    status: "high",
+    explanation:
+      "Above fasting reference range. Together with the elevated HbA1c, this confirms impaired glucose regulation requiring intervention.",
+  },
+  {
+    name: "Haemoglobin",
+    value: 13.4,
+    unit: "g/dL",
+    referenceRange: { low: 14.0, high: 18.0 },
+    status: "low",
+    explanation:
+      "Mildly below the male reference range. In the context of reduced kidney function, this could indicate early anaemia of chronic kidney disease — the kidneys produce less erythropoietin.",
+  },
+  {
+    name: "Triglycerides",
+    value: 1.8,
+    unit: "mmol/L",
+    referenceRange: { low: 0, high: 1.7 },
+    status: "high",
+    explanation:
+      "Slightly above threshold. Elevated triglycerides combined with high LDL and borderline HDL form an atherogenic lipid profile. Dietary changes — particularly reducing refined carbs — can help.",
+  },
+  {
+    name: "HDL Cholesterol",
+    value: 1.16,
+    unit: "mmol/L",
+    referenceRange: { low: 1.0, high: 1.5 },
     status: "normal",
-    explanation: "Morning cortisol is within range. Stress axis functioning normally.",
+    explanation:
+      "Just above the minimum threshold. Ideally should be higher for cardiovascular protection. Regular exercise and omega-3 intake can help raise HDL levels.",
+  },
+  {
+    name: "Sodium",
+    value: 139,
+    unit: "mmol/L",
+    referenceRange: { low: 135, high: 145 },
+    status: "normal",
+    explanation:
+      "Within normal limits. Electrolyte balance is well maintained despite reduced kidney function.",
+  },
+  {
+    name: "Potassium",
+    value: 4.3,
+    unit: "mmol/L",
+    referenceRange: { low: 3.5, high: 5.0 },
+    status: "normal",
+    explanation:
+      "Normal. Important to continue monitoring given kidney function — the kidneys regulate potassium excretion and impairment can cause dangerous elevations.",
+  },
+  {
+    name: "PSA",
+    value: 1.81,
+    unit: "ng/mL",
+    referenceRange: { low: 0, high: 4.0 },
+    status: "normal",
+    explanation:
+      "Well within normal range for age. No prostate concerns indicated. Routine screening recommended annually for men over 50.",
   },
 ];
 
@@ -147,39 +180,38 @@ export const MOCK_WELLNESS_PATHS: WellnessPath[] = [
 
 const VITAL_RECOMMENDATIONS: Record<string, { productId: string; reason: string }[]> = {
   "anti-aging": [
-    { productId: "nad-iv-drip", reason: "Cellular energy restoration for longevity and mitochondrial function." },
-    { productId: "whitening-antioxidant-anti-aging-iv-drip", reason: "Master antioxidant for cellular repair and anti-aging." },
-    { productId: "crystal-tomato-plus-supplements", reason: "Daily antioxidant maintenance for long-term cellular health." },
+    { productId: "nad-iv-drip", reason: "Your eGFR at 55 and HbA1c at 6.7% indicate accelerated cellular ageing from metabolic stress — NAD+ restores mitochondrial function and supports cellular repair in diabetic and kidney-compromised patients." },
+    { productId: "whitening-antioxidant-anti-aging-iv-drip", reason: "High-dose glutathione IV to counteract the oxidative stress that elevated blood sugar and cholesterol place on your vascular system, while supporting skin health." },
+    { productId: "crystal-tomato-plus-supplements", reason: "Daily oral antioxidant for ongoing free-radical defence between IV sessions — particularly important when metabolic markers are elevated." },
   ],
   "health-check": [
-    { productId: "multi-vitamin-replenish-iv-drip", reason: "Directly addresses your low ferritin and nutrient gaps for faster repletion." },
-    { productId: "bone-booster-im-vitamin-d3-support", reason: "Vitamin D3 injection to rapidly restore your levels from 18 to optimal." },
-    { productId: "vitamin-d-jab", reason: "Quick Vitamin D boost to maintain levels after initial treatment." },
-    { productId: "magnesium-bisglycinate-750mg-60-capsules-150mg-elemental", reason: "Daily mineral supplement to support overall nutrient balance." },
+    { productId: "multi-vitamin-replenish-iv-drip", reason: "Your haemoglobin is low at 13.4 g/dL and kidney function is reduced — this IV delivers iron, B-vitamins, and essential minerals directly, bypassing any absorption issues." },
+    { productId: "bone-booster-im-vitamin-d3-support", reason: "Reduced kidney function (eGFR 55) impairs Vitamin D activation. IM injection bypasses both gut and renal pathways for direct bioavailable D3 support." },
+    { productId: "vitamin-d-jab", reason: "Maintenance D3 jab to support calcium metabolism and immune function — especially important given your Stage 3a CKD, which affects vitamin D processing." },
+    { productId: "magnesium-bisglycinate-750mg-60-capsules-150mg-elemental", reason: "Magnesium supports insulin sensitivity (relevant to your HbA1c of 6.7%) and over 300 enzyme reactions including blood pressure regulation." },
   ],
   "supplements": [
-    { productId: "vitamin-d-jab", reason: "Vitamin D injection to restore your levels from 18 to optimal range." },
-    { productId: "magnesium-bisglycinate-750mg-60-capsules-150mg-elemental", reason: "Daily magnesium for sleep quality, stress response, and enzyme support." },
-    { productId: "live-conscious-omegawell-omega-3-fish-oil", reason: "Omega-3 for daily cardiovascular and cognitive support." },
-    { productId: "zinc-vitality-iv-drip", reason: "Essential zinc for immune function and thyroid support." },
-    { productId: "thera-c-advanced-curcumin-complex", reason: "Advanced curcumin for daily anti-inflammatory and antioxidant support." },
-    { productId: "theragut-precision-prebiotic-probiotic-supplement", reason: "Prebiotic and probiotic blend for gut health and nutrient absorption." },
+    { productId: "vitamin-d-jab", reason: "Your reduced kidney function (eGFR 55) impairs vitamin D metabolism — injection delivery ensures adequate levels without relying on compromised renal activation." },
+    { productId: "magnesium-bisglycinate-750mg-60-capsules-150mg-elemental", reason: "Glycinate form for best absorption. Clinically shown to improve insulin sensitivity — directly relevant to your HbA1c of 6.7% and fasting glucose of 6.8." },
+    { productId: "live-conscious-omegawell-omega-3-fish-oil", reason: "Your total cholesterol is 7.19 and LDL is 5.2 — omega-3s help lower triglycerides (yours at 1.8), raise HDL, and reduce cardiovascular inflammation." },
+    { productId: "thera-c-advanced-curcumin-complex", reason: "Curcumin reduces systemic inflammation and has nephroprotective properties — particularly relevant given your eGFR of 55 mL/min." },
+    { productId: "theragut-precision-prebiotic-probiotic-supplement", reason: "Gut health directly affects metabolic markers. Emerging research links gut microbiome balance to improved glycaemic control and cholesterol metabolism." },
   ],
   "mind-mood": [
-    { productId: "magnesium-bisglycinate-750mg-60-capsules-150mg-elemental", reason: "Calming mineral that supports sleep quality and stress response." },
-    { productId: "brain-booster-iv-drip-ginkgo-support", reason: "Ginkgo-infused IV drip to support cognitive function and mental clarity." },
-    { productId: "snooze-d-stress-iv-drip", reason: "Targeted IV therapy for stress reduction and better sleep." },
+    { productId: "magnesium-bisglycinate-750mg-60-capsules-150mg-elemental", reason: "Managing diabetes and kidney disease is stressful. Magnesium glycinate calms the nervous system, improves sleep quality, and supports insulin sensitivity." },
+    { productId: "brain-booster-iv-drip-ginkgo-support", reason: "Elevated blood sugar can affect cognitive function over time. This ginkgo + B-vitamin IV supports neural blood flow and mental clarity." },
+    { productId: "snooze-d-stress-iv-drip", reason: "Chronic metabolic conditions disrupt sleep and stress recovery. This blend of magnesium, B-vitamins, and calming aminos supports restorative rest." },
   ],
   "pain-recovery": [
-    { productId: "nad-iv-drip", reason: "NAD+ accelerates cellular repair and reduces inflammation post-injury." },
-    { productId: "whitening-antioxidant-anti-aging-iv-drip", reason: "Reduces oxidative stress that slows recovery from injury." },
-    { productId: "immune-booster-iv-drip-germany", reason: "Immune-boosting IV to support tissue repair and recovery." },
+    { productId: "nad-iv-drip", reason: "NAD+ directly fuels cellular repair enzymes. Your metabolic profile (diabetes + reduced kidney function) means tissue repair is slower and needs targeted support." },
+    { productId: "immune-booster-iv-drip-germany", reason: "German-formulated high-dose vitamin C + zinc IV to support immune-mediated tissue repair — important when metabolic stress is elevated." },
+    { productId: "whitening-antioxidant-anti-aging-iv-drip", reason: "Glutathione reduces oxidative damage from chronic hyperglycaemia and dyslipidaemia, supporting your body's recovery capacity." },
   ],
   "regen": [
-    { productId: "nad-iv-drip", reason: "Cellular energy restoration for longevity and mitochondrial function." },
-    { productId: "whitening-antioxidant-anti-aging-iv-drip", reason: "Master antioxidant for cellular repair and regeneration." },
-    { productId: "vitality-enhancer-iv-drip", reason: "Energy and vitality boost to support nerve regeneration." },
-    { productId: "cell-renewal-iv-drip", reason: "Cellular renewal therapy for long-term regenerative health." },
+    { productId: "nad-iv-drip", reason: "NAD+ is foundational for cellular regeneration — addresses the mitochondrial dysfunction caused by sustained elevated glucose and compromised kidney clearance." },
+    { productId: "cell-renewal-iv-drip", reason: "Targeted amino acids and growth factors to accelerate stem cell activity — supports kidney and vascular tissue turnover." },
+    { productId: "vitality-enhancer-iv-drip", reason: "Full-spectrum IV with B12, iron, and trace minerals — directly addresses your low haemoglobin (13.4) and supports energy levels." },
+    { productId: "whitening-antioxidant-anti-aging-iv-drip", reason: "Glutathione IV to clear the oxidative load from chronic hyperglycaemia — unblocking your body's natural regenerative pathways." },
   ],
 };
 

@@ -23,6 +23,7 @@ const initialState: ChatState = {
   isTyping: false,
   uploadStatus: null,
   selectedWellnessPath: null,
+  selectedBookingPurpose: null,
   selectedProduct: null,
   hasUploadedReport: false,
   conversationPhase: "greeting",
@@ -44,6 +45,8 @@ function reducer(state: ChatState, action: ChatAction): ChatState {
       return { ...state, selectedWellnessPath: action.pathId };
     case "SELECT_PRODUCT":
       return { ...state, selectedProduct: action.product };
+    case "SELECT_BOOKING_PURPOSE":
+      return state;
     case "UPDATE_MESSAGE":
       return {
         ...state,
@@ -222,6 +225,21 @@ export function ChatShell() {
     sendAction({ type: "select-wellness-path", pathId }, "wellness-select");
   }
 
+  function handleExplainProduct(rec: RecommendedProduct) {
+    const msg: ChatMessage = {
+      id: msgId(),
+      role: "user",
+      type: "text",
+      timestamp: new Date(),
+      payload: {
+        kind: "text",
+        text: `Why does ${rec.product.name} suit me?`,
+      },
+    };
+    dispatch({ type: "ADD_MESSAGE", message: msg });
+    sendAction({ type: "explain-product", product: rec }, "recommendations");
+  }
+
   function handleSelectProduct(rec: RecommendedProduct) {
     const msg: ChatMessage = {
       id: msgId(),
@@ -321,6 +339,7 @@ export function ChatShell() {
               isTyping={state.isTyping}
               onSelectWellnessPath={handleSelectWellnessPath}
               onSelectProduct={handleSelectProduct}
+              onExplainProduct={handleExplainProduct}
               onSelectBookingSlot={handleSelectBookingSlot}
               onConfirmPayment={handleConfirmPayment}
             />

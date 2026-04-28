@@ -120,10 +120,19 @@ export interface BookingSlot {
   available: boolean;
 }
 
+export interface BookingServiceInfo {
+  providerType: "nurse" | "doctor";
+  description: string;
+  includes: string[];
+  price: string;
+  duration: string;
+}
+
 export interface BookingFormPayload {
   kind: "booking-form";
   prompt: string;
   productName: string;
+  serviceInfo?: BookingServiceInfo;
   slots: BookingSlot[];
 }
 
@@ -165,6 +174,7 @@ export interface ChatState {
   isTyping: boolean;
   uploadStatus: FileUploadPayload["status"] | null;
   selectedWellnessPath: WellnessPathId | null;
+  selectedBookingPurpose: string | null;
   hasUploadedReport: boolean;
   conversationPhase: ConversationPhase;
   selectedProduct: RecommendedProduct | null;
@@ -174,6 +184,7 @@ export type UserAction =
   | { type: "upload-file"; fileName: string; fileSize: string; fileType: "pdf" | "image" }
   | { type: "select-wellness-path"; pathId: WellnessPathId }
   | { type: "select-product"; product: RecommendedProduct }
+  | { type: "explain-product"; product: RecommendedProduct }
   | { type: "select-booking-slot"; slotId: string }
   | { type: "confirm-payment" }
   | { type: "send-text"; text: string }
@@ -191,5 +202,6 @@ export type ChatAction =
   | { type: "SET_UPLOAD_STATUS"; status: FileUploadPayload["status"] | null }
   | { type: "SELECT_WELLNESS_PATH"; pathId: WellnessPathId }
   | { type: "SELECT_PRODUCT"; product: RecommendedProduct }
+  | { type: "SELECT_BOOKING_PURPOSE"; purposeId: string }
   | { type: "UPDATE_MESSAGE"; id: string; payload: MessagePayload }
   | { type: "RESET" };

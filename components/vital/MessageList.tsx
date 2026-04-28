@@ -10,6 +10,7 @@ export function MessageList({
   isTyping,
   onSelectWellnessPath,
   onSelectProduct,
+  onExplainProduct,
   onSelectBookingSlot,
   onConfirmPayment,
 }: {
@@ -17,6 +18,7 @@ export function MessageList({
   isTyping: boolean;
   onSelectWellnessPath: (pathId: WellnessPathId) => void;
   onSelectProduct: (rec: RecommendedProduct) => void;
+  onExplainProduct: (rec: RecommendedProduct) => void;
   onSelectBookingSlot: (slotId: string) => void;
   onConfirmPayment: () => void;
 }) {
@@ -49,6 +51,7 @@ export function MessageList({
             message={msg}
             onSelectWellnessPath={onSelectWellnessPath}
             onSelectProduct={onSelectProduct}
+            onExplainProduct={onExplainProduct}
             onSelectBookingSlot={onSelectBookingSlot}
             onConfirmPayment={onConfirmPayment}
           />
