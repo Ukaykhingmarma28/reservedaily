@@ -17,9 +17,10 @@ npm run dev:network  # same but without Turbopack (for debugging Turbopack-speci
 npm run build        # next build — production build (standalone output)
 npm run start        # next start — serve the production build
 npm run lint         # eslint (flat config at eslint.config.mjs)
+npm run fetch-products  # npx tsx scripts/fetch-products.ts — sync products from WooCommerce staging API
 ```
 
-No test runner is configured. Docker: `docker compose up --build` for production-like local run.
+No test runner is configured. No `.env` file is needed — the app is entirely client-side with mock data, so `npm install` is the only setup step. Docker: `docker compose up --build` for production-like local run.
 
 ## Architecture
 
@@ -47,10 +48,11 @@ No test runner is configured. Docker: `docker compose up --build` for production
   - `types.ts` — all types for the chat system (messages, phases, payloads, state, actions).
   - `mock-engine.ts` — `generateResponse()` drives the conversation flow through phases (greeting → upload → analysis → wellness paths → product recs → booking → payment). Returns `ChatMessage[]` with typed payloads.
   - `mock-data.ts` — biomarker results, wellness paths, booking slots, and product recommendation mappings (references products by ID from `data/products.json`).
+- `scripts/fetch-products.ts` — WooCommerce sync script. Fetches from the staging API (`stg-reservedaily.ukaykhing.com`), maps WC categories to app categories, assigns `section` based on sale status/type/ID, and writes `data/products.json`. Run via `npm run fetch-products`.
 
 ### Vital AI conversation flow
 
-The chat follows a linear phase machine: `greeting` → `uploading` → `analyzing` → `analysis` → `wellness_paths` → `product_recs` → `booking` → `payment` → `confirmed`. Each phase transition is handled by `generateResponse()` in `mock-engine.ts`, which returns messages with typed payloads that ChatShell dispatches to the reducer. The entire feature is client-side with simulated delays — no real API calls.
+The chat follows a linear phase machine: `greeting` → `upload` → `parsing` → `analysis` → `wellness-select` → `recommendations` → `booking` → `payment` → `payment-complete` → `free-chat`. Each phase transition is handled by `generateResponse()` in `mock-engine.ts`, which returns messages with typed payloads that ChatShell dispatches to the reducer. The entire feature is client-side with simulated delays — no real API calls.
 
 ### Tailwind v4 (CSS-first)
 

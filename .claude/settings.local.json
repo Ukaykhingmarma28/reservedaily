@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:stg-reservedaily.ukaykhing.com)",
+      "Bash(node -e \"const d=require\\('./data/products.json'\\); console.log\\('Total:', d.products.length\\); const sections={}; d.products.forEach\\(p => { const s = Array.isArray\\(p.section\\) ? p.section : [p.section]; s.forEach\\(sec => { sections[sec] = \\(sections[sec]||0\\)+1; }\\); }\\); console.log\\('By section:', sections\\); const cats={}; d.products.forEach\\(p => { if\\(p.category\\) cats[p.category]=\\(cats[p.category]||0\\)+1; }\\); console.log\\('By category:', cats\\); const types={}; d.products.forEach\\(p => { types[p.type]=\\(types[p.type]||0\\)+1; }\\); console.log\\('By type:', types\\); const arts={}; d.products.forEach\\(p => { arts[p.art]=\\(arts[p.art]||0\\)+1; }\\); console.log\\('By art:', arts\\);\")",
+      "Bash(node -e \"const d=require\\('./data/products.json'\\); const ids = d.products.map\\(p=>p.id\\); const dupes = ids.filter\\(\\(id,i\\) => ids.indexOf\\(id\\) !== i\\); console.log\\('Duplicate IDs:', dupes.length > 0 ? dupes : 'none'\\); console.log\\('Colors used:', [...new Set\\(d.products.map\\(p=>p.color\\)\\)]\\); console.log\\('Tags used:', [...new Set\\(d.products.map\\(p=>p.tag\\)\\)]\\); console.log\\('Providers used:', [...new Set\\(d.products.map\\(p=>p.provider\\)\\)]\\); console.log\\('Locations used:', [...new Set\\(d.products.map\\(p=>p.location\\)\\)]\\);\")",
+      "Bash(node -e ' *)"
+    ]
+  }
+}
