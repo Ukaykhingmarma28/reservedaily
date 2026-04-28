@@ -3,48 +3,9 @@
 import { useRef } from "react";
 import { ArrowRight } from "@/components/ui/icons";
 import { ProductCard } from "./ProductCard";
-import type { Product } from "@/lib/data";
+import { getProductsBySection } from "@/lib/products";
 
-const items: Product[] = [
-  {
-    type: "bookable", tag: "Bestseller", name: "Exosome IV Therapy",
-    provider: "Renewal Medical", location: "KL · Bangsar",
-    rating: 4.9, reviews: 127, duration: "75 min", art: "cell", color: "#1a2659",
-    variationLabel: "Package",
-    variations: [
-      { label: "Single", meta: "75 min", price: "RM 2,400", was: "RM 2,900" },
-      { label: "3-pack", meta: "3 × 75 min", price: "RM 6,800" },
-      { label: "5-pack", meta: "5 × 75 min", price: "RM 10,500" },
-    ],
-  },
-  {
-    type: "bookable", tag: "Staff Pick", name: "NAD+ Longevity Drip",
-    provider: "Pure IV Co.", location: "KL · Mont Kiara",
-    rating: 4.8, reviews: 203, duration: "90 min", art: "cell", color: "#f0a028",
-    variationLabel: "Dosage",
-    variations: [
-      { label: "250 mg", meta: "60 min", price: "RM 680" },
-      { label: "500 mg", meta: "90 min", price: "RM 980" },
-      { label: "1000 mg", meta: "120 min", price: "RM 1,680" },
-    ],
-  },
-  {
-    type: "bookable", tag: "Featured", name: "Luna Lift HIFU Facial",
-    provider: "Éclat Aesthetics", location: "KL · Bukit Bintang",
-    rating: 5.0, reviews: 89, duration: "60 min", art: "leaf", color: "#148c50",
-    variationLabel: "Session",
-    variations: [
-      { label: "60 min", meta: "60 min", price: "RM 3,200", was: "RM 3,800" },
-      { label: "90 min", meta: "90 min", price: "RM 4,200" },
-    ],
-  },
-  {
-    type: "bookable", tag: "Limited", name: "ExoCake 5D Package",
-    provider: "Vitality Wellness", location: "KL · KLCC",
-    rating: 4.9, reviews: 42, duration: "4 sessions", art: "cell", color: "#1a2659",
-    price: "RM 4,200",
-  },
-];
+const items = getProductsBySection("featured-treatments");
 
 export function FeaturedTreatments() {
   const railRef = useRef<HTMLDivElement>(null);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, type KeyboardEvent } from "react";
-import { Sparkle, Upload, ChevronRight, Send, Paperclip } from "@/components/ui/icons";
+import { Sparkle, Upload, ChevronRight, Send, Paperclip, Heart, Dna, MessageSquare } from "@/components/ui/icons";
 import { GREETING_TEXT } from "@/lib/vital/mock-data";
 
 const SUGGESTED_PROMPTS = [
@@ -14,11 +14,15 @@ export function GreetingView({
   onStartUpload,
   onStartChat,
   onBrowseTreatments,
+  onBookNurse,
+  onBookDoctor,
   onSend,
 }: {
   onStartUpload: () => void;
   onStartChat: () => void;
   onBrowseTreatments: () => void;
+  onBookNurse: () => void;
+  onBookDoctor: () => void;
   onSend: (text: string) => void;
 }) {
   const [text, setText] = useState("");
@@ -80,23 +84,40 @@ export function GreetingView({
           <p className="text-[10px] font-bold text-muted tracking-[0.08em] uppercase text-left">
             Quick Actions
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div className="flex flex-col gap-1.5">
             <QuickAction
-              icon={<Upload size={16} className="text-white" />}
-              gradient="from-moss/80 to-moss-2/70"
+              icon={<Upload size={15} className="text-white" />}
+              gradient="from-moss to-moss-2"
               label="Analyse Blood Report"
+              desc="Upload your blood panel for AI analysis"
               onClick={onStartUpload}
             />
             <QuickAction
-              icon={<Sparkle size={16} className="text-white" />}
-              gradient="from-berry/60 to-berry/40"
+              icon={<Sparkle size={15} className="text-white" />}
+              gradient="from-berry to-berry/70"
               label="Browse Treatments"
+              desc="IV drips, injections & supplements"
               onClick={onBrowseTreatments}
             />
             <QuickAction
-              icon={<Sparkle size={16} className="text-white" />}
-              gradient="from-sage-2/70 to-sage/50"
-              label="Ask a Health Question"
+              icon={<Heart size={15} className="text-white" />}
+              gradient="from-rust to-rust-soft"
+              label="Book On-Demand Nurse"
+              desc="Certified nurse visits at your location"
+              onClick={onBookNurse}
+            />
+            <QuickAction
+              icon={<Dna size={15} className="text-white" />}
+              gradient="from-ink to-ink-2"
+              label="Book On-Demand Doctor"
+              desc="Doctor consultations at home or hotel"
+              onClick={onBookDoctor}
+            />
+            <QuickAction
+              icon={<MessageSquare size={15} className="text-white" />}
+              gradient="from-sage-2 to-sage"
+              label="Ask About Symptoms"
+              desc="Get guidance on any health concern"
               onClick={onStartChat}
             />
           </div>
@@ -172,23 +193,28 @@ function QuickAction({
   icon,
   gradient,
   label,
+  desc,
   onClick,
 }: {
   icon: React.ReactNode;
   gradient: string;
   label: string;
+  desc: string;
   onClick: () => void;
 }) {
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-2.5 p-2.5 rounded-[10px] border border-line/40 bg-white text-left transition-all duration-200 hover:border-line hover:shadow-[0_4px_16px_rgba(0,0,0,0.05)] active:scale-[0.98] group"
+      className="flex items-center gap-3 px-3 py-2.5 rounded-[10px] border border-line/40 bg-white text-left transition-all duration-200 hover:border-line hover:shadow-[0_2px_12px_rgba(0,0,0,0.06)] active:scale-[0.99] group"
     >
       <div className={`w-9 h-9 rounded-[8px] bg-gradient-to-br ${gradient} flex items-center justify-center shrink-0 shadow-sm`}>
         {icon}
       </div>
-      <span className="text-[12px] font-semibold text-ink leading-tight flex-1">{label}</span>
-      <ChevronRight size={10} className="text-muted/50 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+      <div className="flex-1 min-w-0">
+        <span className="block text-[13px] font-semibold text-ink leading-tight">{label}</span>
+        <span className="block text-[11px] text-muted leading-snug mt-0.5">{desc}</span>
+      </div>
+      <ChevronRight size={10} className="text-muted/40 shrink-0 group-hover:translate-x-0.5 transition-transform" />
     </button>
   );
 }

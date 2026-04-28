@@ -1,3 +1,4 @@
+import type { Product } from "@/lib/data";
 import type {
   ChatMessage,
   ConversationPhase,
@@ -9,11 +10,15 @@ import {
   UPLOAD_INSTRUCTIONS,
   FREE_CHAT_WELCOME,
   BROWSE_TREATMENTS_WELCOME,
+  NURSE_BOOKING_WELCOME,
+  DOCTOR_BOOKING_WELCOME,
   ANALYSIS_SUMMARY,
   MOCK_BIOMARKERS,
   MOCK_WELLNESS_PATHS,
   PRODUCTS_BY_PATH,
   MOCK_BOOKING_SLOTS,
+  MOCK_NURSE_SLOTS,
+  MOCK_DOCTOR_SLOTS,
   QA_RESPONSES,
 } from "./mock-data";
 
@@ -81,6 +86,44 @@ export async function generateResponse(
         return {
           messages: [assistantText("Let me help you find the right treatment."), pathsMsg],
           nextPhase: "wellness-select",
+        };
+      }
+      if (action.type === "book-nurse") {
+        await delay(800);
+        const bookingMsg: ChatMessage = {
+          id: msgId(),
+          role: "assistant",
+          type: "booking-form",
+          timestamp: new Date(),
+          payload: {
+            kind: "booking-form",
+            prompt: NURSE_BOOKING_WELCOME,
+            productName: "On-Demand Nurse Visit",
+            slots: MOCK_NURSE_SLOTS,
+          },
+        };
+        return {
+          messages: [assistantText("Let me find available nurses for you."), bookingMsg],
+          nextPhase: "booking",
+        };
+      }
+      if (action.type === "book-doctor") {
+        await delay(800);
+        const bookingMsg: ChatMessage = {
+          id: msgId(),
+          role: "assistant",
+          type: "booking-form",
+          timestamp: new Date(),
+          payload: {
+            kind: "booking-form",
+            prompt: DOCTOR_BOOKING_WELCOME,
+            productName: "On-Demand Doctor Visit",
+            slots: MOCK_DOCTOR_SLOTS,
+          },
+        };
+        return {
+          messages: [assistantText("Let me find available doctors for you."), bookingMsg],
+          nextPhase: "booking",
         };
       }
       break;
@@ -232,7 +275,8 @@ export async function generateResponse(
 
     case "booking": {
       if (action.type === "select-booking-slot") {
-        const slot = MOCK_BOOKING_SLOTS.find((s) => s.id === action.slotId);
+        const allSlots = [...MOCK_BOOKING_SLOTS, ...MOCK_NURSE_SLOTS, ...MOCK_DOCTOR_SLOTS];
+        const slot = allSlots.find((s) => s.id === action.slotId);
         if (!slot || !slot.available) {
           return {
             messages: [
@@ -242,8 +286,30 @@ export async function generateResponse(
           };
         }
 
-        const product = _state.selectedProduct?.product;
-        const price = parseFloat(product?.price?.replace(/[^0-9.]/g, "") ?? "0");
+        const isNurse = slot.id.startsWith("ns");
+        const isDoctor = slot.id.startsWith("ds");
+        const product: Product = _state.selectedProduct?.product ?? {
+          id: isNurse ? "on-demand-nurse" : isDoctor ? "on-demand-doctor" : "treatment",
+          type: "bookable" as const,
+          tag: isNurse ? "Nurse Visit" : isDoctor ? "Doctor Visit" : "Treatment",
+          name: isNurse ? "On-Demand Nurse Visit" : isDoctor ? "On-Demand Doctor Visit" : "Treatment",
+          provider: slot.practitioner,
+          location: "Your Location",
+          rating: 4.8,
+          reviews: 0,
+          duration: isNurse ? "60 min" : "45 min",
+          art: "cell" as const,
+          color: "#4a7c6f",
+          category: "Health Services",
+          price: isNurse ? "RM 250" : "RM 450",
+        };
+        const reason = _state.selectedProduct?.reason ?? (isNurse
+          ? "Professional nurse visit for wellness treatments at your convenience."
+          : isDoctor
+            ? "Doctor consultation and treatment at your preferred location."
+            : "");
+
+        const price = parseFloat(product.price?.replace(/[^0-9.]/g, "") ?? "0");
         const serviceFee = Math.round(price * 0.05);
 
         await delay(800);
@@ -254,8 +320,8 @@ export async function generateResponse(
           timestamp: new Date(),
           payload: {
             kind: "payment-summary",
-            product: product!,
-            reason: _state.selectedProduct?.reason ?? "",
+            product,
+            reason,
             subtotal: price,
             serviceFee,
             total: price + serviceFee,
@@ -276,9 +342,14 @@ export async function generateResponse(
     case "payment": {
       if (action.type === "confirm-payment") {
         await delay(2000);
-        const product = _state.selectedProduct?.product;
-        const price = parseFloat(product?.price?.replace(/[^0-9.]/g, "") ?? "0");
-        const serviceFee = Math.round(price * 0.05);
+
+        const lastPaymentSummary = [..._state.messages].reverse().find(
+          (m) => m.payload.kind === "payment-summary",
+        );
+        const summaryPayload = lastPaymentSummary?.payload.kind === "payment-summary" ? lastPaymentSummary.payload : null;
+
+        const product = summaryPayload?.product ?? _state.selectedProduct?.product;
+        const total = summaryPayload?.total ?? 0;
         const orderId = `RD-${Date.now().toString(36).toUpperCase().slice(-6)}`;
 
         const confirmMsg: ChatMessage = {
@@ -290,7 +361,7 @@ export async function generateResponse(
             kind: "payment-confirmation",
             orderId,
             product: product!,
-            amountPaid: price + serviceFee,
+            amountPaid: total,
             currency: "MYR",
             paymentMethod: "Visa ending ····4242",
             message:

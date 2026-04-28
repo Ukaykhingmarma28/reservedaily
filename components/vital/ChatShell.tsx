@@ -11,7 +11,8 @@ import type {
   RecommendedProduct,
 } from "@/lib/vital/types";
 import { generateResponse } from "@/lib/vital/mock-engine";
-import { Sparkle, PanelLeft, Home } from "@/components/ui/icons";
+import Image from "next/image";
+import { Sparkle, PanelLeft } from "@/components/ui/icons";
 import { Sidebar } from "./Sidebar";
 import { GreetingView } from "./GreetingView";
 import { MessageList } from "./MessageList";
@@ -100,6 +101,16 @@ export function ChatShell() {
   function handleBrowseTreatments() {
     dispatch({ type: "SET_PHASE", phase: "wellness-select" });
     sendAction({ type: "browse-treatments" }, "greeting");
+  }
+
+  function handleBookNurse() {
+    dispatch({ type: "SET_PHASE", phase: "booking" });
+    sendAction({ type: "book-nurse" }, "greeting");
+  }
+
+  function handleBookDoctor() {
+    dispatch({ type: "SET_PHASE", phase: "booking" });
+    sendAction({ type: "book-doctor" }, "greeting");
   }
 
   function handleGreetingSend(text: string) {
@@ -288,12 +299,8 @@ export function ChatShell() {
             </span>
           </div>
 
-          <a
-            href="/"
-            className="inline-flex items-center gap-1.5 no-underline text-[11px] font-semibold tracking-[0.04em] uppercase text-muted hover:text-ink transition-colors"
-          >
-            <Home size={14} />
-            <span className="hidden sm:inline">Home</span>
+          <a href="/" className="inline-flex items-center no-underline">
+            <Image src="/logo.png" alt="Reserve Daily" width={100} height={25} className="h-6 w-auto block" />
           </a>
         </header>
 
@@ -303,6 +310,8 @@ export function ChatShell() {
             onStartUpload={handleStartUpload}
             onStartChat={handleStartChat}
             onBrowseTreatments={handleBrowseTreatments}
+            onBookNurse={handleBookNurse}
+            onBookDoctor={handleBookDoctor}
             onSend={handleGreetingSend}
           />
         ) : (

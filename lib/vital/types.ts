@@ -179,7 +179,9 @@ export type UserAction =
   | { type: "send-text"; text: string }
   | { type: "start-upload" }
   | { type: "start-chat" }
-  | { type: "browse-treatments" };
+  | { type: "browse-treatments" }
+  | { type: "book-nurse" }
+  | { type: "book-doctor" };
 
 export type ChatAction =
   | { type: "ADD_MESSAGE"; message: ChatMessage }

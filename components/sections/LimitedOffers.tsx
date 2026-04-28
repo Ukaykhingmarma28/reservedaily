@@ -3,60 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "@/components/ui/icons";
 import { ProductCard } from "./ProductCard";
-import type { Product } from "@/lib/data";
+import { getProductsBySection } from "@/lib/products";
 
-const offers: Product[] = [
-  {
-    type: "bookable", tag: "-30%", name: "Exosome Revival Drip",
-    provider: "Renewal Medical", location: "KL · Bangsar",
-    rating: 4.9, reviews: 127, duration: "75 min", art: "cell", color: "#1a2659",
-    variationLabel: "Package",
-    variations: [
-      { label: "Single", meta: "75 min", price: "RM 1,680", was: "RM 2,400" },
-      { label: "3-pack", meta: "3 × 75 min", price: "RM 4,760", was: "RM 6,800" },
-    ],
-  },
-  {
-    type: "bookable", tag: "-25%", name: "PRF Skin Boost Facial",
-    provider: "Éclat Aesthetics", location: "KL · Bukit Bintang",
-    rating: 5.0, reviews: 89, duration: "60 min", art: "leaf", color: "#148c50",
-    variationLabel: "Session",
-    variations: [
-      { label: "Single", meta: "60 min", price: "RM 2,400", was: "RM 3,200" },
-      { label: "3-pack", meta: "3 × 60 min", price: "RM 6,120", was: "RM 8,640" },
-    ],
-  },
-  {
-    type: "bookable", tag: "-26%", name: "Myer's Cocktail IV",
-    provider: "Pure IV Co.", location: "KL · Mont Kiara",
-    rating: 4.8, reviews: 203, duration: "60 min", art: "droplet", color: "#f0a028",
-    variationLabel: "Dosage",
-    variations: [
-      { label: "Standard", meta: "60 min", price: "RM 280", was: "RM 380" },
-      { label: "Plus", meta: "75 min", price: "RM 380", was: "RM 480" },
-    ],
-  },
-  {
-    type: "physical", tag: "-20%", name: "Liposomal Vitamin C",
-    provider: "Reserve Daily Labs", location: "Ships free · MY",
-    rating: 4.8, reviews: 412, size: "60 caps", art: "leaf", color: "#1a2659",
-    variationLabel: "Count",
-    variations: [
-      { label: "60 caps", meta: "60 caps · 1000mg", price: "RM 119", was: "RM 149" },
-      { label: "120 caps", meta: "120 caps · 1000mg", price: "RM 199", was: "RM 249" },
-    ],
-  },
-  {
-    type: "bookable", tag: "-35%", name: "NAD+ Starter Drip",
-    provider: "Pure IV Co.", location: "KL · Mont Kiara",
-    rating: 4.7, reviews: 96, duration: "60 min", art: "droplet", color: "#1a2659",
-    variationLabel: "Dosage",
-    variations: [
-      { label: "250 mg", meta: "60 min", price: "RM 442", was: "RM 680" },
-      { label: "500 mg", meta: "90 min", price: "RM 637", was: "RM 980" },
-    ],
-  },
-];
+const offers = getProductsBySection("limited-offers");
 
 function Countdown({ hours = 47, minutes = 23, seconds = 11 }: { hours?: number; minutes?: number; seconds?: number }) {
   const [t, setT] = useState({ h: hours, m: minutes, s: seconds });

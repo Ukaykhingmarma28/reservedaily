@@ -52,6 +52,8 @@ export const CATEGORY_STRIP_LINKS = [
 export type Variation = { label: string; meta: string; price: string; was?: string };
 
 export type Product = {
+  id: string;
+  section?: string | string[];
   type: "bookable" | "physical";
   tag: string;
   name: string;

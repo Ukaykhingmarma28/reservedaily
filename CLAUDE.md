@@ -26,7 +26,7 @@ No test runner is configured. Docker: `docker compose up --build` for production
 ### App Router
 
 - Routes live directly under `app/` — no `pages/` dir, no `src/` wrapper.
-- `app/layout.tsx` is the root layout (loads Inter + Fraunces fonts via `next/font/google`).
+- `app/layout.tsx` is the root layout (loads Inter + Figtree fonts via `next/font/google`).
 - `app/page.tsx` is the homepage — assembles section components in order (AnnouncementBar through Footer).
 - `app/vital/` is the Vital AI chat page — single `ChatShell` component with its own layout for metadata.
 - Path alias `@/*` maps to repo root, so imports look like `@/components/sections/Nav`.
@@ -40,8 +40,17 @@ No test runner is configured. Docker: `docker compose up --build` for production
 
 ### Data
 
-- `lib/data.ts` — typed arrays for categories, products, navigation links, and section content. No API/database yet.
-- `lib/vital/` — Vital AI logic: `types.ts` (discriminated union message types, 9 conversation phases), `mock-engine.ts` (state machine that generates responses per phase), `mock-data.ts` (mock biomarkers, wellness paths, booking slots, Q&A).
+- `data/products.json` — single source of truth for all product data (~75 products). Each product has an `id` (kebab-case slug) and `section` field indicating which UI section(s) it belongs to: `"featured-treatments"`, `"limited-offers"`, `"new-arrivals"`, `"featured-apothecary"`, `"vital"`.
+- `lib/products.ts` — typed accessor layer over the JSON. Exports `getAllProducts()`, `getProductById(id)`, `getProductsBySection(section)`, `getProductsByCategory(category)`. All components import from here, never from the JSON directly.
+- `lib/data.ts` — types (`Product`, `Category`, `Review`, `JournalPost`, `Variation`) and constants (`CATEGORIES`, `CATEGORY_STRIP_LINKS`). The `Product` type includes `id: string` and `section?: string | string[]`.
+- `lib/vital/` — Vital AI feature data layer:
+  - `types.ts` — all types for the chat system (messages, phases, payloads, state, actions).
+  - `mock-engine.ts` — `generateResponse()` drives the conversation flow through phases (greeting → upload → analysis → wellness paths → product recs → booking → payment). Returns `ChatMessage[]` with typed payloads.
+  - `mock-data.ts` — biomarker results, wellness paths, booking slots, and product recommendation mappings (references products by ID from `data/products.json`).
+
+### Vital AI conversation flow
+
+The chat follows a linear phase machine: `greeting` → `uploading` → `analyzing` → `analysis` → `wellness_paths` → `product_recs` → `booking` → `payment` → `confirmed`. Each phase transition is handled by `generateResponse()` in `mock-engine.ts`, which returns messages with typed payloads that ChatShell dispatches to the reducer. The entire feature is client-side with simulated delays — no real API calls.
 
 ### Tailwind v4 (CSS-first)
 
@@ -51,8 +60,8 @@ No test runner is configured. Docker: `docker compose up --build` for production
 
 ### Design tokens (defined in globals.css @theme)
 
-- **Colors**: `cream` (#fff), `paper`, `sage`/`sage-2`, `moss`/`moss-2`, `ink`/`ink-2`, `muted`, `line`/`line-2`, `rust`/`rust-soft`, `butter`, `berry`. Background defaults to cream, foreground to ink.
-- **Fonts**: Inter (`--font-sans`, body) and Fraunces/Figtree (`--font-display`, headings). Utility class `.ff` applies the display font.
+- **Colors**: `cream` (#ffffff), `paper`, `sage`/`sage-2`, `moss`/`moss-2` (deep navy blue), `ink`/`ink-2`, `muted`, `line`/`line-2`, `rust`/`rust-soft` (gold/amber), `butter` (teal), `berry` (green). Background defaults to cream, foreground to ink.
+- **Fonts**: Inter (`--font-sans`, body) and Figtree (`--font-display`, headings). The CSS variable is named `--font-fraunces` for historical reasons but loads the Figtree typeface. Utility class `.ff` applies the display font.
 - **Animations**: All keyframes prefixed `rd-` (e.g. `rd-marquee`, `rd-hero-fade`, `rd-dna-spin`, `rd-drawer-slide`, `rd-typing-dot`, `rd-fade-up`, `rd-vital-pulse`, `rd-msg-in`). Defined in globals.css.
 
 ### Layout

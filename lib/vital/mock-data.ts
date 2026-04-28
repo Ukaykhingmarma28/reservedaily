@@ -1,10 +1,10 @@
-import type { Product } from "@/lib/data";
 import type {
   BiomarkerResult,
   WellnessPath,
   RecommendedProduct,
   BookingSlot,
 } from "./types";
+import { getProductById } from "@/lib/products";
 
 export const GREETING_TEXT =
   "Upload a blood test report for AI-powered analysis, browse treatments, or ask me anything about wellness.";
@@ -17,6 +17,12 @@ export const FREE_CHAT_WELCOME =
 
 export const BROWSE_TREATMENTS_WELCOME =
   "Let's find the right treatment for you. Select a wellness path below to see personalised recommendations.";
+
+export const NURSE_BOOKING_WELCOME =
+  "Our on-demand nurses are certified professionals who come to your home or hotel. Select a convenient time slot below:";
+
+export const DOCTOR_BOOKING_WELCOME =
+  "Our on-demand doctors provide consultations and treatments at your location. Select a convenient time slot below:";
 
 export const ANALYSIS_SUMMARY =
   "Based on your blood panel, I've identified a few areas that need attention. Your Vitamin D and iron levels are below optimal range, and there's mild inflammation indicated by elevated hs-CRP. The good news — your thyroid function, blood sugar control, and most other markers look solid. Let's focus on addressing the deficiencies.";
@@ -139,230 +145,53 @@ export const MOCK_WELLNESS_PATHS: WellnessPath[] = [
   },
 ];
 
-// --- Bookable treatments (type: "bookable") ---
-
-const ironIV: Product = {
-  type: "bookable",
-  tag: "IV Therapy",
-  name: "Iron IV Infusion",
-  provider: "Klinik Esthetika",
-  location: "Mont Kiara, KL",
-  rating: 4.8,
-  reviews: 124,
-  duration: "45 min",
-  art: "cell",
-  color: "#4a7c6f",
-  category: "Energy & Vitality",
-  price: "RM 380",
-};
-
-const vitDDrip: Product = {
-  type: "bookable",
-  tag: "IV Therapy",
-  name: "Vitamin D3 + K2 Drip",
-  provider: "Vitality Wellness KL",
-  location: "Bangsar, KL",
-  rating: 4.9,
-  reviews: 89,
-  duration: "30 min",
-  art: "leaf",
-  color: "#6b8f71",
-  category: "Energy & Vitality",
-  price: "RM 280",
-};
-
-const b12Injection: Product = {
-  type: "bookable",
-  tag: "Injection",
-  name: "B12 Methylcobalamin Shot",
-  provider: "The Wellness Clinic PJ",
-  location: "Petaling Jaya",
-  rating: 4.7,
-  reviews: 203,
-  duration: "15 min",
-  art: "cell",
-  color: "#7a6b8f",
-  category: "Energy & Vitality",
-  price: "RM 120",
-};
-
-const nadDrip: Product = {
-  type: "bookable",
-  tag: "Premium IV",
-  name: "NAD+ Recovery Drip",
-  provider: "Reviv Malaysia",
-  location: "KLCC, KL",
-  rating: 4.6,
-  reviews: 67,
-  duration: "90 min",
-  art: "cell",
-  color: "#8f6b6b",
-  category: "Anti-Aging & Longevity",
-  price: "RM 850",
-};
-
-const glutathioneDrip: Product = {
-  type: "bookable",
-  tag: "IV Therapy",
-  name: "Glutathione IV Drip",
-  provider: "GlowMed Clinic",
-  location: "Sri Hartamas, KL",
-  rating: 4.8,
-  reviews: 156,
-  duration: "40 min",
-  art: "leaf",
-  color: "#6b8f8f",
-  category: "Immune Boost",
-  price: "RM 350",
-};
-
-const vitCIV: Product = {
-  type: "bookable",
-  tag: "IV Therapy",
-  name: "High-Dose Vitamin C IV",
-  provider: "Vitality Wellness KL",
-  location: "Bangsar, KL",
-  rating: 4.7,
-  reviews: 178,
-  duration: "45 min",
-  art: "cell",
-  color: "#8f8f6b",
-  category: "Immune Boost",
-  price: "RM 220",
-};
-
-// --- Physical products (type: "physical") ---
-
-const vitD3Supplement: Product = {
-  type: "physical",
-  tag: "Supplement",
-  name: "Vitamin D3 5000 IU + K2",
-  provider: "ReserveDaily Essentials",
-  location: "Ships from KL",
-  rating: 4.9,
-  reviews: 312,
-  size: "60 capsules",
-  art: "leaf",
-  color: "#6b8f71",
-  category: "Energy & Vitality",
-  price: "RM 89",
-  was: "RM 120",
-};
-
-const ironBisglycinate: Product = {
-  type: "physical",
-  tag: "Supplement",
-  name: "Iron Bisglycinate 25mg",
-  provider: "ReserveDaily Essentials",
-  location: "Ships from KL",
-  rating: 4.7,
-  reviews: 187,
-  size: "90 capsules",
-  art: "cell",
-  color: "#8f6b7a",
-  category: "Energy & Vitality",
-  price: "RM 65",
-};
-
-const b12Sublingual: Product = {
-  type: "physical",
-  tag: "Supplement",
-  name: "B12 Methylcobalamin 1000mcg",
-  provider: "Thorne Research",
-  location: "Ships from KL",
-  rating: 4.8,
-  reviews: 245,
-  size: "60 lozenges",
-  art: "cell",
-  color: "#7a6b8f",
-  category: "Energy & Vitality",
-  price: "RM 95",
-};
-
-const glutathioneCapsules: Product = {
-  type: "physical",
-  tag: "Antioxidant",
-  name: "Liposomal Glutathione 500mg",
-  provider: "Quicksilver Scientific",
-  location: "Ships from KL",
-  rating: 4.6,
-  reviews: 98,
-  size: "30 softgels",
-  art: "leaf",
-  color: "#6b8f8f",
-  category: "Immune Boost",
-  price: "RM 180",
-};
-
-const zincSupplement: Product = {
-  type: "physical",
-  tag: "Mineral",
-  name: "Zinc Picolinate 30mg",
-  provider: "ReserveDaily Essentials",
-  location: "Ships from KL",
-  rating: 4.5,
-  reviews: 92,
-  size: "120 capsules",
-  art: "cell",
-  color: "#6b7a8f",
-  category: "Immune Boost",
-  price: "RM 45",
-};
-
-const magnesiumComplex: Product = {
-  type: "physical",
-  tag: "Supplement",
-  name: "Magnesium Glycinate 400mg",
-  provider: "Thorne Research",
-  location: "Ships from KL",
-  rating: 4.8,
-  reviews: 267,
-  size: "90 capsules",
-  art: "leaf",
-  color: "#6b8f71",
-  category: "Mental Clarity & Stress",
-  price: "RM 110",
-};
-
-// --- Product recommendations by wellness path ---
-
-export const PRODUCTS_BY_PATH: Record<string, RecommendedProduct[]> = {
+const VITAL_RECOMMENDATIONS: Record<string, { productId: string; reason: string }[]> = {
   "anti-aging": [
-    { product: nadDrip, reason: "Cellular energy restoration for longevity and mitochondrial function." },
-    { product: glutathioneDrip, reason: "Master antioxidant for cellular repair and anti-aging." },
-    { product: glutathioneCapsules, reason: "Daily antioxidant maintenance for long-term cellular health." },
+    { productId: "nad-recovery-drip", reason: "Cellular energy restoration for longevity and mitochondrial function." },
+    { productId: "glutathione-iv-drip", reason: "Master antioxidant for cellular repair and anti-aging." },
+    { productId: "liposomal-glutathione-500mg", reason: "Daily antioxidant maintenance for long-term cellular health." },
   ],
   "health-check": [
-    { product: ironIV, reason: "Directly addresses your low ferritin for faster iron repletion." },
-    { product: vitDDrip, reason: "High-dose Vitamin D IV to rapidly restore your levels from 18 to optimal." },
-    { product: vitD3Supplement, reason: "Daily maintenance to keep Vitamin D levels optimal after IV therapy." },
-    { product: ironBisglycinate, reason: "Gentle daily iron supplement to maintain ferritin between IV sessions." },
+    { productId: "iron-iv-infusion", reason: "Directly addresses your low ferritin for faster iron repletion." },
+    { productId: "vitamin-d3-k2-drip", reason: "High-dose Vitamin D IV to rapidly restore your levels from 18 to optimal." },
+    { productId: "vitamin-d3-5000iu-k2", reason: "Daily maintenance to keep Vitamin D levels optimal after IV therapy." },
+    { productId: "iron-bisglycinate-25mg", reason: "Gentle daily iron supplement to maintain ferritin between IV sessions." },
   ],
   "supplements": [
-    { product: vitD3Supplement, reason: "Daily Vitamin D to restore your levels from 18 to optimal range." },
-    { product: ironBisglycinate, reason: "Gentle daily iron to maintain ferritin between clinical sessions." },
-    { product: b12Sublingual, reason: "Sublingual B12 for daily support — absorbs faster than oral tablets." },
-    { product: zincSupplement, reason: "Essential trace mineral for immune function and thyroid support." },
-    { product: magnesiumComplex, reason: "Supports sleep quality, stress response, and over 300 enzymes." },
-    { product: glutathioneCapsules, reason: "Daily liposomal glutathione for sustained antioxidant support." },
+    { productId: "vitamin-d3-5000iu-k2", reason: "Daily Vitamin D to restore your levels from 18 to optimal range." },
+    { productId: "iron-bisglycinate-25mg", reason: "Gentle daily iron to maintain ferritin between clinical sessions." },
+    { productId: "b12-methylcobalamin-1000mcg", reason: "Sublingual B12 for daily support — absorbs faster than oral tablets." },
+    { productId: "zinc-picolinate-30mg", reason: "Essential trace mineral for immune function and thyroid support." },
+    { productId: "magnesium-glycinate-400mg", reason: "Supports sleep quality, stress response, and over 300 enzymes." },
+    { productId: "liposomal-glutathione-500mg", reason: "Daily liposomal glutathione for sustained antioxidant support." },
   ],
   "mind-mood": [
-    { product: magnesiumComplex, reason: "Calming mineral that supports sleep quality and stress response." },
-    { product: b12Injection, reason: "B12 supports cognitive function and mood regulation." },
-    { product: b12Sublingual, reason: "Daily B12 maintenance for mental clarity." },
+    { productId: "magnesium-glycinate-400mg", reason: "Calming mineral that supports sleep quality and stress response." },
+    { productId: "b12-methylcobalamin-shot", reason: "B12 supports cognitive function and mood regulation." },
+    { productId: "b12-methylcobalamin-1000mcg", reason: "Daily B12 maintenance for mental clarity." },
   ],
   "pain-recovery": [
-    { product: nadDrip, reason: "NAD+ accelerates cellular repair and reduces inflammation post-injury." },
-    { product: glutathioneDrip, reason: "Reduces oxidative stress that slows recovery from injury." },
-    { product: vitCIV, reason: "High-dose Vitamin C supports collagen synthesis and tissue repair." },
+    { productId: "nad-recovery-drip", reason: "NAD+ accelerates cellular repair and reduces inflammation post-injury." },
+    { productId: "glutathione-iv-drip", reason: "Reduces oxidative stress that slows recovery from injury." },
+    { productId: "high-dose-vitamin-c-iv", reason: "High-dose Vitamin C supports collagen synthesis and tissue repair." },
   ],
   "regen": [
-    { product: nadDrip, reason: "Cellular energy restoration for longevity and mitochondrial function." },
-    { product: glutathioneDrip, reason: "Master antioxidant for cellular repair and regeneration." },
-    { product: b12Injection, reason: "Quick B12 boost to support nerve regeneration and energy." },
-    { product: glutathioneCapsules, reason: "Daily antioxidant maintenance for long-term cellular health." },
+    { productId: "nad-recovery-drip", reason: "Cellular energy restoration for longevity and mitochondrial function." },
+    { productId: "glutathione-iv-drip", reason: "Master antioxidant for cellular repair and regeneration." },
+    { productId: "b12-methylcobalamin-shot", reason: "Quick B12 boost to support nerve regeneration and energy." },
+    { productId: "liposomal-glutathione-500mg", reason: "Daily antioxidant maintenance for long-term cellular health." },
   ],
 };
+
+export const PRODUCTS_BY_PATH: Record<string, RecommendedProduct[]> = Object.fromEntries(
+  Object.entries(VITAL_RECOMMENDATIONS).map(([path, recs]) => [
+    path,
+    recs.map(({ productId, reason }) => ({
+      product: getProductById(productId)!,
+      reason,
+    })),
+  ]),
+);
 
 export const MOCK_BOOKING_SLOTS: BookingSlot[] = [
   {
@@ -412,6 +241,92 @@ export const MOCK_BOOKING_SLOTS: BookingSlot[] = [
     practitioner: "Dr. Mei Chen",
     specialty: "Nutritional Medicine",
     available: true,
+  },
+];
+
+export const MOCK_NURSE_SLOTS: BookingSlot[] = [
+  {
+    id: "ns1",
+    date: "2026-04-28",
+    time: "9:00 AM",
+    practitioner: "Nurse Aisha Rahman",
+    specialty: "IV Therapy & Wellness",
+    available: true,
+  },
+  {
+    id: "ns2",
+    date: "2026-04-28",
+    time: "1:00 PM",
+    practitioner: "Nurse Priya Nair",
+    specialty: "Home Care & Injections",
+    available: true,
+  },
+  {
+    id: "ns3",
+    date: "2026-04-29",
+    time: "10:00 AM",
+    practitioner: "Nurse Aisha Rahman",
+    specialty: "IV Therapy & Wellness",
+    available: true,
+  },
+  {
+    id: "ns4",
+    date: "2026-04-29",
+    time: "3:00 PM",
+    practitioner: "Nurse Priya Nair",
+    specialty: "Home Care & Injections",
+    available: false,
+  },
+  {
+    id: "ns5",
+    date: "2026-04-30",
+    time: "11:00 AM",
+    practitioner: "Nurse Aisha Rahman",
+    specialty: "IV Therapy & Wellness",
+    available: true,
+  },
+];
+
+export const MOCK_DOCTOR_SLOTS: BookingSlot[] = [
+  {
+    id: "ds1",
+    date: "2026-04-28",
+    time: "10:00 AM",
+    practitioner: "Dr. Sarah Lim",
+    specialty: "Functional Medicine",
+    available: true,
+  },
+  {
+    id: "ds2",
+    date: "2026-04-28",
+    time: "3:00 PM",
+    practitioner: "Dr. Ahmad Razak",
+    specialty: "General Practitioner",
+    available: true,
+  },
+  {
+    id: "ds3",
+    date: "2026-04-29",
+    time: "9:30 AM",
+    practitioner: "Dr. Sarah Lim",
+    specialty: "Functional Medicine",
+    available: true,
+  },
+  {
+    id: "ds4",
+    date: "2026-04-29",
+    time: "2:00 PM",
+    practitioner: "Dr. Mei Chen",
+    specialty: "Nutritional Medicine",
+    available: true,
+  },
+  {
+    id: "ds5",
+    date: "2026-04-30",
+    time: "10:00 AM",
+    practitioner: "Dr. Ahmad Razak",
+    specialty: "General Practitioner",
+    available: false,
   },
 ];
 
