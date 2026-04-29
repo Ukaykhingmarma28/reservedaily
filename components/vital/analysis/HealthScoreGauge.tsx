@@ -3,6 +3,13 @@
 import { useEffect, useState } from "react";
 import { Sparkle } from "@/components/ui/icons";
 
+export type ScoreFactor = {
+  label: string;
+  impact: "positive" | "negative" | "critical";
+  value?: string;
+  ref?: string;
+};
+
 function badgeStyle(score: number): { bg: string; text: string } {
   if (score >= 80) return { bg: "bg-[#2a824b]/12", text: "text-[#2a824b]" };
   if (score >= 60) return { bg: "bg-[#5bab6e]/12", text: "text-[#3d8a50]" };
@@ -57,13 +64,16 @@ export function HealthScoreGauge({
   score,
   scoreLabel,
   summary,
+  scoreFactors,
 }: {
   score: number;
   scoreLabel: string;
   summary: string;
+  scoreFactors?: ScoreFactor[];
 }) {
   const [anim, setAnim] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const [showWhy, setShowWhy] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -83,6 +93,9 @@ export function HealthScoreGauge({
 
   const needleGaugeDeg = 2 + (anim / 100) * 176;
   const nc = "#1a5c32";
+
+  const negativeFactors = scoreFactors?.filter((f) => f.impact === "negative" || f.impact === "critical") ?? [];
+  const positiveFactors = scoreFactors?.filter((f) => f.impact === "positive") ?? [];
 
   return (
     <div
@@ -135,6 +148,75 @@ export function HealthScoreGauge({
           </svg>
         </div>
       </div>
+
+      {/* Why this score button */}
+      {scoreFactors && scoreFactors.length > 0 && (
+        <>
+          <button
+            onClick={() => setShowWhy(!showWhy)}
+            className="mt-3 w-full flex items-center justify-center gap-1.5 text-[11px] font-semibold text-moss py-2 rounded-lg border border-line/40 hover:bg-paper/60 transition-colors"
+          >
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            {showWhy ? "Hide score breakdown" : "Why this score?"}
+            <svg
+              width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+              className={`transition-transform duration-200 ${showWhy ? "rotate-180" : ""}`}
+              aria-hidden
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+
+          <div className={`overflow-hidden transition-all duration-300 ease-out ${showWhy ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"}`}>
+            <div className="mt-3 rounded-xl bg-paper/50 border border-line/30 p-4">
+              {/* Negative factors */}
+              {negativeFactors.length > 0 && (
+                <div className="mb-3">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-rust mb-2">
+                    Pulling score down
+                  </p>
+                  <div className="space-y-2">
+                    {negativeFactors.map((f) => (
+                      <div key={f.label} className="flex items-start gap-2">
+                        <div className={`w-1.5 h-1.5 rounded-full mt-[5px] shrink-0 ${f.impact === "critical" ? "bg-red-500" : "bg-rust"}`} />
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[11px] font-semibold text-ink">{f.label}</span>
+                          {f.value && (
+                            <span className="text-[11px] text-muted ml-1.5">
+                              {f.value} <span className="text-[9px]">(ref: {f.ref})</span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Positive factors */}
+              {positiveFactors.length > 0 && (
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#3a8a5c] mb-2">
+                    Supporting your score
+                  </p>
+                  <div className="space-y-2">
+                    {positiveFactors.map((f) => (
+                      <div key={f.label} className="flex items-start gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#3a8a5c] mt-[5px] shrink-0" />
+                        <span className="text-[11px] text-muted">{f.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
