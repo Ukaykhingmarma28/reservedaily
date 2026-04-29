@@ -21,7 +21,7 @@ export const BROWSE_TREATMENTS_WELCOME =
   "Let's find the right treatment for you. Select a wellness path below to see personalised recommendations.";
 
 export const ANALYSIS_SUMMARY =
-  "Your lipid panel reveals significant cardiovascular risk. LDL cholesterol at 4.04 mmol/L is well above the recommended threshold of 2.58, while total cholesterol (5.8) and non-HDL cholesterol (4.69) are also elevated. Your TC/HDL ratio of 5.2 exceeds the target of 5.0. The positive news — kidney function (eGFR 101), liver enzymes, fasting glucose (5.4), electrolytes, and inflammatory markers are all within healthy ranges. This is an excellent foundation for targeted lipid intervention.";
+  "Atherogenic dyslipidaemia with elevated LDL (4.04 mmol/L), total cholesterol (5.8), non-HDL cholesterol (4.69), and TC/HDL ratio (5.2) — placing you at intermediate-to-high 10-year cardiovascular risk. Renal, hepatic, glycaemic, haematological, and inflammatory markers are reassuringly normal. The primary recommendation is lifestyle modification with targeted nutraceutical support, with reassessment at 3 months.";
 
 export const MOCK_BIOMARKERS: BiomarkerResult[] = [
   {
@@ -32,7 +32,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "high",
     category: "cardiovascular",
     explanation:
-      "Significantly elevated at 1.57× the desirable upper limit. LDL is the primary driver of atherosclerotic plaque. Guidelines recommend aggressive reduction, particularly given the elevated total cholesterol and TC/HDL ratio.",
+      "At 4.04 mmol/L, this falls at the upper end of 'borderline high' per NCEP ATP III classification (3.36–4.11 mmol/L), functionally treated as high. For an intermediate-risk patient, the ESC/EAS target is < 2.6 mmol/L — you are 55% above goal. LDL is the primary driver of atherosclerotic plaque formation.",
   },
   {
     name: "Total Cholesterol",
@@ -42,7 +42,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "high",
     category: "cardiovascular",
     explanation:
-      "Above the desirable threshold. Combined with high LDL and non-HDL cholesterol, this indicates a lipid profile that warrants active management to reduce cardiovascular risk.",
+      "Exceeds the desirable threshold of 5.2 mmol/L. Combined with elevated LDL and non-HDL cholesterol, this confirms an atherogenic lipid profile. The concordance of multiple elevated lipid markers increases cardiovascular risk beyond what any single marker indicates alone.",
   },
   {
     name: "Non-HDL Cholesterol",
@@ -52,7 +52,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "high",
     category: "cardiovascular",
     explanation:
-      "Non-HDL captures all atherogenic lipoproteins (LDL + VLDL). At 4.69, this is 1.39× the upper limit and a strong independent predictor of cardiovascular events.",
+      "Non-HDL captures all atherogenic lipoproteins (LDL + VLDL + IDL + remnant particles). A 2020 JAMA Cardiology meta-analysis found non-HDL is a stronger predictor of cardiovascular events than LDL alone. At 4.69, you are 39% above the recommended target of < 3.37 mmol/L.",
   },
   {
     name: "TC/HDL Ratio",
@@ -62,7 +62,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "high",
     category: "cardiovascular",
     explanation:
-      "Just above the desirable threshold. This ratio reflects the balance between total and protective cholesterol — improving HDL or lowering LDL will bring this into range.",
+      "The Castelli Risk Index at 5.2 places you in the 'moderate risk' tier for males (average risk is 4.4–5.0, moderate is 5.0–5.9). This ratio is an independent predictor of coronary artery disease per the Framingham Offspring Study. Reducing LDL or raising HDL will improve this ratio.",
   },
   {
     name: "HDL Cholesterol",
@@ -72,7 +72,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "normal",
     category: "cardiovascular",
     explanation:
-      "Above the minimum threshold but could be higher for optimal cardiovascular protection. Regular exercise and omega-3 intake can help raise HDL levels.",
+      "Clears the minimum risk-factor threshold (1.03) but is suboptimal — the desirable range for cardiovascular protection is ≥ 1.55 mmol/L. In the context of elevated LDL, a higher HDL would provide better counterbalance against atherogenic burden. Regular exercise is the most effective lifestyle intervention for raising HDL.",
   },
   {
     name: "Triglyceride",
@@ -82,7 +82,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "normal",
     category: "cardiovascular",
     explanation:
-      "Within normal limits. This is a positive finding — elevated triglycerides would compound the LDL-driven cardiovascular risk. Maintain through balanced diet and regular activity.",
+      "Within normal limits — a positive finding. Your dyslipidaemia is LDL-dominant rather than mixed (triglyceride-driven), which is an important distinction for treatment strategy. Normal triglycerides indicate the atherogenic burden is primarily from LDL cholesterol particles.",
   },
   {
     name: "Red Blood Cells",
@@ -92,7 +92,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "low",
     category: "overall",
     explanation:
-      "Marginally below the reference range. Haemoglobin remains normal at 145 g/L, so oxygen-carrying capacity is preserved. Worth monitoring on repeat testing but not clinically concerning in isolation.",
+      "Marginally below the reference range by 1.1% — well within analytical and biological imprecision. Haemoglobin is normal at 145 g/L, confirming adequate oxygen-carrying capacity. This is clinically insignificant and requires no action or workup.",
   },
   {
     name: "Haemoglobin",
@@ -152,7 +152,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "high",
     category: "renal",
     explanation:
-      "Borderline elevated — just 0.01 above the upper limit. Mildly raised uric acid can be associated with cardiovascular risk and gout susceptibility. Dietary modification (reducing purine-rich foods) is recommended.",
+      "Borderline elevated at 0.01 above the upper limit. A 2018 JAMA Internal Medicine meta-analysis linked hyperuricaemia to a 20% increased coronary heart disease risk, though Mendelian randomisation studies suggest it may be a marker rather than a cause. Reduce purine-rich foods, fructose, and alcohol; increase low-fat dairy and hydration.",
   },
   {
     name: "ALT",
@@ -162,7 +162,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "normal",
     category: "metabolic",
     explanation:
-      "Within normal range, confirming healthy liver function. All other liver markers (AST 23, GGT 37, ALP 51, Bilirubin 16) are also normal — your liver is well-equipped to support lipid metabolism and detoxification.",
+      "Within normal range. All liver markers are normal (AST 23, GGT 37, ALP 51, Bilirubin 16), confirming healthy hepatic function. This is relevant because the liver is the primary organ for cholesterol metabolism and clearance — healthy liver function supports both lifestyle and pharmacological lipid interventions.",
   },
   {
     name: "Fasting Glucose",
@@ -172,7 +172,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "normal",
     category: "metabolic",
     explanation:
-      "Well within the normal fasting range, with no indication of prediabetes or impaired glucose tolerance. Metabolic glucose regulation is healthy.",
+      "Well within the normal fasting range (prediabetes threshold is 6.1 mmol/L per Malaysian CPG 2020). Healthy glucose metabolism means your dyslipidaemia is not insulin resistance–driven, which is a favourable prognostic indicator for treatment response.",
   },
   {
     name: "ESR",
@@ -182,7 +182,7 @@ export const MOCK_BIOMARKERS: BiomarkerResult[] = [
     status: "normal",
     category: "overall",
     explanation:
-      "Low ESR indicates no significant systemic inflammation. This is reassuring — chronic inflammation can accelerate atherosclerosis, so a low baseline is protective.",
+      "Low ESR indicates no significant systemic inflammation. This is reassuring — chronic inflammation accelerates atherosclerosis and LDL oxidation. A low inflammatory baseline means your elevated LDL has not yet triggered a significant vascular inflammatory response.",
   },
 ];
 
@@ -191,36 +191,36 @@ export const MOCK_SCORE_LABEL = "Fair" as const;
 export const MOCK_KEY_TAKEAWAYS: KeyTakeaway[] = [
   {
     category: "cardiovascular",
-    title: "Cardiovascular Risk — Elevated",
-    description: "LDL at 4.04 mmol/L is 1.57× the upper limit. Combined with elevated total cholesterol (5.8) and non-HDL cholesterol (4.69), your lipid profile indicates significant cardiovascular risk requiring active management.",
+    title: "Lipid Panel — Intermediate-to-High Risk",
+    description: "Four concordant lipid markers elevated: LDL 4.04 (borderline high per ATP III), total cholesterol 5.8, non-HDL 4.69, and TC/HDL ratio 5.2. This atherogenic lipid profile places you at intermediate-to-high 10-year cardiovascular risk. Lifestyle modification is first-line therapy.",
     status: "needs-attention",
     icon: "heart",
   },
   {
     category: "renal",
-    title: "Uric Acid — Borderline High",
-    description: "Uric acid at 0.48 is just above the upper limit (0.47). Kidney function itself is excellent with eGFR at 101. Reducing purine-rich foods and staying well-hydrated can help normalise uric acid.",
+    title: "Uric Acid — Borderline Elevated",
+    description: "Uric acid at 0.48 mmol/L is marginally above the upper limit (0.47). Associated with a modest increase in cardiovascular risk per meta-analysis data. Kidney function is excellent (eGFR 101). Dietary modification — reducing purine-rich foods, fructose, and alcohol — is recommended.",
     status: "borderline",
     icon: "zap",
   },
   {
-    category: "nutritional",
-    title: "Red Blood Cells — Slightly Low",
-    description: "RBC count of 4.55 is marginally below the reference range (4.60–6.10). Haemoglobin remains normal at 145 g/L, so this is a monitoring point rather than an immediate concern.",
-    status: "borderline",
-    icon: "droplet",
+    category: "metabolic",
+    title: "Glucose & Liver — All Normal",
+    description: "Fasting glucose 5.4 mmol/L (well below prediabetes threshold of 6.1). All liver enzymes within range (ALT 41, AST 23, GGT 37). Your dyslipidaemia is not driven by insulin resistance or hepatic dysfunction — a favourable indicator for treatment response.",
+    status: "good",
+    icon: "leaf",
   },
   {
     category: "overall",
-    title: "Overall Health — Strong Foundation",
-    description: "Kidney function (eGFR 101), liver enzymes, fasting glucose (5.4), electrolytes, and inflammatory markers are all within normal ranges. This is an excellent foundation for targeted lipid intervention.",
+    title: "Haematology & Inflammation — Reassuring",
+    description: "Haemoglobin 145 g/L, WBC 7.3, platelets 287, ESR 6 — all well within range. Marginally low RBC (4.55 vs ref 4.60) is clinically insignificant given normal haemoglobin. No systemic inflammation detected, meaning elevated LDL has not yet triggered a vascular inflammatory cascade.",
     status: "good",
     icon: "shield",
   },
 ];
 
 export const MOCK_TOP_RECOMMENDATION =
-  "Begin a cardiovascular wellness programme focused on lowering LDL cholesterol from 4.04 to below 2.58 mmol/L. IV-based lipid support therapies combined with targeted nutraceuticals can accelerate results alongside lifestyle modifications. Your strong kidney and liver function means your body is well-equipped to respond to treatment.";
+  "Lifestyle modification is first-line: adopt a Mediterranean or DASH-style diet, increase soluble fibre to 10–25 g/day, add plant sterols (2 g/day), and aim for 150+ minutes of moderate exercise weekly. Targeted nutraceuticals — berberine, omega-3, and citrus bergamot — have clinical evidence for LDL reduction. Reassess lipid panel at 3 months. Your excellent kidney and liver function supports strong treatment response.";
 
 export const MOCK_WELLNESS_PATHS: WellnessPath[] = [
   {
@@ -473,28 +473,28 @@ export const QA_RESPONSES: Record<string, string> = {
 export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
   {
     phaseNumber: 1,
-    title: "Cardiovascular Reset",
+    title: "Lifestyle Foundation & Nutraceuticals",
     weekRange: "Weeks 1–4",
-    goal: "Lower LDL cholesterol aggressively through IV lipid support, anti-inflammatory therapy, and foundational supplementation. Establish a heart-healthy baseline.",
+    goal: "Establish evidence-based dietary and supplement protocol as first-line therapy per ESC/EAS guidelines. IV micronutrient support to optimise metabolic pathways involved in cholesterol processing.",
     treatments: [
       {
         productId: "cardiovascular-health-iv-drip",
-        name: "Cardiovascular Health IV Drip",
+        name: "Cardiovascular Wellness IV",
         frequency: "2× / Week",
         bullets: [
-          "Targeted lipid-lowering micronutrients via IV",
-          "Supports LDL reduction from 4.04 toward < 2.58",
-          "Enhances vascular endothelial function",
+          "Magnesium, B-complex, Vitamin C & taurine support",
+          "Optimises metabolic pathways for cholesterol processing",
+          "Supports vascular endothelial function",
         ],
       },
       {
         productId: "inflamrelief-iv-drip",
-        name: "InflamRelief IV Drip",
+        name: "Antioxidant & Anti-Inflammatory IV",
         frequency: "Weekly",
         bullets: [
           "Glutathione + Vitamin C + ALA + Magnesium",
-          "Protects arterial walls during active lipid management",
-          "Reduces oxidative stress from dyslipidaemia",
+          "Antioxidant support against LDL oxidation",
+          "Vascular wellness and recovery support",
         ],
       },
       {
@@ -502,66 +502,66 @@ export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
         frequency: "Once at Week 4",
         bullets: [
           "Recheck LDL, Total Cholesterol, Non-HDL, TC/HDL ratio",
-          "Track inflammatory markers (hsCRP)",
-          "Measure early response to treatment protocol",
+          "Add hsCRP and ApoB for refined risk stratification",
+          "Measure early response to lifestyle + supplement protocol",
         ],
       },
     ],
     expectedBenefits: [
-      { label: "Improved energy & circulation", timeline: "Week 1–2" },
-      { label: "Reduced oxidative stress markers", timeline: "Week 2–3" },
-      { label: "Measurable LDL reduction", timeline: "Week 4" },
+      { label: "Dietary adaptation established", timeline: "Week 1–2" },
+      { label: "Berberine reaches steady-state levels", timeline: "Week 2–3" },
+      { label: "First measurable lipid changes expected", timeline: "Week 4" },
     ],
     supplementStack: {
       morning: [
-        { name: "Omega-3 Fish Oil (High EPA)", dosage: "2,000 mg" },
-        { name: "Berberine", dosage: "500 mg" },
-        { name: "Vitamin D3 + K2", dosage: "5,000 IU" },
-        { name: "Citrus Bergamot", dosage: "500 mg" },
+        { name: "Berberine", dosage: "500 mg (3× daily with meals)" },
+        { name: "Plant Sterols / Stanols", dosage: "2 g/day (with food)" },
+        { name: "Omega-3 EPA/DHA", dosage: "2,000 mg" },
+        { name: "Psyllium Husk (soluble fibre)", dosage: "10 g" },
       ],
       night: [
+        { name: "Citrus Bergamot", dosage: "500 mg" },
         { name: "Magnesium Glycinate", dosage: "400 mg" },
         { name: "CoQ10", dosage: "200 mg" },
-        { name: "Curcumin Phytosome", dosage: "500 mg" },
       ],
     },
     lifestyleGuidance: [
-      "Adopt a heart-healthy Mediterranean-style diet",
-      "Reduce saturated fat, trans fat, and processed foods",
-      "Increase soluble fibre (oats, legumes, fruits) to 10–25g daily",
-      "30 min moderate cardio 5 days/week (walking, cycling, swimming)",
-      "Hydrate: 2.5–3L water daily to support uric acid clearance",
+      "Mediterranean or DASH-style diet — proven to lower LDL 10–15%",
+      "Reduce saturated fat to < 7% of calories; eliminate trans fat",
+      "Increase soluble fibre (oats, legumes, barley) to 10–25 g/day",
+      "150 min/week moderate cardio (brisk walking, cycling, swimming)",
+      "Hydrate 2.5–3L daily to support uric acid clearance (0.48 mmol/L)",
     ],
     monitoring: [
       "Weekly vitals check-in via app",
       "Food and exercise journal",
-      "Lipid panel + hsCRP at Week 4",
+      "Full lipid panel + hsCRP + ApoB at Week 4",
     ],
   },
   {
     phaseNumber: 2,
-    title: "Vascular Repair & Optimisation",
+    title: "Optimisation & Progress Assessment",
     weekRange: "Weeks 5–12",
-    goal: "Deepen cellular repair with NAD+ and regenerative therapies. Sustain lipid improvements while addressing vascular endothelial damage from chronic dyslipidaemia.",
+    goal: "Intensify supplement protocol based on Week 4 results. Add cellular wellness support. Meta-analysis data suggests berberine alone can reduce LDL by ~0.65 mmol/L — combined with diet and plant sterols, a 1.0–1.5 mmol/L reduction is achievable.",
     treatments: [
       {
         productId: "nad-iv-therapy",
-        name: "NAD+ IV Infusion",
+        name: "NAD+ Cellular Wellness Infusion",
         frequency: "Weekly",
         bullets: [
-          "Restores endothelial function at the cellular level",
-          "Supports mitochondrial energy for cardiovascular repair",
-          "Enhances DNA repair mechanisms",
+          "Supports mitochondrial function and cellular energy",
+          "Preclinical evidence for vascular endothelial support",
+          "Complements lifestyle and nutraceutical protocol",
         ],
       },
       {
         productId: "cardiovascular-health-iv-drip",
-        name: "Cardiovascular Health IV Drip",
+        name: "Cardiovascular Wellness IV",
         frequency: "Weekly",
         bullets: [
-          "Maintenance dose to sustain Phase 1 lipid improvements",
-          "Continued micronutrient support for cholesterol metabolism",
-          "Ongoing vascular protection",
+          "Maintenance micronutrient support",
+          "Magnesium and B-vitamin replenishment",
+          "Supports ongoing metabolic optimisation",
         ],
       },
       {
@@ -570,69 +570,67 @@ export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
         bullets: [
           "Full lipid profile including ApoB and Lp(a)",
           "hsCRP, fasting insulin, uric acid recheck",
-          "Track progress and adjust protocol",
+          "Assess whether pharmacotherapy is needed if LDL > 2.6",
         ],
       },
     ],
     expectedBenefits: [
-      { label: "Sustained energy throughout day", timeline: "Week 6–7" },
-      { label: "Improved vascular flexibility", timeline: "Week 8–10" },
-      { label: "Target: LDL below 3.0 mmol/L", timeline: "Week 10–12" },
+      { label: "Sustained energy and exercise capacity", timeline: "Week 6–7" },
+      { label: "Improved lipid ratios on trend", timeline: "Week 8–10" },
+      { label: "Target: LDL reduction of 1.0+ mmol/L from baseline", timeline: "Week 12" },
     ],
     supplementStack: {
       morning: [
-        { name: "Berberine", dosage: "500 mg" },
-        { name: "CoQ10", dosage: "200 mg" },
+        { name: "Berberine", dosage: "500 mg (3× daily with meals)" },
+        { name: "Plant Sterols / Stanols", dosage: "2 g/day" },
         { name: "Omega-3 (High EPA)", dosage: "2,000 mg" },
-        { name: "Citrus Bergamot", dosage: "500 mg" },
+        { name: "Psyllium Husk", dosage: "10 g" },
         { name: "Vitamin D3 + K2", dosage: "5,000 IU" },
       ],
       night: [
+        { name: "Citrus Bergamot", dosage: "1,000 mg" },
         { name: "Magnesium Glycinate", dosage: "400 mg" },
         { name: "Aged Garlic Extract", dosage: "600 mg" },
-        { name: "Curcumin Phytosome", dosage: "500 mg" },
-        { name: "NAC (N-Acetyl Cysteine)", dosage: "600 mg" },
-        { name: "Nattokinase", dosage: "2,000 FU" },
+        { name: "CoQ10", dosage: "200 mg" },
       ],
     },
     lifestyleGuidance: [
-      "Continue heart-healthy Mediterranean diet",
-      "Increase exercise to 150 min/week cardio + 2× strength training",
-      "Reduce refined carbs, sugar, and deep-fried foods",
-      "Increase vegetables, fibre, omega-3 rich fish (salmon, mackerel)",
-      "7–8 hours quality sleep nightly",
-      "Manage stress through mindfulness or meditation",
+      "Continue Mediterranean / DASH diet as established habit",
+      "Increase to 150+ min/week cardio + 2× strength training",
+      "Increase omega-3 rich fish to 2–3 servings/week (salmon, mackerel)",
+      "7–8 hours quality sleep — poor sleep increases LDL and cortisol",
+      "Reduce purine-rich foods and alcohol for uric acid management",
     ],
     monitoring: [
-      "Full lipid panel + ApoB at Week 10–12",
-      "Uric acid recheck (target < 0.47 mmol/L)",
-      "Adjust protocol based on progress",
+      "Full lipid panel + ApoB + Lp(a) at Week 10–12",
+      "Uric acid recheck (target ≤ 0.47 mmol/L)",
+      "Clinical review: discuss pharmacotherapy if targets not met",
     ],
   },
   {
     phaseNumber: 3,
-    title: "Maintenance & Cardiovascular Longevity",
+    title: "Maintenance & Long-Term Monitoring",
     weekRange: "Weeks 13–24",
-    goal: "Consolidate lipid improvements with regenerative therapies and quarterly monitoring. Target: LDL below 2.58, TC/HDL ratio below 5.0, maintain all other panels in normal range.",
+    goal: "Sustain lifestyle changes and supplement protocol. Quarterly lipid monitoring. If LDL remains above 2.6 mmol/L at Week 12, discuss statin therapy with your physician per ESC/EAS guidelines for intermediate-risk patients.",
     treatments: [
       {
         productId: "nad-iv-therapy",
-        name: "NAD+ IV Infusion",
+        name: "NAD+ Cellular Wellness Infusion",
         frequency: "Biweekly",
         bullets: [
-          "Sustained NAD+ levels for ongoing vascular health",
-          "Long-term cellular energy and DNA repair support",
-          "Supports cardiovascular longevity",
+          "Maintenance cellular energy support",
+          "Supports long-term vascular wellness",
+          "Complements ongoing lifestyle protocol",
         ],
       },
       {
         productId: "exosomes-therapy",
-        name: "Exosome Therapy",
+        name: "Regenerative Cellular Therapy",
         frequency: "Monthly",
         bullets: [
-          "Deep cellular regeneration for vascular tissue",
-          "Long-term inflammation modulation",
-          "Supports endothelial repair and immune balance",
+          "Advanced cellular regeneration support",
+          "Immune modulation and tissue recovery",
+          "Emerging longevity and wellness therapy",
         ],
       },
       {
@@ -641,39 +639,39 @@ export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
         bullets: [
           "Full lipid profile, ApoB, Lp(a), hsCRP",
           "Uric acid, liver and kidney function recheck",
-          "Measure long-term cardiovascular risk reduction",
+          "Track long-term cardiovascular risk trajectory",
         ],
       },
     ],
     expectedBenefits: [
-      { label: "LDL target achieved (< 2.58)", timeline: "Month 4–5" },
-      { label: "Normalised TC/HDL ratio", timeline: "Month 5–6" },
-      { label: "Sustained cardiovascular protection", timeline: "Month 6+" },
+      { label: "Lipid targets on track or achieved", timeline: "Month 4–5" },
+      { label: "Improved TC/HDL ratio (target < 5.0)", timeline: "Month 5–6" },
+      { label: "Sustained cardiovascular risk reduction", timeline: "Month 6+" },
     ],
     supplementStack: {
       morning: [
+        { name: "Plant Sterols / Stanols", dosage: "2 g/day" },
         { name: "Omega-3 Fish Oil", dosage: "2,000 mg" },
-        { name: "CoQ10", dosage: "200 mg" },
         { name: "Vitamin D3 + K2", dosage: "5,000 IU" },
-        { name: "Citrus Bergamot", dosage: "500 mg" },
+        { name: "Psyllium Husk", dosage: "10 g" },
       ],
       night: [
+        { name: "Citrus Bergamot", dosage: "500 mg" },
         { name: "Magnesium Glycinate", dosage: "400 mg" },
         { name: "Aged Garlic Extract", dosage: "600 mg" },
-        { name: "Nattokinase", dosage: "2,000 FU" },
       ],
     },
     lifestyleGuidance: [
-      "Maintain Mediterranean diet as long-term lifestyle",
-      "Continue 150+ min/week exercise with Zone 2 cardio focus",
-      "Annual advanced cardiovascular screening",
-      "Quarterly Vital AI lipid reassessment",
-      "Maintain hydration for uric acid management",
+      "Mediterranean diet as permanent lifestyle — not a temporary intervention",
+      "Maintain 150+ min/week moderate exercise as lifelong habit",
+      "Annual advanced cardiovascular screening (consider CAC score)",
+      "Quarterly Vital AI reassessment to track biomarker trends",
+      "Continue hydration and low-purine diet for uric acid maintenance",
     ],
     monitoring: [
-      "Monthly Vital AI progress review",
       "Quarterly comprehensive lipid panel",
-      "Annual cardiovascular risk assessment",
+      "Annual cardiovascular risk reassessment",
+      "Discuss pharmacotherapy options at any point if targets not met",
     ],
   },
 ];

@@ -184,7 +184,7 @@ export async function generateResponse(
             summary: ANALYSIS_SUMMARY,
             biomarkers: MOCK_BIOMARKERS,
             deficiencies: ["High LDL Cholesterol", "Elevated Total Cholesterol", "High Non-HDL Cholesterol", "Borderline Uric Acid"],
-            overallScore: 66,
+            overallScore: 72,
             scoreLabel: MOCK_SCORE_LABEL,
             keyTakeaways: MOCK_KEY_TAKEAWAYS,
             topRecommendation: MOCK_TOP_RECOMMENDATION,
