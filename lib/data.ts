@@ -65,6 +65,7 @@ export type Product = {
   size?: string;
   art: "cell" | "leaf" | "droplet";
   color: string;
+  image?: string;
   category?: string;
   variationLabel?: string;
   variations?: Variation[];

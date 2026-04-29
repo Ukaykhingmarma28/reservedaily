@@ -27,9 +27,10 @@ No test runner is configured. No `.env` file is needed — the app is entirely c
 ### App Router
 
 - Routes live directly under `app/` — no `pages/` dir, no `src/` wrapper.
-- `app/layout.tsx` is the root layout (loads Inter + Figtree fonts via `next/font/google`).
-- `app/page.tsx` is the homepage — assembles section components in order (AnnouncementBar through Footer).
-- `app/vital/` is the Vital AI chat page — single `ChatShell` component with its own layout for metadata.
+- `app/layout.tsx` is the root layout (loads Inter + Figtree fonts via `next/font/google`). Sets `metadataBase` to the staging URL (`reservedaily.ukaykhing.com`). Theme-aware favicons (light/dark) are declared via `<link>` tags with `prefers-color-scheme` media queries.
+- `app/page.tsx` is the homepage — assembles 17 section components: AnnouncementBar → Nav → CategoryStrip → Hero → Marquee → ShopByConcern → ShopByCategory → FeaturedTreatments → LimitedOffers → FeaturedApothecary → NewArrivals → JourneyPromise → Testimonials → TrustStats → Journal → CTA → Footer.
+- `app/vital/` is the Vital AI chat page (separate route, not on homepage) — single `ChatShell` component with its own layout for metadata.
+- `app/opengraph-image.tsx` and `app/twitter-image.tsx` generate social card images at build time using Next.js image generation (Satori). They render the favicon over a branded background. Satori requires explicit numeric `width`/`height` on all elements (not strings).
 - Path alias `@/*` maps to repo root, so imports look like `@/components/sections/Nav`.
 
 ### Component layers

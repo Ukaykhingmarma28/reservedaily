@@ -12,11 +12,16 @@ import {
   BROWSE_TREATMENTS_WELCOME,
   ANALYSIS_SUMMARY,
   MOCK_BIOMARKERS,
+  MOCK_SCORE_LABEL,
+  MOCK_KEY_TAKEAWAYS,
+  MOCK_TOP_RECOMMENDATION,
   MOCK_WELLNESS_PATHS,
   PRODUCTS_BY_PATH,
   MOCK_BOOKING_SLOTS,
   MOCK_NURSE_SLOTS,
   MOCK_DOCTOR_SLOTS,
+  MOCK_RECOVERY_PHASES,
+  MOCK_RECOVERY_CLOSING,
   QA_RESPONSES,
 } from "./mock-data";
 
@@ -178,8 +183,11 @@ export async function generateResponse(
             kind: "analysis",
             summary: ANALYSIS_SUMMARY,
             biomarkers: MOCK_BIOMARKERS,
-            deficiencies: ["Diabetes (HbA1c)", "High LDL Cholesterol", "Kidney Function (eGFR)"],
-            overallScore: 52,
+            deficiencies: ["High LDL Cholesterol", "Elevated Total Cholesterol", "High Non-HDL Cholesterol", "Borderline Uric Acid"],
+            overallScore: 66,
+            scoreLabel: MOCK_SCORE_LABEL,
+            keyTakeaways: MOCK_KEY_TAKEAWAYS,
+            topRecommendation: MOCK_TOP_RECOMMENDATION,
           },
         };
         const pathsMsg: ChatMessage = {
@@ -190,7 +198,7 @@ export async function generateResponse(
           payload: {
             kind: "wellness-paths",
             prompt:
-              "Based on your results, I'd recommend focusing on Health Check & Body Insights or Health Products & Supplements to address your metabolic and cardiovascular markers. Which wellness path interests you?",
+              "Based on your lipid panel, I'd recommend focusing on Health Check & Body Insights, Supplements, or Regen & Functional Care to address your elevated LDL and cardiovascular markers. Which wellness path interests you?",
             paths: MOCK_WELLNESS_PATHS,
           },
         };
@@ -214,6 +222,27 @@ export async function generateResponse(
     }
 
     case "wellness-select": {
+      if (action.type === "build-recovery-plan") {
+        await delay(2000);
+        const planMsg: ChatMessage = {
+          id: msgId(),
+          role: "assistant",
+          type: "recovery-plan",
+          timestamp: new Date(),
+          payload: {
+            kind: "recovery-plan",
+            phases: MOCK_RECOVERY_PHASES,
+            closingMessage: MOCK_RECOVERY_CLOSING,
+          },
+        };
+        return {
+          messages: [
+            assistantText("I've built your personalized recovery plan based on your biomarker analysis. Here's your complete protocol:"),
+            planMsg,
+          ],
+          nextPhase: "recommendations",
+        };
+      }
       if (action.type === "select-wellness-path") {
         const pathId = action.pathId;
         const path = MOCK_WELLNESS_PATHS.find((p) => p.id === pathId);

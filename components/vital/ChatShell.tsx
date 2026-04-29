@@ -11,6 +11,7 @@ import type {
   RecommendedProduct,
 } from "@/lib/vital/types";
 import { generateResponse } from "@/lib/vital/mock-engine";
+import { getProductById } from "@/lib/products";
 import Image from "next/image";
 import { Sparkle, PanelLeft } from "@/components/ui/icons";
 import { Sidebar } from "./Sidebar";
@@ -210,6 +211,39 @@ export function ChatShell() {
     }, 300);
   }
 
+  function handleBuildPlan() {
+    const msg: ChatMessage = {
+      id: msgId(),
+      role: "user",
+      type: "text",
+      timestamp: new Date(),
+      payload: { kind: "text", text: "Build my recovery plan" },
+    };
+    dispatch({ type: "ADD_MESSAGE", message: msg });
+    sendAction({ type: "build-recovery-plan" }, "wellness-select");
+  }
+
+  function handleBookFromPlan(productId: string) {
+    const product = getProductById(productId);
+    if (!product) return;
+    const rec: RecommendedProduct = { product, reason: "Recommended in your recovery plan" };
+    const msg: ChatMessage = {
+      id: msgId(),
+      role: "user",
+      type: "text",
+      timestamp: new Date(),
+      payload: {
+        kind: "text",
+        text: product.type === "bookable"
+          ? `I'd like to book ${product.name}`
+          : `I'd like to order ${product.name}`,
+      },
+    };
+    dispatch({ type: "ADD_MESSAGE", message: msg });
+    dispatch({ type: "SELECT_PRODUCT", product: rec });
+    sendAction({ type: "select-product", product: rec }, "recommendations");
+  }
+
   function handleSelectWellnessPath(pathId: WellnessPathId) {
     const path =
       pathId.charAt(0).toUpperCase() + pathId.slice(1).replace(/-/g, " ");
@@ -338,10 +372,12 @@ export function ChatShell() {
               messages={state.messages}
               isTyping={state.isTyping}
               onSelectWellnessPath={handleSelectWellnessPath}
+              onBuildPlan={handleBuildPlan}
               onSelectProduct={handleSelectProduct}
               onExplainProduct={handleExplainProduct}
               onSelectBookingSlot={handleSelectBookingSlot}
               onConfirmPayment={handleConfirmPayment}
+              onBookFromPlan={handleBookFromPlan}
             />
             <ChatInput
               onSend={handleSend}

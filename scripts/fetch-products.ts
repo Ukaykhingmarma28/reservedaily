@@ -35,6 +35,7 @@ type WcStoreProduct = {
   short_description: string;
   description: string;
   add_to_cart: { text: string };
+  images: { id: number; src: string; name: string; alt: string }[];
 };
 
 // --- Local Product types ---
@@ -55,6 +56,7 @@ type Product = {
   size?: string;
   art: "cell" | "leaf" | "droplet";
   color: string;
+  image?: string;
   category?: string;
   variationLabel?: string;
   variations?: Variation[];
@@ -354,6 +356,7 @@ function mapProduct(wc: WcStoreProduct, index: number, usedIds: Set<string>): Pr
 
   if (price) product.price = price;
   if (was) product.was = was;
+  if (wc.images?.[0]?.src) product.image = wc.images[0].src;
 
   return product;
 }

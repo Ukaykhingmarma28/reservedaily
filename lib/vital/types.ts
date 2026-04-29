@@ -7,6 +7,7 @@ export type MessageType =
   | "file-upload"
   | "analysis"
   | "wellness-paths"
+  | "recovery-plan"
   | "product-recommendations"
   | "booking-form"
   | "booking-confirmation"
@@ -39,6 +40,7 @@ export type MessagePayload =
   | FileUploadPayload
   | AnalysisPayload
   | WellnessPathsPayload
+  | RecoveryPlanPayload
   | ProductRecsPayload
   | BookingFormPayload
   | BookingConfirmationPayload
@@ -60,6 +62,18 @@ export interface FileUploadPayload {
   progress: number;
 }
 
+export type HealthCategory = "cardiovascular" | "metabolic" | "renal" | "nutritional" | "hormonal" | "overall";
+
+export type TakeawayStatus = "good" | "needs-attention" | "borderline" | "critical";
+
+export interface KeyTakeaway {
+  category: HealthCategory;
+  title: string;
+  description: string;
+  status: TakeawayStatus;
+  icon: "heart" | "droplet" | "shield" | "leaf" | "zap" | "bolt";
+}
+
 export interface BiomarkerResult {
   name: string;
   value: number;
@@ -67,6 +81,7 @@ export interface BiomarkerResult {
   referenceRange: { low: number; high: number };
   status: "low" | "normal" | "high" | "critical";
   explanation: string;
+  category?: HealthCategory;
 }
 
 export interface AnalysisPayload {
@@ -75,6 +90,9 @@ export interface AnalysisPayload {
   biomarkers: BiomarkerResult[];
   deficiencies: string[];
   overallScore: number;
+  scoreLabel?: "Needs Attention" | "Fair" | "Good" | "Excellent";
+  keyTakeaways?: KeyTakeaway[];
+  topRecommendation?: string;
 }
 
 export type WellnessPathId =
@@ -165,6 +183,39 @@ export interface PaymentConfirmationPayload {
   message: string;
 }
 
+export interface RecoveryTreatment {
+  productId?: string;
+  name: string;
+  frequency: string;
+  bullets: string[];
+}
+
+export interface SupplementItem {
+  name: string;
+  dosage: string;
+}
+
+export interface RecoveryPlanPhase {
+  phaseNumber: number;
+  title: string;
+  weekRange: string;
+  goal: string;
+  treatments: RecoveryTreatment[];
+  expectedBenefits: { label: string; timeline: string }[];
+  supplementStack: {
+    morning: SupplementItem[];
+    night: SupplementItem[];
+  };
+  lifestyleGuidance: string[];
+  monitoring: string[];
+}
+
+export interface RecoveryPlanPayload {
+  kind: "recovery-plan";
+  phases: RecoveryPlanPhase[];
+  closingMessage: string;
+}
+
 export interface TypingPayload {
   kind: "typing";
 }
@@ -191,6 +242,7 @@ export type UserAction =
   | { type: "start-upload" }
   | { type: "start-chat" }
   | { type: "browse-treatments" }
+  | { type: "build-recovery-plan" }
   | { type: "book-nurse" }
   | { type: "book-doctor" };
 

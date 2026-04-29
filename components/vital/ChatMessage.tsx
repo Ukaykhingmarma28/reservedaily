@@ -1,4 +1,4 @@
-import type { ChatMessage as ChatMessageType, WellnessPathId, RecommendedProduct } from "@/lib/vital/types";
+import type { ChatMessage as ChatMessageType, WellnessPathId, RecommendedProduct, RecoveryPlanPayload } from "@/lib/vital/types";
 import { Sparkle, User } from "@/components/ui/icons";
 import { UploadPreview } from "./UploadPreview";
 import { AnalysisCard } from "./AnalysisCard";
@@ -7,25 +7,30 @@ import { ProductRecommendation } from "./ProductRecommendation";
 import { BookingForm } from "./BookingForm";
 import { BookingConfirmation, PaymentConfirmation } from "./BookingConfirmation";
 import { PaymentSummary } from "./PaymentSummary";
+import { RecoveryPlanCard } from "./RecoveryPlanCard";
 
 export function ChatMessage({
   message,
   onSelectWellnessPath,
+  onBuildPlan,
   onSelectProduct,
   onExplainProduct,
   onSelectBookingSlot,
   onConfirmPayment,
+  onBookFromPlan,
 }: {
   message: ChatMessageType;
   onSelectWellnessPath: (pathId: WellnessPathId) => void;
+  onBuildPlan: () => void;
   onSelectProduct: (rec: RecommendedProduct) => void;
   onExplainProduct: (rec: RecommendedProduct) => void;
   onSelectBookingSlot: (slotId: string) => void;
   onConfirmPayment: () => void;
+  onBookFromPlan?: (productId: string) => void;
 }) {
   const isUser = message.role === "user";
   const isRich = [
-    "analysis", "wellness-paths", "product-recommendations",
+    "analysis", "wellness-paths", "recovery-plan", "product-recommendations",
     "booking-form", "booking-confirmation",
     "payment-summary", "payment-confirmation",
   ].includes(message.type);
@@ -65,10 +70,12 @@ export function ChatMessage({
           <MessageContent
             message={message}
             onSelectWellnessPath={onSelectWellnessPath}
+            onBuildPlan={onBuildPlan}
             onSelectProduct={onSelectProduct}
             onExplainProduct={onExplainProduct}
             onSelectBookingSlot={onSelectBookingSlot}
             onConfirmPayment={onConfirmPayment}
+            onBookFromPlan={onBookFromPlan}
           />
         </div>
 
@@ -83,17 +90,21 @@ export function ChatMessage({
 function MessageContent({
   message,
   onSelectWellnessPath,
+  onBuildPlan,
   onSelectProduct,
   onExplainProduct,
   onSelectBookingSlot,
   onConfirmPayment,
+  onBookFromPlan,
 }: {
   message: ChatMessageType;
   onSelectWellnessPath: (pathId: WellnessPathId) => void;
+  onBuildPlan: () => void;
   onSelectProduct: (rec: RecommendedProduct) => void;
   onExplainProduct: (rec: RecommendedProduct) => void;
   onSelectBookingSlot: (slotId: string) => void;
   onConfirmPayment: () => void;
+  onBookFromPlan?: (productId: string) => void;
 }) {
   const { payload } = message;
 
@@ -108,7 +119,10 @@ function MessageContent({
       return <AnalysisCard payload={payload} />;
 
     case "wellness-paths":
-      return <WellnessPathSelector payload={payload} onSelect={onSelectWellnessPath} />;
+      return <WellnessPathSelector payload={payload} onSelect={onSelectWellnessPath} onBuildPlan={onBuildPlan} />;
+
+    case "recovery-plan":
+      return <RecoveryPlanCard payload={payload as RecoveryPlanPayload} onBook={onBookFromPlan} />;
 
     case "product-recommendations":
       return <ProductRecommendation payload={payload} onSelectProduct={onSelectProduct} onExplainProduct={onExplainProduct} />;

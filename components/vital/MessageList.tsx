@@ -9,18 +9,22 @@ export function MessageList({
   messages,
   isTyping,
   onSelectWellnessPath,
+  onBuildPlan,
   onSelectProduct,
   onExplainProduct,
   onSelectBookingSlot,
   onConfirmPayment,
+  onBookFromPlan,
 }: {
   messages: ChatMessageType[];
   isTyping: boolean;
   onSelectWellnessPath: (pathId: WellnessPathId) => void;
+  onBuildPlan: () => void;
   onSelectProduct: (rec: RecommendedProduct) => void;
   onExplainProduct: (rec: RecommendedProduct) => void;
   onSelectBookingSlot: (slotId: string) => void;
   onConfirmPayment: () => void;
+  onBookFromPlan?: (productId: string) => void;
 }) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -50,10 +54,12 @@ export function MessageList({
             key={msg.id}
             message={msg}
             onSelectWellnessPath={onSelectWellnessPath}
+            onBuildPlan={onBuildPlan}
             onSelectProduct={onSelectProduct}
             onExplainProduct={onExplainProduct}
             onSelectBookingSlot={onSelectBookingSlot}
             onConfirmPayment={onConfirmPayment}
+            onBookFromPlan={onBookFromPlan}
           />
         ))}
         {isTyping && <TypingIndicator />}

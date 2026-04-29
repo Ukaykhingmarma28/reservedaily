@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import Image from "next/image";
 import type { ProductRecsPayload, RecommendedProduct } from "@/lib/vital/types";
 import type { Product } from "@/lib/data";
 import { Star, ArrowRight, ChevronRight, Sparkle } from "@/components/ui/icons";
@@ -39,21 +40,17 @@ function VitalProductCard({
       style={{ animationDelay: `${index * 120}ms` }}
     >
       <article className="flex flex-col bg-white border border-line-2 rounded-xl overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.05)] flex-1">
-        {/* Gradient header */}
-        <div
-          className="h-20 lg:h-24 relative overflow-hidden"
-          style={{
-            background: `linear-gradient(135deg, ${p.color}18, ${p.color}30, ${p.color}12)`,
-          }}
-        >
-          <div
-            className="absolute -right-4 -top-4 w-20 h-20 rounded-full opacity-20"
-            style={{ background: p.color }}
-          />
-          <div
-            className="absolute -right-1 top-8 w-10 h-10 rounded-full opacity-10"
-            style={{ background: p.color }}
-          />
+        {/* Header */}
+        <div className="h-20 lg:h-24 relative overflow-hidden">
+          {p.image ? (
+            <Image src={p.image} alt={p.name} fill className="object-cover" sizes="260px" />
+          ) : (
+            <>
+              <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${p.color}18, ${p.color}30, ${p.color}12)` }} />
+              <div className="absolute -right-4 -top-4 w-20 h-20 rounded-full opacity-20" style={{ background: p.color }} />
+              <div className="absolute -right-1 top-8 w-10 h-10 rounded-full opacity-10" style={{ background: p.color }} />
+            </>
+          )}
 
           {/* Type badge */}
           <div className="absolute top-2.5 left-2.5">
