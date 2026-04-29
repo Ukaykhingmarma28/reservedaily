@@ -17,6 +17,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://reservedaily.ukaykhing.com"),
   title: "ReserveDaily, Reserve Your Path to Wellness",
   description:
     "Malaysia's curated wellness marketplace. Book vetted treatments, check your health with Vital AI, and shop doctor-certified supplements.",
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     title: "ReserveDaily, Reserve Your Path to Wellness",
     description:
       "Vetted providers, clinical-grade exosomes, concierge booking, your integrated wellness journey in one place.",
-    url: "https://reservedaily.com",
+    url: "https://reservedaily.ukaykhing.com",
     siteName: "ReserveDaily",
     locale: "en_MY",
     type: "website",
@@ -50,6 +51,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${figtree.variable} ${inter.variable}`}>
+      <head>
+        <link rel="icon" href="/favicon-light.png" media="(prefers-color-scheme: light)" />
+        <link rel="icon" href="/favicon-dark.png" media="(prefers-color-scheme: dark)" />
+      </head>
       <body className="min-h-screen bg-cream text-ink antialiased">{children}</body>
     </html>
   );

@@ -41,7 +41,7 @@ No test runner is configured. No `.env` file is needed — the app is entirely c
 
 ### Data
 
-- `data/products.json` — single source of truth for all product data (~75 products). Each product has an `id` (kebab-case slug) and `section` field indicating which UI section(s) it belongs to: `"featured-treatments"`, `"limited-offers"`, `"new-arrivals"`, `"featured-apothecary"`, `"vital"`.
+- `data/products.json` — single source of truth for all product data (~196 products). Each product has an `id` (kebab-case slug) and `section` field indicating which UI section(s) it belongs to: `"featured-treatments"`, `"limited-offers"`, `"new-arrivals"`, `"featured-apothecary"`, `"vital"`.
 - `lib/products.ts` — typed accessor layer over the JSON. Exports `getAllProducts()`, `getProductById(id)`, `getProductsBySection(section)`, `getProductsByCategory(category)`. All components import from here, never from the JSON directly.
 - `lib/data.ts` — types (`Product`, `Category`, `Review`, `JournalPost`, `Variation`) and constants (`CATEGORIES`, `CATEGORY_STRIP_LINKS`). The `Product` type includes `id: string` and `section?: string | string[]`.
 - `lib/vital/` — Vital AI feature data layer:
