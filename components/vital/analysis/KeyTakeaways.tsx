@@ -57,17 +57,19 @@ export function KeyTakeaways({ takeaways }: { takeaways: KeyTakeaway[] }) {
           const status = STATUS_STYLES[t.status];
           const iconStyle = ICON_STYLES[t.icon];
           return (
-            <div key={t.category} className="flex items-start gap-3 py-3.5 first:pt-0 last:pb-0">
-              <div className={`w-9 h-9 rounded-full ${iconStyle.bg} flex items-center justify-center shrink-0 mt-0.5`}>
+            <div key={t.category} className="flex items-start gap-2.5 sm:gap-3 py-3.5 first:pt-0 last:pb-0">
+              <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full ${iconStyle.bg} flex items-center justify-center shrink-0 mt-0.5`}>
                 <TakeawayIcon icon={t.icon} className={iconStyle.color} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[13px] font-semibold text-ink leading-tight">{t.title}</p>
-                <p className="text-[11px] text-muted leading-relaxed mt-0.5">{t.description}</p>
+                <div className="flex items-start justify-between gap-1.5 mb-0.5">
+                  <p className="text-[12px] sm:text-[13px] font-semibold text-ink leading-tight">{t.title}</p>
+                  <span className={`shrink-0 text-[7px] sm:text-[8px] font-bold uppercase tracking-[0.06em] px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full whitespace-nowrap ${status.bg} ${status.text}`}>
+                    {status.label}
+                  </span>
+                </div>
+                <p className="text-[10px] sm:text-[11px] text-muted leading-relaxed">{t.description}</p>
               </div>
-              <span className={`shrink-0 text-[8px] font-bold uppercase tracking-[0.06em] px-2 py-1 rounded-full whitespace-nowrap ${status.bg} ${status.text}`}>
-                {status.label}
-              </span>
             </div>
           );
         })}

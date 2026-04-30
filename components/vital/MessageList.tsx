@@ -46,7 +46,7 @@ export function MessageList({
     <div
       ref={containerRef}
       onScroll={handleScroll}
-      className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-6 scroll-smooth"
+      className="flex-1 overflow-y-auto overflow-x-hidden px-3 sm:px-4 py-4 sm:py-6 scroll-smooth"
     >
       <div className="max-w-[680px] mx-auto flex flex-col gap-5">
         {messages.map((msg) => (

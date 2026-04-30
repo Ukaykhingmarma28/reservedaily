@@ -36,7 +36,7 @@ function VitalProductCard({
 
   return (
     <div
-      className="shrink-0 w-[220px] lg:w-[260px] snap-start flex flex-col"
+      className="shrink-0 w-[200px] sm:w-[220px] lg:w-[260px] snap-start flex flex-col"
       style={{ animationDelay: `${index * 120}ms` }}
     >
       <article className="flex flex-col bg-white border border-line-2 rounded-xl overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.05)] flex-1">
@@ -195,11 +195,11 @@ export function ProductRecommendation({
       <p className="text-[13px] lg:text-sm text-ink leading-relaxed">{payload.intro}</p>
 
       {/* Scroll rail */}
-      <div className="relative -mx-4">
+      <div className="relative -mx-3 sm:-mx-4">
         <div
           ref={railRef}
           onScroll={updateArrows}
-          className="flex gap-2.5 lg:gap-3 overflow-x-auto pb-3 px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+          className="flex gap-2 sm:gap-2.5 lg:gap-3 overflow-x-auto pb-3 px-3 sm:px-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
         >
           {payload.products.map((rec, i) => (
             <VitalProductCard

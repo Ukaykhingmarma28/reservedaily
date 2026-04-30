@@ -50,7 +50,7 @@ export function ChatInput({
   const canSend = text.trim().length > 0 && !disabled;
 
   return (
-    <div className="shrink-0 px-4 pb-4 pt-2">
+    <div className="shrink-0 px-3 sm:px-4 pb-3 sm:pb-4 pt-2">
       <div className="max-w-[680px] mx-auto">
         <div className="bg-white rounded-2xl border border-line/40 shadow-[0_2px_16px_rgba(0,0,0,0.06)] px-3 py-2.5">
           <textarea

@@ -6,7 +6,8 @@
       "Bash(node -e \"const d=require\\('./data/products.json'\\); const ids = d.products.map\\(p=>p.id\\); const dupes = ids.filter\\(\\(id,i\\) => ids.indexOf\\(id\\) !== i\\); console.log\\('Duplicate IDs:', dupes.length > 0 ? dupes : 'none'\\); console.log\\('Colors used:', [...new Set\\(d.products.map\\(p=>p.color\\)\\)]\\); console.log\\('Tags used:', [...new Set\\(d.products.map\\(p=>p.tag\\)\\)]\\); console.log\\('Providers used:', [...new Set\\(d.products.map\\(p=>p.provider\\)\\)]\\); console.log\\('Locations used:', [...new Set\\(d.products.map\\(p=>p.location\\)\\)]\\);\")",
       "Bash(node -e ' *)",
       "mcp__plugin_claude-mem_mcp-search__smart_outline",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "mcp__plugin_claude-mem_mcp-search__smart_unfold"
     ]
   },
   "enableAllProjectMcpServers": true,

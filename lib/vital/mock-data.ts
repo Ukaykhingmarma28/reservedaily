@@ -498,6 +498,16 @@ export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
         ],
       },
       {
+        productId: "sea-buckthorn-omega-7-supplement-malaysia",
+        name: "Cardiberry Omega-7 (Sea Buckthorn)",
+        frequency: "Daily",
+        bullets: [
+          "Palmitoleic acid (omega-7) supports healthy lipid metabolism",
+          "Anti-inflammatory properties reduce vascular oxidative stress",
+          "Complements omega-3 for comprehensive fatty acid support",
+        ],
+      },
+      {
         name: "Baseline Lipid & Inflammatory Panel",
         frequency: "Once at Week 4",
         bullets: [
@@ -517,6 +527,7 @@ export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
         { name: "Berberine", dosage: "500 mg (3× daily with meals)" },
         { name: "Plant Sterols / Stanols", dosage: "2 g/day (with food)" },
         { name: "Omega-3 EPA/DHA", dosage: "2,000 mg" },
+        { name: "Cardiberry Omega-7", dosage: "1 capsule" },
         { name: "Psyllium Husk (soluble fibre)", dosage: "10 g" },
       ],
       night: [

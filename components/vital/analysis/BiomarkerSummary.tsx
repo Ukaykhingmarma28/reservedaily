@@ -60,17 +60,17 @@ function MarkerRow({ marker, expanded, onToggle }: {
       onClick={onToggle}
     >
       {/* Row 1: name + value */}
-      <div className="flex items-center justify-between gap-2 mb-1">
-        <div className="flex items-center gap-2 min-w-0">
+      <div className="flex items-center justify-between gap-1.5 sm:gap-2 mb-1">
+        <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
           <span className={`w-2 h-2 rounded-full ${config.dot} shrink-0`} />
-          <span className="text-[13px] font-semibold text-ink truncate">{marker.name}</span>
+          <span className="text-[12px] sm:text-[13px] font-semibold text-ink truncate">{marker.name}</span>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <span className="text-[13px] font-mono font-bold text-ink tabular-nums">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <span className="text-[12px] sm:text-[13px] font-mono font-bold text-ink tabular-nums">
             {marker.value}
-            <span className="text-[10px] font-normal text-muted ml-0.5">{marker.unit}</span>
+            <span className="text-[9px] sm:text-[10px] font-normal text-muted ml-0.5">{marker.unit}</span>
           </span>
-          <span className={`text-[8px] font-bold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-full whitespace-nowrap ${labelStyle.bg} ${labelStyle.text}`}>
+          <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-[0.06em] px-1.5 py-0.5 rounded-full whitespace-nowrap ${labelStyle.bg} ${labelStyle.text}`}>
             {label}
           </span>
         </div>

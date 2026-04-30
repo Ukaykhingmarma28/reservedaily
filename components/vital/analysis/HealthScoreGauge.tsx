@@ -110,27 +110,11 @@ export function HealthScoreGauge({
         </span>
       </div>
 
-      {/* Main: text left, gauge right */}
-      <div className="flex items-center gap-3">
-        {/* Left side */}
-        <div className="flex-1 min-w-0">
-          <p className="ff text-[15px] font-bold text-ink tracking-[-0.01em] mb-1">Health Score</p>
-          <div className="flex items-baseline gap-1">
-            <span className="ff text-[46px] font-bold text-ink tracking-[-0.04em] leading-none tabular-nums">
-              {ds}
-            </span>
-            <span className="text-[17px] font-medium text-muted/50">/100</span>
-          </div>
-          <span className={`inline-block mt-2 text-[9px] font-bold uppercase tracking-[0.1em] px-2.5 py-[3px] rounded-[4px] ${badge.bg} ${badge.text}`}>
-            {scoreLabel}
-          </span>
-          <p className="text-[11px] text-muted leading-[1.6] mt-2">{summary}</p>
-        </div>
-
-        {/* Right side: gauge */}
-        <div className="shrink-0 w-[130px] lg:w-[150px]">
+      {/* Main: stacked on mobile, side-by-side on sm+ */}
+      <div className="flex flex-col sm:flex-row items-center gap-3">
+        {/* Gauge — top on mobile, right on sm+ */}
+        <div className="shrink-0 w-[140px] sm:w-[130px] lg:w-[150px] sm:order-2">
           <svg viewBox="0 0 140 82" className="w-full" aria-hidden="true">
-            {/* Three colored arc segments */}
             {SEGMENTS.map((seg, i) => (
               <path
                 key={i}
@@ -141,11 +125,24 @@ export function HealthScoreGauge({
                 strokeLinecap="butt"
               />
             ))}
-
-            {/* Tapered needle */}
             <path d={needlePath(needleGaugeDeg)} fill={nc} />
             <circle cx={CX} cy={CY} r="4" fill="white" stroke={nc} strokeWidth="1.6" />
           </svg>
+        </div>
+
+        {/* Text — below on mobile, left on sm+ */}
+        <div className="flex-1 min-w-0 text-center sm:text-left sm:order-1">
+          <p className="ff text-[15px] font-bold text-ink tracking-[-0.01em] mb-1">Health Score</p>
+          <div className="flex items-baseline gap-1 justify-center sm:justify-start">
+            <span className="ff text-[42px] sm:text-[46px] font-bold text-ink tracking-[-0.04em] leading-none tabular-nums">
+              {ds}
+            </span>
+            <span className="text-[17px] font-medium text-muted/50">/100</span>
+          </div>
+          <span className={`inline-block mt-2 text-[9px] font-bold uppercase tracking-[0.1em] px-2.5 py-[3px] rounded-[4px] ${badge.bg} ${badge.text}`}>
+            {scoreLabel}
+          </span>
+          <p className="text-[11px] text-muted leading-[1.6] mt-2">{summary}</p>
         </div>
       </div>
 

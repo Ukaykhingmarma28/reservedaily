@@ -78,8 +78,17 @@ export function ChatShell() {
           action,
           state,
         );
-        dispatch({ type: "SET_TYPING", isTyping: false });
-        dispatch({ type: "ADD_MESSAGES", messages: result.messages });
+
+        for (let i = 0; i < result.messages.length; i++) {
+          dispatch({ type: "SET_TYPING", isTyping: false });
+          dispatch({ type: "ADD_MESSAGE", message: result.messages[i] });
+
+          if (i < result.messages.length - 1) {
+            dispatch({ type: "SET_TYPING", isTyping: true });
+            await new Promise((r) => setTimeout(r, 500));
+          }
+        }
+
         dispatch({ type: "SET_PHASE", phase: result.nextPhase });
       } catch {
         dispatch({ type: "SET_TYPING", isTyping: false });

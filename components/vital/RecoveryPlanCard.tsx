@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import type { RecoveryPlanPayload, RecoveryPlanPhase, RecoveryTreatment } from "@/lib/vital/types";
 import Image from "next/image";
 import { Sparkle } from "@/components/ui/icons";
@@ -37,7 +37,7 @@ function TreatmentCard({ t, onBook }: { t: RecoveryTreatment; onBook?: (productI
   const ArtIcon = ART_COMPONENTS[art] ?? ART_COMPONENTS.droplet;
 
   return (
-    <div className="rounded-xl border border-line/50 bg-white p-4 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
+    <div className="rounded-xl border border-line/50 bg-white p-3 sm:p-4 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
       <div className="flex items-start gap-3">
         {/* Product thumbnail */}
         {product?.image ? (
@@ -54,8 +54,8 @@ function TreatmentCard({ t, onBook }: { t: RecoveryTreatment; onBook?: (productI
         )}
 
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2 mb-1">
-            <h4 className="ff text-[13px] font-bold text-ink leading-tight">{t.name}</h4>
+          <div className="flex flex-wrap items-start justify-between gap-1.5 sm:gap-2 mb-1">
+            <h4 className="ff text-[12px] sm:text-[13px] font-bold text-ink leading-tight">{t.name}</h4>
             <span className="shrink-0 text-[9px] font-bold text-butter bg-butter/10 px-2 py-[3px] rounded-full whitespace-nowrap uppercase tracking-[0.04em]">
               {t.frequency}
             </span>
@@ -100,7 +100,7 @@ function SupplementStack({ stack }: { stack: RecoveryPlanPhase["supplementStack"
         </svg>
         <h4 className="ff text-[13px] font-semibold text-ink">Compounding Supplement Stack</h4>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div>
           <p className="text-[10px] font-bold text-moss/60 uppercase tracking-[0.08em] mb-2 flex items-center gap-1">
             <span className="text-[12px]">☀️</span> Morning Stack
@@ -189,8 +189,8 @@ function PhaseContent({ phase, onBook }: { phase: RecoveryPlanPhase; onBook?: (p
   return (
     <div className="animate-[rd-plan-slide_0.3s_ease-out]">
       {/* Phase header */}
-      <div className="flex items-center gap-3 mb-1">
-        <h3 className="ff text-[16px] font-bold text-moss tracking-[-0.01em]">
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
+        <h3 className="ff text-[14px] sm:text-[16px] font-bold text-moss tracking-[-0.01em]">
           Phase {phase.phaseNumber} – {phase.title}
         </h3>
         <span className="shrink-0 text-[10px] font-bold text-rust bg-rust/10 px-2.5 py-1 rounded-full whitespace-nowrap">
@@ -239,6 +239,30 @@ function PhaseContent({ phase, onBook }: { phase: RecoveryPlanPhase; onBook?: (p
 export function RecoveryPlanCard({ payload, onBook }: { payload: RecoveryPlanPayload; onBook?: (productId: string) => void }) {
   const [activePhase, setActivePhase] = useState(0);
   const phase = payload.phases[activePhase];
+  const touchStart = useRef<number | null>(null);
+  const touchDelta = useRef(0);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStart.current = e.touches[0].clientX;
+    touchDelta.current = 0;
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (touchStart.current === null) return;
+    touchDelta.current = e.touches[0].clientX - touchStart.current;
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    if (Math.abs(touchDelta.current) < 50) {
+      touchStart.current = null;
+      return;
+    }
+    setActivePhase((prev) => {
+      if (touchDelta.current < 0) return Math.min(prev + 1, payload.phases.length - 1);
+      return Math.max(prev - 1, 0);
+    });
+    touchStart.current = null;
+  }, [payload.phases.length]);
 
   return (
     <div className="space-y-3 animate-[rd-card-stagger_0.5s_ease-out_both]">
@@ -265,8 +289,19 @@ export function RecoveryPlanCard({ payload, onBook }: { payload: RecoveryPlanPay
         </div>
       </div>
 
-      {/* Phase content */}
-      <PhaseContent key={activePhase} phase={phase} onBook={onBook} />
+      {/* Phase content — swipeable */}
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <PhaseContent key={activePhase} phase={phase} onBook={onBook} />
+      </div>
+
+      {/* Swipe hint — mobile only */}
+      <p className="text-[9px] text-muted/50 text-center sm:hidden">
+        Swipe left/right to switch phases · {activePhase + 1} of {payload.phases.length}
+      </p>
 
       {/* Closing message */}
       <div className="rounded-xl bg-gradient-to-br from-moss to-moss-2 px-4 py-3 flex items-start gap-3">
