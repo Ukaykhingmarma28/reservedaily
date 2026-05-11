@@ -27,7 +27,7 @@ const shortLabels: Record<string, string> = {
 
 export function FeaturedApothecary() {
   const [cat, setCat] = useState(filters[0]);
-  const filtered = items.filter((p) => p.category === cat);
+  const filtered = items.filter((p) => p.category === cat).slice(0, 8);
 
   return (
     <section className="py-14 lg:py-24 px-6 md:px-10 border-b border-line-2">

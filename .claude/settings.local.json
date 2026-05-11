@@ -7,7 +7,9 @@
       "Bash(node -e ' *)",
       "mcp__plugin_claude-mem_mcp-search__smart_outline",
       "Bash(npm run *)",
-      "mcp__plugin_claude-mem_mcp-search__smart_unfold"
+      "mcp__plugin_claude-mem_mcp-search__smart_unfold",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); prods=d['products']; print\\(f'Total: {len\\(prods\\)}'\\); print\\(f'With image: {sum\\(1 for p in prods if p.get\\(\\\\\"image\\\\\"\\)\\)}'\\); print\\(f'Types: {set\\(p[\\\\\"type\\\\\"] for p in prods\\)}'\\); print\\(f'Arts: {set\\(p[\\\\\"art\\\\\"] for p in prods\\)}'\\); cats={p.get\\('category','none'\\) for p in prods}; print\\(f'Categories: {cats}'\\); print\\(f'With variations: {sum\\(1 for p in prods if p.get\\(\\\\\"variations\\\\\"\\)\\)}'\\); print\\(f'Sample IDs:', [p['id'] for p in prods[:5]]\\)\")",
+      "Bash(curl *)"
     ]
   },
   "enableAllProjectMcpServers": true,

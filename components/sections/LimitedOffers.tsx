@@ -137,10 +137,10 @@ export function LimitedOffers() {
 
           <div
             ref={railRef}
-            className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[minmax(280px,320px)] gap-4 lg:gap-6 overflow-x-auto snap-x snap-mandatory pb-3 lg:pb-5 min-w-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="grid grid-flow-col auto-cols-[46%] sm:auto-cols-[minmax(280px,320px)] gap-3 lg:gap-6 overflow-x-auto snap-x snap-mandatory pb-3 lg:pb-5 min-w-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {offers.map((p, i) => (
-              <div key={i} className="relative snap-start">
+              <div key={i} className="relative snap-start flex">
                 <ProductCard p={p} />
               </div>
             ))}

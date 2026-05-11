@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Heart, Star } from "@/components/ui/icons";
 import { CellArt } from "@/components/illustrations/CellArt";
 import { LeafArt } from "@/components/illustrations/LeafArt";
@@ -17,7 +18,7 @@ export function ProductCard({ p }: { p: Product }) {
 
   return (
     <article className="snap-start flex flex-col border border-line-2 p-1 lg:p-2.5 bg-paper min-w-0 lg:min-w-[280px] w-full">
-      <div className="aspect-[4/3] lg:aspect-[5/4] bg-cream relative mb-1 lg:mb-2.5 overflow-hidden">
+      <Link href={`/products/${p.id}`} className="block aspect-[4/3] lg:aspect-[5/4] bg-cream relative mb-1 lg:mb-2.5 overflow-hidden">
         <div className="absolute inset-0">
           <ArtComp color={p.color} bg="var(--color-cream)" />
         </div>
@@ -26,6 +27,7 @@ export function ProductCard({ p }: { p: Product }) {
         </div>
         <button
           aria-label="Add to wishlist"
+          onClick={(e) => e.preventDefault()}
           className="absolute top-1.5 right-1.5 lg:top-2.5 lg:right-2.5 w-6 h-6 lg:w-7 lg:h-7 bg-cream/95 border border-line flex items-center justify-center cursor-pointer text-ink hover:text-rust transition-colors"
         >
           <Heart size={12} />
@@ -35,7 +37,7 @@ export function ProductCard({ p }: { p: Product }) {
             {isBookable ? `⏱ ${displayMeta}` : `◱ ${displayMeta}`}
           </span>
         </div>
-      </div>
+      </Link>
 
       <div className="flex items-center gap-1 lg:gap-1.5 text-[9px] lg:text-[11px] text-muted tracking-[0.04em] mb-0.5 lg:mb-1 truncate">
         <span className="text-ink font-medium truncate">{p.provider}</span>
@@ -43,7 +45,9 @@ export function ProductCard({ p }: { p: Product }) {
         <span className="truncate">{p.location}</span>
       </div>
 
-      <h3 className="ff text-[11px] lg:text-[17px] font-medium text-ink tracking-[-0.01em] mb-0.5 lg:mb-1.5 leading-tight line-clamp-2">{p.name}</h3>
+      <Link href={`/products/${p.id}`} className="no-underline">
+        <h3 className="ff text-[11px] lg:text-[17px] font-medium text-ink tracking-[-0.01em] mb-0.5 lg:mb-1.5 leading-tight line-clamp-2 hover:text-moss transition-colors">{p.name}</h3>
+      </Link>
 
       <div className="flex items-center gap-1 lg:gap-1.5 mb-1 lg:mb-2.5 text-[9px] lg:text-xs text-ink-2">
         <span className="text-rust flex gap-px">

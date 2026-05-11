@@ -60,7 +60,7 @@ export function FeaturedTreatments() {
 
         <div
           ref={railRef}
-          className="grid grid-flow-col auto-cols-[85%] sm:auto-cols-[minmax(300px,1fr)] gap-4 lg:gap-7 overflow-x-auto snap-x snap-mandatory pb-3 lg:pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="grid grid-flow-col auto-cols-[46%] sm:auto-cols-[minmax(280px,320px)] gap-3 lg:gap-7 overflow-x-auto snap-x snap-mandatory pb-3 lg:pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {items.map((p, i) => (
             <ProductCard key={i} p={p} />

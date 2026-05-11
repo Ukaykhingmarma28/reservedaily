@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Stack
 
-- **Next.js 16.2.4**, **React 19.2.4**, **Tailwind CSS v4**, **ESLint 9 (flat config)**, **TypeScript 5**.
+- **Next.js 16.2.4**, **React 19.2.4**, **Tailwind CSS v4**, **ESLint 9 (flat config)**, **TypeScript 5**. Zero runtime dependencies beyond React and Next.js.
 - APIs, file conventions, and config shapes have breaking changes vs. earlier majors. **Before writing or editing framework code, read the relevant guide in `node_modules/next/dist/docs/`** (`01-app/` for App Router, `03-architecture/` for internals). Heed any deprecation notices printed during `dev`/`build`.
 
 ## Commands
@@ -49,7 +49,7 @@ No test runner is configured. No `.env` file is needed — the app is entirely c
   - `types.ts` — all types for the chat system (messages, phases, payloads, state, actions).
   - `mock-engine.ts` — `generateResponse()` drives the conversation flow through phases (greeting → upload → analysis → wellness paths → product recs → booking → payment). Returns `ChatMessage[]` with typed payloads.
   - `mock-data.ts` — biomarker results, wellness paths, booking slots, and product recommendation mappings (references products by ID from `data/products.json`).
-- `scripts/fetch-products.ts` — WooCommerce sync script. Fetches from the staging API (`stg-reservedaily.ukaykhing.com`), maps WC categories to app categories, assigns `section` based on sale status/type/ID, and writes `data/products.json`. Run via `npm run fetch-products`.
+- `scripts/fetch-products.ts` — WooCommerce sync script. Fetches from the staging API (`stg-reservedaily.ukaykhing.com`), maps WC categories to app categories, assigns `section` based on sale status/type/ID, and writes `data/products.json`. Run via `npm run fetch-products`. The generated `data/products.json` is checked in — don't hand-edit it, re-run the script instead.
 
 ### Vital AI conversation flow
 
@@ -75,7 +75,7 @@ The chat follows a linear phase machine: `greeting` → `upload` → `parsing` �
 
 ### Config
 
-- `next.config.ts`: `output: "standalone"` for Docker, `turbopack.root: __dirname` (works around ancestor `package.json` resolution issues), `remotePatterns` for Unsplash images.
+- `next.config.ts`: `output: "standalone"` for Docker, `turbopack.root: __dirname` (works around ancestor `package.json` resolution issues), `remotePatterns` allows Unsplash and `stg-reservedaily.ukaykhing.com` (WooCommerce staging) images.
 - ESLint flat config at `eslint.config.mjs` composes `core-web-vitals` + `typescript` presets. Add global ignores to the existing `globalIgnores([...])` call.
 - Dockerfile: multi-stage Node 22 Alpine build. `docker-compose.yml` maps port 3000.
 
