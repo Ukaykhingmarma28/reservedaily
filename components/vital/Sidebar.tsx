@@ -58,7 +58,7 @@ export function Sidebar({
             <span className="w-7 h-7 rounded-[8px] bg-gradient-to-br from-moss to-moss-2 flex items-center justify-center shadow-sm">
               <Sparkle size={13} className="text-cream" />
             </span>
-            <span className="ff font-semibold text-[14px] text-ink tracking-[-0.01em]">Vital AI</span>
+            <span className="ff font-semibold text-[14px] text-ink tracking-[-0.01em]">VitalNow AI</span>
           </div>
           <button
             onClick={onClose}

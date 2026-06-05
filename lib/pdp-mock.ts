@@ -9,6 +9,45 @@ export type MockReview = {
   verified: boolean;
 };
 
+export type PackageOption = {
+  label: string;
+  meta: string;
+  price: string;
+  was?: string;
+};
+
+export type ProductSpec = { label: string; value: string };
+
+export type SupplementFactRow = {
+  nutrient: string;
+  amount: string;
+  dailyValue: string;
+};
+
+export type ProductSpecification = { text: string; checked?: boolean };
+
+export type ProductInformation = {
+  overviewBullets: string[];
+  overviewText: string;
+  supplementFacts?: {
+    servingSize: string;
+    servingsPerContainer: string;
+    rows: SupplementFactRow[];
+  };
+  treatmentFacts?: {
+    sessionType: string;
+    duration: string;
+    consultation: string;
+    rows: { label: string; value: string }[];
+  };
+  specifications: ProductSpecification[];
+  suggestedUse: string;
+  otherIngredients: string;
+  warnings: string[];
+  disclaimer: string;
+  manufacturerUrl: string;
+};
+
 export type ProductDetail = {
   description: string;
   highlights: string[];
@@ -20,6 +59,13 @@ export type ProductDetail = {
   ratingBreakdown: number[];
   frequentlyBoughtWith: Product[];
   similarItems: Product[];
+  aiSummary: string;
+  specs: ProductSpec[];
+  certifications: string[];
+  categoryRanks: string[];
+  soldLast30Days: string;
+  packageOptions: PackageOption[];
+  productInformation: ProductInformation;
 };
 
 function hash(s: string): number {
@@ -136,6 +182,173 @@ function generateIngredients(p: Product, rand: () => number): string[] {
   return base;
 }
 
+function generateAiSummary(p: Product): string {
+  if (p.type === "bookable") {
+    return `${p.name} is a clinician-supervised treatment at ${p.provider}. Sessions are tailored to your goals with structured aftercare and follow-up guidance included.`;
+  }
+  return `${p.name} is formulated for daily wellness support with clinically studied actives. Designed for consistent use as part of a broader health protocol recommended by your practitioner.`;
+}
+
+function generateSpecs(p: Product, rand: () => number): ProductSpec[] {
+  const months = ["Jun 2027", "Aug 2027", "Oct 2027", "Dec 2027"];
+  if (p.type === "bookable") {
+    return [
+      { label: "Session length", value: p.duration ?? "60 min" },
+      { label: "Clinic location", value: p.location },
+      { label: "Consultation", value: "Included" },
+      { label: "Recovery window", value: pick(["Same day", "24–48 hrs", "3–5 days"], rand) },
+    ];
+  }
+  return [
+    { label: "Portion size", value: p.size ?? "1 serving" },
+    { label: "Total servings", value: pick(["30", "60", "90", "120"], rand) },
+    { label: "Best before", value: pick(months, rand) },
+    { label: "Country of origin", value: pick(["USA", "Australia", "Malaysia", "Switzerland"], rand) },
+  ];
+}
+
+function generateCertifications(p: Product, rand: () => number): string[] {
+  if (p.type === "bookable") {
+    return pickN(
+      ["Licensed clinic", "Physician-led", "FDA-cleared devices", "Sterile protocol", "Post-care kit"],
+      4,
+      rand,
+    );
+  }
+  return pickN(
+    ["Vegetarian", "Vegan", "GMP certified", "Halal", "Non-GMO", "Gluten-free", "Third-party tested"],
+    4,
+    rand,
+  );
+}
+
+function generateCategoryRanks(p: Product, rand: () => number): string[] {
+  const cat = p.category ?? "Wellness";
+  const ranks = [2, 3, 5, 8, 12];
+  const n = 2 + Math.floor(rand() * 2);
+  return pickN(ranks, n, rand).map((r) => `#${r} in ${cat}`);
+}
+
+function generateSoldCount(rand: () => number): string {
+  const n = 1200 + Math.floor(rand() * 88000);
+  return `${n.toLocaleString("en-MY")}+ sold in 30 days`;
+}
+
+function generatePackageOptions(p: Product, _rand: () => number): PackageOption[] {
+  if (p.variations?.length) {
+    return p.variations.map((v) => ({
+      label: v.label,
+      meta: v.meta,
+      price: v.price,
+      was: v.was,
+    }));
+  }
+
+  const base = p.price ?? "RM 0";
+  if (p.type === "bookable") {
+    return [
+      { label: "Single session", meta: p.duration ?? "60 min", price: base, was: p.was },
+      {
+        label: "3-session course",
+        meta: "Save 12% · best value",
+        price: base.replace(/\d+/, (m) => String(Math.round(Number(m) * 2.64))),
+      },
+    ];
+  }
+
+  return [
+    { label: p.size ?? "1 unit", meta: "Standard pack", price: base, was: p.was },
+    {
+      label: "Twin pack",
+      meta: "Save 8%",
+      price: base.replace(/\d+/, (m) => String(Math.round(Number(m) * 1.84))),
+    },
+  ];
+}
+
+function generateProductInformation(
+  p: Product,
+  rand: () => number,
+  highlights: string[],
+  description: string,
+  suggestedUse: string,
+  ingredients: string[],
+  warnings: string[],
+): ProductInformation {
+  const months = ["Jun 2027", "Aug 2027", "Oct 2027", "Dec 2027"];
+  const bestBefore = pick(months, rand);
+  const servings = pick(["30", "60", "90", "120"], rand);
+  const code = p.id.slice(0, 8).toUpperCase();
+  const upc = `${100000 + Math.floor(rand() * 899999)}${Math.floor(rand() * 10)}`;
+
+  const specifications: ProductSpecification[] = [
+    { text: "100% authentic — satisfaction guarantee", checked: true },
+    { text: `Best before: ${bestBefore}` },
+    { text: `Product code: RD-${code}` },
+    { text: `UPC: ${upc}` },
+    { text: `Package quantity: ${p.size ?? "1 unit"}` },
+    { text: `Dimensions: ${pick(["6 × 6 × 12 cm", "5 × 5 × 10 cm", "8 × 4 × 14 cm"], rand)}` },
+    { text: `Ships from: ${p.location}`, checked: true },
+  ];
+
+  if (p.type === "bookable") {
+    return {
+      overviewBullets: highlights,
+      overviewText: description,
+      treatmentFacts: {
+        sessionType: p.category ?? "Treatment",
+        duration: p.duration ?? "60 min",
+        consultation: "Included",
+        rows: [
+          { label: "Provider", value: p.provider },
+          { label: "Location", value: p.location },
+          { label: "Consultation", value: "Pre-session assessment" },
+          { label: "Aftercare", value: "Kit & follow-up guidance" },
+        ],
+      },
+      specifications: specifications.filter((s) => !s.text.startsWith("UPC")),
+      suggestedUse,
+      otherIngredients:
+        `This treatment is delivered at ${p.provider}, ${p.location}. Protocols follow physician-led standards with sterile technique and licensed practitioners.`,
+      warnings,
+      disclaimer:
+        "Treatment outcomes vary by individual. ReserveDaily facilitates booking with independent licensed providers. This information is not medical advice — consult your physician before treatment.",
+      manufacturerUrl: "https://reservedaily.ukaykhing.com",
+    };
+  }
+
+  const primary = ingredients[0] ?? "Active ingredient";
+  const amountMg = pick(["100 mg", "150 mg", "200 mg", "250 mg", "500 mg"], rand);
+  const dv = pick(["38%", "42%", "48%", "50%", "67%"], rand);
+
+  const otherList = ingredients.slice(1, 6).join(", ");
+  const otherIngredients = `${otherList}. Manufactured in a GMP-certified facility. Contains no artificial colours or flavours. Store in a cool, dry place.`;
+
+  return {
+    overviewBullets: highlights,
+    overviewText: description,
+    supplementFacts: {
+      servingSize: p.size ?? "1 capsule",
+      servingsPerContainer: servings,
+      rows: [
+        { nutrient: primary, amount: amountMg, dailyValue: dv },
+        ...ingredients.slice(1, 3).map((ing) => ({
+          nutrient: ing.split("(")[0].trim(),
+          amount: pick(["50 mg", "25 mg", "10 mg", "5 mg"], rand),
+          dailyValue: pick(["—", "12%", "8%", "6%"], rand),
+        })),
+      ],
+    },
+    specifications,
+    suggestedUse,
+    otherIngredients,
+    warnings,
+    disclaimer:
+      "While we strive to ensure product information is correct, manufacturers may alter ingredient lists or packaging. Actual product packaging and materials may contain additional or different information. Always read labels, warnings, and directions before use — not intended to diagnose, treat, cure, or prevent any disease.",
+    manufacturerUrl: "https://reservedaily.ukaykhing.com",
+  };
+}
+
 function generateWarnings(p: Product): string[] {
   if (p.type === "bookable") {
     return [
@@ -220,16 +433,37 @@ export function generateProductDetail(product: Product): ProductDetail {
     .filter((p) => p.id !== product.id);
   const shuffled = [...categoryProducts].sort(() => rand() - 0.5);
 
+  const description = generateDescription(product);
+  const highlights = generateHighlights(product, rand);
+  const suggestedUse = generateSuggestedUse(product);
+  const ingredients = generateIngredients(product, rand);
+  const warnings = generateWarnings(product);
+
   return {
-    description: generateDescription(product),
-    highlights: generateHighlights(product, rand),
-    suggestedUse: generateSuggestedUse(product),
-    ingredients: generateIngredients(product, rand),
-    warnings: generateWarnings(product),
+    description,
+    highlights,
+    suggestedUse,
+    ingredients,
+    warnings,
     reviews,
     avgRating,
     ratingBreakdown: breakdown.reverse(),
     frequentlyBoughtWith: shuffled.slice(0, 6),
     similarItems: shuffled.slice(6, 14),
+    aiSummary: generateAiSummary(product),
+    specs: generateSpecs(product, rand),
+    certifications: generateCertifications(product, rand),
+    categoryRanks: generateCategoryRanks(product, rand),
+    soldLast30Days: generateSoldCount(rand),
+    packageOptions: generatePackageOptions(product, rand),
+    productInformation: generateProductInformation(
+      product,
+      rand,
+      highlights,
+      description,
+      suggestedUse,
+      ingredients,
+      warnings,
+    ),
   };
 }

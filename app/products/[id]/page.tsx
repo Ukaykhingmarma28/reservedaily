@@ -5,10 +5,9 @@ import { AnnouncementBar } from "@/components/sections/AnnouncementBar";
 import { Nav } from "@/components/sections/Nav";
 import { CategoryStrip } from "@/components/sections/CategoryStrip";
 import { Footer } from "@/components/sections/Footer";
-import { Breadcrumbs } from "@/components/pdp/Breadcrumbs";
-import { ProductHero } from "@/components/pdp/ProductHero";
-import { ProductTabs } from "@/components/pdp/ProductTabs";
+import { ProductPdpShell } from "@/components/pdp/ProductHero";
 import { FrequentlyBought } from "@/components/pdp/FrequentlyBought";
+import { ProductInformation } from "@/components/pdp/ProductInformation";
 import { SimilarItems } from "@/components/pdp/SimilarItems";
 import { CustomerReviews } from "@/components/pdp/CustomerReviews";
 
@@ -25,35 +24,27 @@ export default async function ProductPage({ params }: Props) {
 
   const detail = generateProductDetail(product);
 
-  const isBookable = product.type === "bookable";
-  const tabs = isBookable
-    ? [
-        { label: "Overview", content: detail.description },
-        { label: "How it works", content: detail.suggestedUse },
-        { label: "What to expect", content: detail.highlights },
-        { label: "Important info", content: detail.warnings },
-      ]
-    : [
-        { label: "Overview", content: detail.description },
-        { label: "Suggested use", content: detail.suggestedUse },
-        { label: "Ingredients", content: detail.ingredients },
-        { label: "Warnings", content: detail.warnings },
-      ];
-
   return (
     <>
       <AnnouncementBar />
       <Nav />
       <CategoryStrip />
       <main className="max-w-[1400px] mx-auto px-6 md:px-10">
-        <Breadcrumbs category={product.category ?? "Products"} productName={product.name} />
-        <ProductHero
+        <ProductPdpShell
           product={product}
           description={detail.description}
-          highlights={detail.highlights}
+          aiSummary={detail.aiSummary}
+          specs={detail.specs}
+          certifications={detail.certifications}
+          categoryRanks={detail.categoryRanks}
+          soldLast30Days={detail.soldLast30Days}
+          packageOptions={detail.packageOptions}
+          avgRating={detail.avgRating}
+          similarHighlight={detail.similarItems[0]}
+          comboProducts={detail.frequentlyBoughtWith}
         />
         <FrequentlyBought products={detail.frequentlyBoughtWith} />
-        <ProductTabs tabs={tabs} />
+        <ProductInformation info={detail.productInformation} />
         <SimilarItems products={detail.similarItems} />
         <CustomerReviews
           reviews={detail.reviews}

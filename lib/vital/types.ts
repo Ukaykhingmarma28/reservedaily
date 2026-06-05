@@ -9,10 +9,6 @@ export type MessageType =
   | "wellness-paths"
   | "recovery-plan"
   | "product-recommendations"
-  | "booking-form"
-  | "booking-confirmation"
-  | "payment-summary"
-  | "payment-confirmation"
   | "typing";
 
 export type ConversationPhase =
@@ -22,9 +18,6 @@ export type ConversationPhase =
   | "analysis"
   | "wellness-select"
   | "recommendations"
-  | "booking"
-  | "payment"
-  | "payment-complete"
   | "free-chat";
 
 export interface ChatMessage {
@@ -42,10 +35,6 @@ export type MessagePayload =
   | WellnessPathsPayload
   | RecoveryPlanPayload
   | ProductRecsPayload
-  | BookingFormPayload
-  | BookingConfirmationPayload
-  | PaymentSummaryPayload
-  | PaymentConfirmationPayload
   | TypingPayload;
 
 export interface TextPayload {
@@ -129,60 +118,6 @@ export interface ProductRecsPayload {
   wellnessPath: WellnessPathId;
 }
 
-export interface BookingSlot {
-  id: string;
-  date: string;
-  time: string;
-  practitioner: string;
-  specialty: string;
-  available: boolean;
-}
-
-export interface BookingServiceInfo {
-  providerType: "nurse" | "doctor";
-  description: string;
-  includes: string[];
-  price: string;
-  duration: string;
-}
-
-export interface BookingFormPayload {
-  kind: "booking-form";
-  prompt: string;
-  productName: string;
-  serviceInfo?: BookingServiceInfo;
-  slots: BookingSlot[];
-}
-
-export interface BookingConfirmationPayload {
-  kind: "booking-confirmation";
-  slot: BookingSlot;
-  productName: string;
-  confirmationCode: string;
-  message: string;
-}
-
-export interface PaymentSummaryPayload {
-  kind: "payment-summary";
-  product: Product;
-  reason: string;
-  subtotal: number;
-  serviceFee: number;
-  total: number;
-  currency: string;
-}
-
-export interface PaymentConfirmationPayload {
-  kind: "payment-confirmation";
-  orderId: string;
-  product: Product;
-  amountPaid: number;
-  currency: string;
-  paymentMethod: string;
-  slot?: BookingSlot;
-  message: string;
-}
-
 export interface RecoveryTreatment {
   productId?: string;
   name: string;
@@ -210,10 +145,22 @@ export interface RecoveryPlanPhase {
   monitoring: string[];
 }
 
+export interface RecoveryPlanOverview {
+  title: string;
+  description: string;
+  duration: string;
+  phaseCount: number;
+  focusLabel: string;
+  focusAreas: string[];
+}
+
 export interface RecoveryPlanPayload {
   kind: "recovery-plan";
+  overview: RecoveryPlanOverview;
   phases: RecoveryPlanPhase[];
   closingMessage: string;
+  products: RecommendedProduct[];
+  productsIntro?: string;
 }
 
 export interface TypingPayload {
@@ -225,26 +172,19 @@ export interface ChatState {
   isTyping: boolean;
   uploadStatus: FileUploadPayload["status"] | null;
   selectedWellnessPath: WellnessPathId | null;
-  selectedBookingPurpose: string | null;
   hasUploadedReport: boolean;
   conversationPhase: ConversationPhase;
-  selectedProduct: RecommendedProduct | null;
 }
 
 export type UserAction =
   | { type: "upload-file"; fileName: string; fileSize: string; fileType: "pdf" | "image" }
   | { type: "select-wellness-path"; pathId: WellnessPathId }
-  | { type: "select-product"; product: RecommendedProduct }
   | { type: "explain-product"; product: RecommendedProduct }
-  | { type: "select-booking-slot"; slotId: string }
-  | { type: "confirm-payment" }
   | { type: "send-text"; text: string }
   | { type: "start-upload" }
   | { type: "start-chat" }
   | { type: "browse-treatments" }
-  | { type: "build-recovery-plan" }
-  | { type: "book-nurse" }
-  | { type: "book-doctor" };
+  | { type: "build-recovery-plan" };
 
 export type ChatAction =
   | { type: "ADD_MESSAGE"; message: ChatMessage }
@@ -253,7 +193,5 @@ export type ChatAction =
   | { type: "SET_PHASE"; phase: ConversationPhase }
   | { type: "SET_UPLOAD_STATUS"; status: FileUploadPayload["status"] | null }
   | { type: "SELECT_WELLNESS_PATH"; pathId: WellnessPathId }
-  | { type: "SELECT_PRODUCT"; product: RecommendedProduct }
-  | { type: "SELECT_BOOKING_PURPOSE"; purposeId: string }
   | { type: "UPDATE_MESSAGE"; id: string; payload: MessagePayload }
   | { type: "RESET" };

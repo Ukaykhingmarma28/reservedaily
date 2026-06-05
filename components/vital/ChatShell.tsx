@@ -11,7 +11,6 @@ import type {
   RecommendedProduct,
 } from "@/lib/vital/types";
 import { generateResponse } from "@/lib/vital/mock-engine";
-import { getProductById } from "@/lib/products";
 import Image from "next/image";
 import { Sparkle, PanelLeft } from "@/components/ui/icons";
 import { Sidebar } from "./Sidebar";
@@ -24,8 +23,6 @@ const initialState: ChatState = {
   isTyping: false,
   uploadStatus: null,
   selectedWellnessPath: null,
-  selectedBookingPurpose: null,
-  selectedProduct: null,
   hasUploadedReport: false,
   conversationPhase: "greeting",
 };
@@ -44,10 +41,6 @@ function reducer(state: ChatState, action: ChatAction): ChatState {
       return { ...state, uploadStatus: action.status };
     case "SELECT_WELLNESS_PATH":
       return { ...state, selectedWellnessPath: action.pathId };
-    case "SELECT_PRODUCT":
-      return { ...state, selectedProduct: action.product };
-    case "SELECT_BOOKING_PURPOSE":
-      return state;
     case "UPDATE_MESSAGE":
       return {
         ...state,
@@ -114,16 +107,6 @@ export function ChatShell() {
   function handleBrowseTreatments() {
     dispatch({ type: "SET_PHASE", phase: "wellness-select" });
     sendAction({ type: "browse-treatments" }, "greeting");
-  }
-
-  function handleBookNurse() {
-    dispatch({ type: "SET_PHASE", phase: "booking" });
-    sendAction({ type: "book-nurse" }, "greeting");
-  }
-
-  function handleBookDoctor() {
-    dispatch({ type: "SET_PHASE", phase: "booking" });
-    sendAction({ type: "book-doctor" }, "greeting");
   }
 
   function handleGreetingSend(text: string) {
@@ -232,27 +215,6 @@ export function ChatShell() {
     sendAction({ type: "build-recovery-plan" }, "wellness-select");
   }
 
-  function handleBookFromPlan(productId: string) {
-    const product = getProductById(productId);
-    if (!product) return;
-    const rec: RecommendedProduct = { product, reason: "Recommended in your recovery plan" };
-    const msg: ChatMessage = {
-      id: msgId(),
-      role: "user",
-      type: "text",
-      timestamp: new Date(),
-      payload: {
-        kind: "text",
-        text: product.type === "bookable"
-          ? `I'd like to book ${product.name}`
-          : `I'd like to order ${product.name}`,
-      },
-    };
-    dispatch({ type: "ADD_MESSAGE", message: msg });
-    dispatch({ type: "SELECT_PRODUCT", product: rec });
-    sendAction({ type: "select-product", product: rec }, "recommendations");
-  }
-
   function handleSelectWellnessPath(pathId: WellnessPathId) {
     const path =
       pathId.charAt(0).toUpperCase() + pathId.slice(1).replace(/-/g, " ");
@@ -283,48 +245,6 @@ export function ChatShell() {
     sendAction({ type: "explain-product", product: rec }, "recommendations");
   }
 
-  function handleSelectProduct(rec: RecommendedProduct) {
-    const msg: ChatMessage = {
-      id: msgId(),
-      role: "user",
-      type: "text",
-      timestamp: new Date(),
-      payload: {
-        kind: "text",
-        text: rec.product.type === "bookable"
-          ? `I'd like to book ${rec.product.name}`
-          : `I'd like to order ${rec.product.name}`,
-      },
-    };
-    dispatch({ type: "ADD_MESSAGE", message: msg });
-    dispatch({ type: "SELECT_PRODUCT", product: rec });
-    sendAction({ type: "select-product", product: rec }, "recommendations");
-  }
-
-  function handleSelectBookingSlot(slotId: string) {
-    const msg: ChatMessage = {
-      id: msgId(),
-      role: "user",
-      type: "text",
-      timestamp: new Date(),
-      payload: { kind: "text", text: "I'll take this slot" },
-    };
-    dispatch({ type: "ADD_MESSAGE", message: msg });
-    sendAction({ type: "select-booking-slot", slotId }, "booking");
-  }
-
-  function handleConfirmPayment() {
-    const msg: ChatMessage = {
-      id: msgId(),
-      role: "user",
-      type: "text",
-      timestamp: new Date(),
-      payload: { kind: "text", text: "Confirm payment" },
-    };
-    dispatch({ type: "ADD_MESSAGE", message: msg });
-    sendAction({ type: "confirm-payment" }, "payment");
-  }
-
   const isGreeting = state.conversationPhase === "greeting";
 
   return (
@@ -348,11 +268,9 @@ export function ChatShell() {
           </button>
 
           <div className="flex items-center gap-2 lg:ml-3">
-            <span className="w-6 h-6 rounded-full bg-gradient-to-br from-moss to-moss-2 flex items-center justify-center shadow-sm lg:hidden">
-              <Sparkle size={10} className="text-cream" />
-            </span>
+            <Image src="/vital-logo.svg" alt="VitalNow AI" width={22} height={22} className="lg:hidden" />
             <span className="ff font-semibold text-[14px] text-ink tracking-[-0.01em] lg:text-[15px]">
-              {isGreeting ? "New chat" : "Vital AI"}
+              {isGreeting ? "New chat" : "VitalNow AI"}
             </span>
             <span className="relative flex h-1.5 w-1.5 ml-0.5">
               <span className="absolute inline-flex h-full w-full rounded-full bg-moss opacity-60 animate-[rd-vital-pulse_2.5s_ease-in-out_infinite]" />
@@ -371,8 +289,6 @@ export function ChatShell() {
             onStartUpload={handleStartUpload}
             onStartChat={handleStartChat}
             onBrowseTreatments={handleBrowseTreatments}
-            onBookNurse={handleBookNurse}
-            onBookDoctor={handleBookDoctor}
             onSend={handleGreetingSend}
           />
         ) : (
@@ -382,11 +298,7 @@ export function ChatShell() {
               isTyping={state.isTyping}
               onSelectWellnessPath={handleSelectWellnessPath}
               onBuildPlan={handleBuildPlan}
-              onSelectProduct={handleSelectProduct}
               onExplainProduct={handleExplainProduct}
-              onSelectBookingSlot={handleSelectBookingSlot}
-              onConfirmPayment={handleConfirmPayment}
-              onBookFromPlan={handleBookFromPlan}
             />
             <ChatInput
               onSend={handleSend}

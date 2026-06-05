@@ -84,7 +84,7 @@ export function WellnessPathSelector({
               Build My Recovery Plan
             </p>
             <p className="text-[10.5px] text-cream/55 leading-tight mt-1 font-normal">
-              Cover all flagged areas — supplements, treatments & lifestyle changes
+              Phased planning first, then matched treatments & products
             </p>
           </div>
 

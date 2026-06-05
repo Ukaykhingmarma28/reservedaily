@@ -3,7 +3,6 @@ import type {
   ChatMessage,
   ConversationPhase,
   UserAction,
-  WellnessPathId,
   ChatState,
 } from "./types";
 import {
@@ -17,11 +16,10 @@ import {
   MOCK_TOP_RECOMMENDATION,
   MOCK_WELLNESS_PATHS,
   PRODUCTS_BY_PATH,
-  MOCK_BOOKING_SLOTS,
-  MOCK_NURSE_SLOTS,
-  MOCK_DOCTOR_SLOTS,
   MOCK_RECOVERY_PHASES,
   MOCK_RECOVERY_CLOSING,
+  MOCK_RECOVERY_OVERVIEW,
+  getRecoveryPlanProducts,
   QA_RESPONSES,
 } from "./mock-data";
 
@@ -46,7 +44,6 @@ function delay(ms: number): Promise<void> {
 
 function generateExplanation(product: Product, reason: string): string {
   const isBookable = product.type === "bookable";
-  const price = product.variations?.[0]?.price ?? product.price ?? "";
   const meta = isBookable ? product.duration : product.size;
 
   let explanation = `Here's why ${product.name} is a strong match for your profile:\n\n`;
@@ -60,11 +57,10 @@ function generateExplanation(product: Product, reason: string): string {
     explanation += `While clinical treatments provide immediate correction, supplements maintain your levels long-term between sessions.\n\n`;
   }
 
-  explanation += `Pricing starts at ${price}. `;
   if (product.rating >= 4.5) {
     explanation += `It's rated ${product.rating}/5 across ${product.reviews} verified reviews. `;
   }
-  explanation += `Would you like to proceed with this, or would you prefer to see other options?`;
+  explanation += `You can view full details on the product page, or ask me anything else about this recommendation.`;
 
   return explanation;
 }
@@ -114,58 +110,6 @@ export async function generateResponse(
         return {
           messages: [assistantText("Let me help you find the right treatment."), pathsMsg],
           nextPhase: "wellness-select",
-        };
-      }
-      if (action.type === "book-nurse") {
-        await delay(800);
-        const bookingMsg: ChatMessage = {
-          id: msgId(),
-          role: "assistant",
-          type: "booking-form",
-          timestamp: new Date(),
-          payload: {
-            kind: "booking-form",
-            prompt: "Select a convenient time and your nurse will come to your location.",
-            productName: "On-Demand Nurse Visit",
-            serviceInfo: {
-              providerType: "nurse",
-              description: "A certified nurse visits your home, hotel, or office to provide professional healthcare services.",
-              includes: ["IV drip therapy & vitamin injections", "Blood draw & sample collection", "Wound care & basic treatments", "Health monitoring & vitals check"],
-              price: "From RM 250",
-              duration: "45–60 min",
-            },
-            slots: MOCK_NURSE_SLOTS,
-          },
-        };
-        return {
-          messages: [bookingMsg],
-          nextPhase: "booking",
-        };
-      }
-      if (action.type === "book-doctor") {
-        await delay(800);
-        const bookingMsg: ChatMessage = {
-          id: msgId(),
-          role: "assistant",
-          type: "booking-form",
-          timestamp: new Date(),
-          payload: {
-            kind: "booking-form",
-            prompt: "Select a convenient time and your doctor will come to your location.",
-            productName: "On-Demand Doctor Visit",
-            serviceInfo: {
-              providerType: "doctor",
-              description: "A licensed doctor visits your home, hotel, or office for consultations, prescriptions, and treatments.",
-              includes: ["General health consultation", "Prescription & medication management", "Blood panel review & health screening", "Specialist referrals if needed"],
-              price: "From RM 350",
-              duration: "30–45 min",
-            },
-            slots: MOCK_DOCTOR_SLOTS,
-          },
-        };
-        return {
-          messages: [bookingMsg],
-          nextPhase: "booking",
         };
       }
       break;
@@ -224,6 +168,7 @@ export async function generateResponse(
     case "wellness-select": {
       if (action.type === "build-recovery-plan") {
         await delay(2000);
+        const planProducts = getRecoveryPlanProducts(MOCK_RECOVERY_PHASES);
         const planMsg: ChatMessage = {
           id: msgId(),
           role: "assistant",
@@ -231,13 +176,19 @@ export async function generateResponse(
           timestamp: new Date(),
           payload: {
             kind: "recovery-plan",
+            overview: MOCK_RECOVERY_OVERVIEW,
             phases: MOCK_RECOVERY_PHASES,
             closingMessage: MOCK_RECOVERY_CLOSING,
+            products: planProducts,
+            productsIntro:
+              "Treatments and products matched to this protocol — tap Ask VitalNow AI on any card to learn why it fits your profile.",
           },
         };
         return {
           messages: [
-            assistantText("I've built your personalized recovery plan based on your biomarker analysis. Here's your complete protocol:"),
+            assistantText(
+              "I've built your personalised recovery plan from your biomarker analysis. Review your phased planning below, then the matched treatments and products.",
+            ),
             planMsg,
           ],
           nextPhase: "recommendations",
@@ -289,166 +240,15 @@ export async function generateResponse(
           nextPhase: "recommendations",
         };
       }
-      if (action.type === "select-product") {
-        const { product } = action.product;
-        const price = parseFloat(product.price?.replace(/[^0-9.]/g, "") ?? "0");
-        const serviceFee = Math.round(price * 0.05);
-        await delay(1200);
-
-        if (product.type === "bookable") {
-          const bookingMsg: ChatMessage = {
-            id: msgId(),
-            role: "assistant",
-            type: "booking-form",
-            timestamp: new Date(),
-            payload: {
-              kind: "booking-form",
-              prompt: `Let's book your ${product.name}. Select an available appointment slot:`,
-              productName: product.name,
-              slots: MOCK_BOOKING_SLOTS,
-            },
-          };
-          return {
-            messages: [bookingMsg],
-            nextPhase: "booking",
-          };
-        }
-
-        const paymentMsg: ChatMessage = {
-          id: msgId(),
-          role: "assistant",
-          type: "payment-summary",
-          timestamp: new Date(),
-          payload: {
-            kind: "payment-summary",
-            product,
-            reason: action.product.reason,
-            subtotal: price,
-            serviceFee,
-            total: price + serviceFee,
-            currency: "MYR",
-          },
-        };
-        return {
-          messages: [paymentMsg],
-          nextPhase: "payment",
-        };
-      }
       if (action.type === "send-text") {
         await delay(1000);
         return {
           messages: [
             assistantText(
-              "Select a treatment or product above to proceed, or ask me anything about the recommendations.",
+              "Tap \"Ask VitalNow AI\" on any recommendation to learn more, or ask me anything about the treatments shown.",
             ),
           ],
           nextPhase: "recommendations",
-        };
-      }
-      break;
-    }
-
-    case "booking": {
-      if (action.type === "select-booking-slot") {
-        const allSlots = [...MOCK_BOOKING_SLOTS, ...MOCK_NURSE_SLOTS, ...MOCK_DOCTOR_SLOTS];
-        const slot = allSlots.find((s) => s.id === action.slotId);
-        if (!slot || !slot.available) {
-          return {
-            messages: [
-              assistantText("That slot is no longer available. Please select another time."),
-            ],
-            nextPhase: "booking",
-          };
-        }
-
-        const isNurse = slot.id.startsWith("ns");
-        const isDoctor = slot.id.startsWith("ds");
-
-        const product: Product = _state.selectedProduct?.product ?? {
-          id: isNurse ? "on-demand-nurse" : isDoctor ? "on-demand-doctor" : "treatment",
-          type: "bookable" as const,
-          tag: isNurse ? "Nurse Visit" : isDoctor ? "Doctor Visit" : "Treatment",
-          name: isNurse ? "On-Demand Nurse Visit" : isDoctor ? "On-Demand Doctor Visit" : "Treatment",
-          provider: slot.practitioner,
-          location: "Your Location",
-          rating: 4.8,
-          reviews: 0,
-          duration: isNurse ? "60 min" : "45 min",
-          art: "cell" as const,
-          color: "#4a7c6f",
-          category: "Health Services",
-          price: isNurse ? "RM 250" : "RM 450",
-        };
-        const reason = _state.selectedProduct?.reason ?? (isNurse
-          ? "Professional nurse visit for wellness treatments at your convenience."
-          : isDoctor
-            ? "Doctor consultation and treatment at your preferred location."
-            : "");
-
-        const price = parseFloat(product.price?.replace(/[^0-9.]/g, "") ?? "0");
-        const serviceFee = Math.round(price * 0.05);
-
-        await delay(800);
-        const paymentMsg: ChatMessage = {
-          id: msgId(),
-          role: "assistant",
-          type: "payment-summary",
-          timestamp: new Date(),
-          payload: {
-            kind: "payment-summary",
-            product,
-            reason,
-            subtotal: price,
-            serviceFee,
-            total: price + serviceFee,
-            currency: "MYR",
-          },
-        };
-        return {
-          messages: [
-            assistantText(`Appointment selected: ${slot.date} at ${slot.time} with ${slot.practitioner}. Here's your order summary:`),
-            paymentMsg,
-          ],
-          nextPhase: "payment",
-        };
-      }
-      break;
-    }
-
-    case "payment": {
-      if (action.type === "confirm-payment") {
-        await delay(2000);
-
-        const lastPaymentSummary = [..._state.messages].reverse().find(
-          (m) => m.payload.kind === "payment-summary",
-        );
-        const summaryPayload = lastPaymentSummary?.payload.kind === "payment-summary" ? lastPaymentSummary.payload : null;
-
-        const product = summaryPayload?.product ?? _state.selectedProduct?.product;
-        const total = summaryPayload?.total ?? 0;
-        const orderId = `RD-${Date.now().toString(36).toUpperCase().slice(-6)}`;
-
-        const confirmMsg: ChatMessage = {
-          id: msgId(),
-          role: "assistant",
-          type: "payment-confirmation",
-          timestamp: new Date(),
-          payload: {
-            kind: "payment-confirmation",
-            orderId,
-            product: product!,
-            amountPaid: total,
-            currency: "MYR",
-            paymentMethod: "Visa ending ····4242",
-            message:
-              product?.type === "bookable"
-                ? "Your appointment is confirmed. You'll receive a confirmation email shortly with all the details. Is there anything else I can help with?"
-                : "Your order is confirmed and will be shipped within 1-2 business days. Estimated delivery: 3-5 business days. Is there anything else I can help with?",
-          },
-        };
-        return {
-          messages: [confirmMsg],
-          nextPhase: "free-chat",
         };
       }
       break;

@@ -132,7 +132,7 @@ export function Nav() {
             className="inline-flex items-center gap-2 no-underline bg-ink text-cream px-3.5 py-2 text-xs font-semibold tracking-[0.04em] rounded-[2px]"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-butter" />
-            Telehealth Vital AI
+            Telehealth VitalNow AI
           </a>
           <a
             href="#"

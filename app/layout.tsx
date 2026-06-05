@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://reservedaily.ukaykhing.com"),
   title: "ReserveDaily, Reserve Your Path to Wellness",
   description:
-    "Malaysia's curated wellness marketplace. Book vetted treatments, check your health with Vital AI, and shop doctor-certified supplements.",
+    "Malaysia's curated wellness marketplace. Book vetted treatments, check your health with VitalNow AI, and shop doctor-certified supplements.",
   openGraph: {
     title: "ReserveDaily, Reserve Your Path to Wellness",
     description:

@@ -15,9 +15,9 @@ const reviews: Review[] = [
     treatment: "Provider Partner", clinic: "Mountbatten Clinic", rating: 5, date: "February 2026",
   },
   {
-    q: "The Vital AI preview sold me. Knowing my blood work could guide the right treatment changed how I think about wellness spending.",
+    q: "The VitalNow AI preview sold me. Knowing my blood work could guide the right treatment changed how I think about wellness spending.",
     n: "Priya S.", r: "Entrepreneur", city: "Kuala Lumpur",
-    treatment: "Vital AI + NAD+ Drip", clinic: "Atlas Longevity", rating: 5, date: "March 2026",
+    treatment: "VitalNow AI + NAD+ Drip", clinic: "Atlas Longevity", rating: 5, date: "March 2026",
   },
   {
     q: "Booked my first HIFU facial with zero hassle. Concierge texted me a reschedule option, no phone calls, no awkward emails.",

@@ -95,7 +95,7 @@ export function ChatInput({
           </div>
         </div>
         <p className="text-center text-[10px] text-muted/40 mt-2">
-          Vital AI can make mistakes. Please verify health recommendations.
+          VitalNow AI can make mistakes. Please verify health recommendations.
         </p>
       </div>
     </div>

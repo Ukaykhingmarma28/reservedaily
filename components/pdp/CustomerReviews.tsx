@@ -27,7 +27,7 @@ export function CustomerReviews({
   const visible = sorted.slice(0, visibleCount);
 
   return (
-    <section className="py-10 lg:py-16 border-t border-line-2">
+    <section id="reviews" className="py-10 lg:py-16 border-t border-line-2 scroll-mt-24">
       <div className="flex items-center gap-3 text-[11px] text-moss tracking-[0.18em] uppercase font-semibold mb-2">
         <span className="w-6 h-px bg-moss" />
         What customers say

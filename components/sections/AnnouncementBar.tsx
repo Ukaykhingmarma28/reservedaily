@@ -161,7 +161,7 @@ export function AnnouncementBar() {
       <div className="max-w-[1760px] mx-auto flex items-center justify-between">
         <SitePreferences />
         <span className="flex-1 text-center">
-          ✦ Vital AI launches Q1 2026,{" "}
+          ✦ VitalNow AI launches Q1 2026,{" "}
           <a href="#vital" className="text-butter underline underline-offset-2">
             join the waitlist
           </a>

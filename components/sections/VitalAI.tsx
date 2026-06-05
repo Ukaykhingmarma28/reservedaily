@@ -21,7 +21,7 @@ const toneColors = {
 
 const steps = [
   { n: "01", t: "Upload", d: "Any blood report, PDF, image, or clinic email. We parse it in seconds." },
-  { n: "02", t: "Analyse", d: "Vital AI scores every biomarker, detecting what's optimal, low-optimal, or out of range." },
+  { n: "02", t: "Analyse", d: "VitalNow AI scores every biomarker, detecting what's optimal, low-optimal, or out of range." },
   { n: "03", t: "Match", d: "A personalised care protocol, treatments, supplements, providers, ranked by fit and price." },
 ];
 
@@ -38,7 +38,7 @@ export function VitalAI() {
           <div>
             <div className="flex items-center gap-3 text-[11px] text-moss tracking-[0.18em] uppercase font-semibold mb-4 lg:mb-[22px]">
               <span className="w-6 h-px bg-moss" />
-              Vital AI · Exclusive to Reserve Daily
+              VitalNow AI · Exclusive to Reserve Daily
             </div>
             <h2
               className="ff text-[clamp(28px,7vw,38px)] lg:text-[clamp(42px,4.6vw,68px)] font-normal leading-[0.98] tracking-[-0.025em] text-ink m-0"
@@ -51,7 +51,7 @@ export function VitalAI() {
             </h2>
           </div>
           <p className="text-sm lg:text-base leading-[1.65] text-ink-2 max-w-[460px]">
-            Vital AI reads your biomarkers through a <em className="ff text-moss">functional medicine</em>{" "}
+            VitalNow AI reads your biomarkers through a <em className="ff text-moss">functional medicine</em>{" "}
             lens, flagging suboptimal ranges, not just abnormal ones, and matches you to the right clinics,
             treatments, and supplements at the best prices in Malaysia.
           </p>

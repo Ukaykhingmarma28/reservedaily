@@ -18,7 +18,7 @@ const posts: JournalPost[] = [
     read: "9 min", date: "Apr 08, 2026", author: "Rafael Tan", art: "pulse",
   },
   {
-    cat: "Vital AI",
+    cat: "VitalNow AI",
     t: "Your blood work, translated, a field guide to the numbers that matter.",
     d: "How to read a CBC panel without a medical degree. What to flag, what to ignore, and when to re-test.",
     read: "12 min", date: "Apr 02, 2026", author: "Priya Sundaram", art: "page",

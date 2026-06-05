@@ -16,7 +16,7 @@ export function TopRecommendation({ recommendation }: { recommendation: string }
         </div>
       </div>
       <p className="text-[10px] text-muted/50 text-center mt-3">
-        Vital AI can make mistakes. Please verify health recommendations.
+        VitalNow AI can make mistakes. Please verify health recommendations.
       </p>
     </div>
   );

@@ -1,246 +1,221 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useCallback } from "react";
-import type { RecoveryPlanPayload, RecoveryPlanPhase, RecoveryTreatment } from "@/lib/vital/types";
-import Image from "next/image";
-import { Sparkle } from "@/components/ui/icons";
-import { getProductById } from "@/lib/products";
+import type {
+  RecoveryPlanPayload,
+  RecoveryPlanPhase,
+  RecommendedProduct,
+  SupplementItem,
+} from "@/lib/vital/types";
+import { ProductRecommendation } from "./ProductRecommendation";
+import {
+  Sparkle,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Leaf,
+} from "@/components/ui/icons";
 
-const ART_COMPONENTS: Record<string, (props: { color: string }) => React.ReactNode> = {
-  droplet: ({ color }) => (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-    </svg>
-  ),
-  cell: ({ color }) => (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <circle cx="12" cy="12" r="4" />
-      <line x1="12" y1="2" x2="12" y2="8" />
-      <line x1="12" y1="16" x2="12" y2="22" />
-      <line x1="2" y1="12" x2="8" y2="12" />
-      <line x1="16" y1="12" x2="22" y2="12" />
-    </svg>
-  ),
-  leaf: ({ color }) => (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 19 2c1 2 2 4.5 2 8 0 5.5-4.78 10-10 10Z" />
-      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
-    </svg>
-  ),
-};
-
-function TreatmentCard({ t, onBook }: { t: RecoveryTreatment; onBook?: (productId: string) => void }) {
-  const product = t.productId ? getProductById(t.productId) : null;
-  const art = product?.art ?? "droplet";
-  const color = product?.color ?? "#148c50";
-  const ArtIcon = ART_COMPONENTS[art] ?? ART_COMPONENTS.droplet;
-
+function Section({
+  title,
+  subtitle,
+  icon,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="rounded-xl border border-line/50 bg-white p-3 sm:p-4 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
-      <div className="flex items-start gap-3">
-        {/* Product thumbnail */}
-        {product?.image ? (
-          <div className="shrink-0 w-12 h-12 rounded-lg overflow-hidden">
-            <Image src={product.image} alt={t.name} width={48} height={48} className="object-cover w-full h-full" />
-          </div>
-        ) : (
-          <div
-            className="shrink-0 w-12 h-12 rounded-lg flex items-center justify-center"
-            style={{ backgroundColor: color + "14" }}
-          >
-            {ArtIcon({ color })}
-          </div>
-        )}
-
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-start justify-between gap-1.5 sm:gap-2 mb-1">
-            <h4 className="ff text-[12px] sm:text-[13px] font-bold text-ink leading-tight">{t.name}</h4>
-            <span className="shrink-0 text-[9px] font-bold text-butter bg-butter/10 px-2 py-[3px] rounded-full whitespace-nowrap uppercase tracking-[0.04em]">
-              {t.frequency}
-            </span>
-          </div>
-          <ul className="space-y-1">
-            {t.bullets.map((b, i) => (
-              <li key={i} className="flex items-start gap-2 text-[11px] text-ink-2 leading-[1.5]">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-berry)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-[2px]">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                {b}
-              </li>
-            ))}
-          </ul>
-
-          {/* Price + Book button */}
-          {product && (
-            <div className="flex items-center justify-between mt-2.5 pt-2 border-t border-line/30">
-              <span className="text-[12px] font-bold text-ink tabular-nums">{product.price}</span>
-              <button
-                onClick={() => onBook?.(product.id)}
-                className="text-[10px] font-bold text-cream bg-moss px-3 py-1.5 rounded-lg active:opacity-80"
-              >
-                {product.type === "bookable" ? "Book Now" : "Order"}
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function SupplementStack({ stack }: { stack: RecoveryPlanPhase["supplementStack"] }) {
-  return (
-    <div className="rounded-xl border border-line/50 bg-white p-4 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
-      <div className="flex items-center gap-2 mb-3">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-moss)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M9 2h6l3 7H6z" />
-          <path d="M12 9v13" />
-          <path d="M8 13h8" />
-        </svg>
-        <h4 className="ff text-[13px] font-semibold text-ink">Compounding Supplement Stack</h4>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-        <div>
-          <p className="text-[10px] font-bold text-moss/60 uppercase tracking-[0.08em] mb-2 flex items-center gap-1">
-            <span className="text-[12px]">☀️</span> Morning Stack
-          </p>
-          <ul className="space-y-1.5">
-            {stack.morning.map((s, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-[10.5px] text-ink-2 leading-tight">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-berry)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-[2px]">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span>{s.name} <span className="text-muted">{s.dosage}</span></span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <p className="text-[10px] font-bold text-moss/60 uppercase tracking-[0.08em] mb-2 flex items-center gap-1">
-            <span className="text-[12px]">🌙</span> Night Stack
-          </p>
-          <ul className="space-y-1.5">
-            {stack.night.map((s, i) => (
-              <li key={i} className="flex items-start gap-1.5 text-[10.5px] text-ink-2 leading-tight">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-berry)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-[2px]">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span>{s.name} <span className="text-muted">{s.dosage}</span></span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function LifestyleSection({ items }: { items: string[] }) {
-  return (
-    <div className="rounded-xl border border-line/50 bg-white p-4 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
-      <div className="flex items-center gap-2 mb-3">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-moss)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-        </svg>
-        <h4 className="ff text-[13px] font-semibold text-ink">Lifestyle & Nutrition Guidance</h4>
-      </div>
-      <ul className="space-y-1.5">
-        {items.map((item, i) => (
-          <li key={i} className="flex items-start gap-2 text-[11px] text-ink-2 leading-[1.5]">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-berry)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-[2px]">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            {item}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function MonitoringSection({ items }: { items: string[] }) {
-  return (
-    <div className="rounded-xl border border-line/50 bg-white p-4 shadow-[0_1px_4px_rgba(0,0,0,0.04)]">
-      <div className="flex items-center gap-2 mb-3">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-moss)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-          <line x1="16" y1="2" x2="16" y2="6" />
-          <line x1="8" y1="2" x2="8" y2="6" />
-          <line x1="3" y1="10" x2="21" y2="10" />
-        </svg>
-        <h4 className="ff text-[13px] font-semibold text-ink">Monitoring & Follow-Up</h4>
-      </div>
-      <ul className="space-y-1.5">
-        {items.map((item, i) => (
-          <li key={i} className="flex items-start gap-2 text-[11px] text-ink-2 leading-[1.5]">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-berry)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 mt-[2px]">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-            {item}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function PhaseContent({ phase, onBook }: { phase: RecoveryPlanPhase; onBook?: (productId: string) => void }) {
-  return (
-    <div className="animate-[rd-plan-slide_0.3s_ease-out]">
-      {/* Phase header */}
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-1">
-        <h3 className="ff text-[14px] sm:text-[16px] font-bold text-moss tracking-[-0.01em]">
-          Phase {phase.phaseNumber} – {phase.title}
-        </h3>
-        <span className="shrink-0 text-[10px] font-bold text-rust bg-rust/10 px-2.5 py-1 rounded-full whitespace-nowrap">
-          {phase.weekRange}
+    <section className="rounded-xl border border-line/40 bg-white overflow-hidden">
+      <div className="flex items-start gap-2.5 px-4 py-3 border-b border-line/30 bg-paper/50">
+        <span className="w-8 h-8 rounded-lg bg-moss/8 flex items-center justify-center shrink-0 text-moss">
+          {icon}
         </span>
+        <div className="min-w-0 pt-0.5">
+          <h4 className="ff text-[13px] font-semibold text-ink tracking-[-0.01em]">{title}</h4>
+          {subtitle ? (
+            <p className="text-[10px] text-muted mt-0.5 leading-snug">{subtitle}</p>
+          ) : null}
+        </div>
       </div>
-      <p className="text-[11px] text-muted leading-relaxed mb-4">
-        Goal: {phase.goal}
+      <div className="p-4">{children}</div>
+    </section>
+  );
+}
+
+function PlanOverview({ overview }: { overview: RecoveryPlanPayload["overview"] }) {
+  return (
+    <div className="px-4 sm:px-5 py-4 border-b border-line/25 bg-gradient-to-b from-sage/25 to-transparent">
+      <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-moss mb-2">
+        Plan overview
+      </p>
+      <h4 className="ff text-[14px] sm:text-[15px] font-semibold text-ink tracking-[-0.02em] mb-2 leading-snug">
+        {overview.title}
+      </h4>
+      <p className="text-[12px] sm:text-[13px] text-ink-2 leading-[1.65] mb-4">
+        {overview.description}
       </p>
 
-      {/* Two-column: treatments left, supplements right */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-3">
-        <div className="space-y-3">
-          {phase.treatments.map((t, i) => (
-            <TreatmentCard key={i} t={t} onBook={onBook} />
-          ))}
-
-          {/* Expected Benefits */}
-          <div className="rounded-xl bg-sage/30 border border-line/30 p-3">
-            <p className="text-[10px] font-bold text-moss/70 uppercase tracking-[0.06em] mb-2">
-              Expected Benefits ({phase.weekRange})
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {phase.expectedBenefits.map((b, i) => (
-                <span key={i} className="inline-flex items-center gap-1.5 text-[10px] text-ink-2 bg-white rounded-full px-2.5 py-1 border border-line/40">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-berry)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                  {b.label}
-                </span>
-              ))}
-            </div>
-          </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+        <div className="rounded-lg bg-white border border-line/40 px-3 py-2.5">
+          <p className="text-[9px] font-bold uppercase tracking-[0.08em] text-muted mb-0.5">
+            Duration
+          </p>
+          <p className="ff text-[13px] font-semibold text-ink leading-tight">{overview.duration}</p>
         </div>
-
-        <div className="space-y-3">
-          <SupplementStack stack={phase.supplementStack} />
-          <LifestyleSection items={phase.lifestyleGuidance} />
-          <MonitoringSection items={phase.monitoring} />
+        <div className="rounded-lg bg-white border border-line/40 px-3 py-2.5">
+          <p className="text-[9px] font-bold uppercase tracking-[0.08em] text-muted mb-0.5">
+            Phases
+          </p>
+          <p className="ff text-[13px] font-semibold text-ink leading-tight">
+            {overview.phaseCount} stages
+          </p>
+        </div>
+        <div className="rounded-lg bg-white border border-line/40 px-3 py-2.5 col-span-2 sm:col-span-1">
+          <p className="text-[9px] font-bold uppercase tracking-[0.08em] text-muted mb-0.5">
+            Focus
+          </p>
+          <p className="ff text-[13px] font-semibold text-ink leading-tight">
+            {overview.focusLabel}
+          </p>
         </div>
       </div>
+
+      <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-muted mb-2">
+        What this plan aims to improve
+      </p>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+        {overview.focusAreas.map((area) => (
+          <li
+            key={area}
+            className="flex items-start gap-2 text-[11px] sm:text-[12px] text-ink-2 leading-snug"
+          >
+            <Check size={11} className="text-berry shrink-0 mt-0.5" />
+            {area}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-export function RecoveryPlanCard({ payload, onBook }: { payload: RecoveryPlanPayload; onBook?: (productId: string) => void }) {
+function BulletList({ items }: { items: string[] }) {
+  return (
+    <ul className="space-y-2">
+      {items.map((item, i) => (
+        <li key={i} className="flex items-start gap-2.5 text-[12px] text-ink-2 leading-[1.55]">
+          <span className="mt-[5px] w-4 h-4 rounded-full bg-berry/12 flex items-center justify-center shrink-0">
+            <Check size={9} className="text-berry" />
+          </span>
+          {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+
+function SupplementColumn({
+  label,
+  items,
+  variant,
+}: {
+  label: string;
+  items: SupplementItem[];
+  variant: "morning" | "night";
+}) {
+  return (
+    <div
+      className={`rounded-lg p-3 border ${
+        variant === "morning"
+          ? "bg-gradient-to-br from-rust-soft/12 to-paper border-rust-soft/25"
+          : "bg-gradient-to-br from-moss/6 to-paper border-moss/15"
+      }`}
+    >
+      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-muted mb-2.5">
+        {label}
+      </p>
+      <ul className="space-y-2">
+        {items.map((s, i) => (
+          <li key={i} className="border-b border-line/25 last:border-0 pb-2 last:pb-0">
+            <p className="text-[12px] font-medium text-ink leading-tight">{s.name}</p>
+            <p className="text-[10px] text-muted mt-0.5">{s.dosage}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function PhasePanel({ phase }: { phase: RecoveryPlanPhase }) {
+  return (
+    <div className="flex flex-col gap-4 animate-[rd-plan-slide_0.35s_ease-out_both]">
+      <div className="rounded-xl bg-gradient-to-r from-moss/[0.07] via-sage/40 to-transparent border border-moss/15 px-4 py-3.5">
+        <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-moss mb-1.5">
+          Phase goal
+        </p>
+        <p className="text-[12px] sm:text-[13px] text-ink-2 leading-[1.65]">{phase.goal}</p>
+      </div>
+
+      <Section
+        title="Supplement stack"
+        subtitle="Daily nutraceutical protocol"
+        icon={<Leaf size={16} />}
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <SupplementColumn label="Morning" items={phase.supplementStack.morning} variant="morning" />
+          <SupplementColumn label="Evening" items={phase.supplementStack.night} variant="night" />
+        </div>
+      </Section>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Section title="Lifestyle" icon={<Leaf size={16} />}>
+          <BulletList items={phase.lifestyleGuidance} />
+        </Section>
+        <Section title="Monitoring" icon={<Calendar size={16} />}>
+          <BulletList items={phase.monitoring} />
+        </Section>
+      </div>
+
+      <section className="rounded-xl border border-berry/20 bg-berry/[0.04] p-4">
+        <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-berry mb-3">
+          Expected outcomes · {phase.weekRange}
+        </p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {phase.expectedBenefits.map((b, i) => (
+            <div
+              key={i}
+              className="rounded-lg bg-white border border-line/40 px-3 py-2.5 shadow-[0_1px_3px_rgba(0,0,0,0.03)]"
+            >
+              <p className="text-[11px] font-medium text-ink leading-snug mb-1">{b.label}</p>
+              <p className="text-[10px] text-muted">{b.timeline}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export function RecoveryPlanCard({
+  payload,
+  onExplainProduct,
+}: {
+  payload: RecoveryPlanPayload;
+  onExplainProduct: (rec: RecommendedProduct) => void;
+}) {
   const [activePhase, setActivePhase] = useState(0);
   const phase = payload.phases[activePhase];
+  const total = payload.phases.length;
   const touchStart = useRef<number | null>(null);
   const touchDelta = useRef(0);
+
+  const goPhase = (index: number) => {
+    setActivePhase(Math.max(0, Math.min(index, total - 1)));
+  };
 
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     touchStart.current = e.touches[0].clientX;
@@ -253,62 +228,148 @@ export function RecoveryPlanCard({ payload, onBook }: { payload: RecoveryPlanPay
   }, []);
 
   const handleTouchEnd = useCallback(() => {
-    if (Math.abs(touchDelta.current) < 50) {
+    if (Math.abs(touchDelta.current) < 48) {
       touchStart.current = null;
       return;
     }
     setActivePhase((prev) => {
-      if (touchDelta.current < 0) return Math.min(prev + 1, payload.phases.length - 1);
+      if (touchDelta.current < 0) return Math.min(prev + 1, total - 1);
       return Math.max(prev - 1, 0);
     });
     touchStart.current = null;
-  }, [payload.phases.length]);
+  }, [total]);
 
   return (
-    <div className="space-y-3 animate-[rd-card-stagger_0.5s_ease-out_both]">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-moss to-moss-2 flex items-center justify-center">
-            <Sparkle size={11} className="text-cream" />
+    <div
+      className="w-full rounded-2xl border border-line/40 bg-gradient-to-b from-white to-paper/50 shadow-[0_4px_24px_rgba(26,38,89,0.06)] overflow-hidden animate-[rd-card-stagger_0.45s_ease-out_both]"
+    >
+      {/* Plan header */}
+      <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 border-b border-line/30 bg-white/80">
+        <div className="flex items-center gap-2.5 mb-1">
+          <span className="w-8 h-8 rounded-full bg-gradient-to-br from-moss to-moss-2 flex items-center justify-center shadow-[0_2px_8px_rgba(26,38,89,0.18)]">
+            <Sparkle size={14} className="text-cream" />
+          </span>
+          <div>
+            <h3 className="ff text-[15px] sm:text-[16px] font-semibold text-ink tracking-[-0.02em]">
+              Your recovery plan
+            </h3>
+            <p className="text-[11px] text-muted">
+              Personalised from your biomarker analysis
+            </p>
           </div>
-          <span className="ff text-[13px] font-semibold text-ink">Vital AI Recommendation</span>
-        </div>
-
-        {/* Pagination dots */}
-        <div className="flex items-center gap-1.5">
-          {payload.phases.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActivePhase(i)}
-              className={`w-2 h-2 rounded-full transition-all ${
-                i === activePhase ? "bg-moss scale-110" : "bg-line hover:bg-muted/40"
-              }`}
-            />
-          ))}
         </div>
       </div>
 
-      {/* Phase content — swipeable */}
+      <PlanOverview overview={payload.overview} />
+
+      {/* Phase stepper */}
+      <div className="px-3 sm:px-4 py-3 bg-paper/40 border-b border-line/25 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex gap-2 min-w-max sm:min-w-0 sm:grid sm:grid-cols-3">
+          {payload.phases.map((p, i) => {
+            const active = i === activePhase;
+            return (
+              <button
+                key={p.phaseNumber}
+                type="button"
+                onClick={() => goPhase(i)}
+                className={`flex flex-col items-start text-left px-3 py-2.5 rounded-xl border transition-all cursor-pointer min-w-[140px] sm:min-w-0 ${
+                  active
+                    ? "bg-white border-moss/30 shadow-[0_2px_12px_rgba(26,38,89,0.08)] ring-1 ring-moss/15"
+                    : "bg-transparent border-transparent hover:bg-white/60 hover:border-line/40"
+                }`}
+              >
+                <span
+                  className={`text-[9px] font-bold uppercase tracking-[0.1em] mb-1 ${
+                    active ? "text-moss" : "text-muted"
+                  }`}
+                >
+                  Phase {p.phaseNumber}
+                </span>
+                <span className={`ff text-[12px] font-semibold leading-tight mb-0.5 line-clamp-2 ${active ? "text-ink" : "text-ink-2"}`}>
+                  {p.title}
+                </span>
+                <span className="text-[10px] text-muted">{p.weekRange}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Phase body */}
       <div
+        className="px-3 sm:px-4 py-4 sm:py-5"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <PhaseContent key={activePhase} phase={phase} onBook={onBook} />
+        <div className="flex items-center justify-between gap-3 mb-4">
+          <div className="min-w-0">
+            <p className="text-[10px] font-bold text-moss uppercase tracking-[0.08em]">
+              Phase {phase.phaseNumber} of {total}
+            </p>
+            <h4 className="ff text-[17px] sm:text-[18px] font-semibold text-ink tracking-[-0.02em] leading-tight mt-0.5 truncate">
+              {phase.title}
+            </h4>
+          </div>
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              type="button"
+              onClick={() => goPhase(activePhase - 1)}
+              disabled={activePhase === 0}
+              aria-label="Previous phase"
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-line/50 bg-white text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper transition-colors"
+            >
+              <ChevronLeft size={14} />
+            </button>
+            <button
+              type="button"
+              onClick={() => goPhase(activePhase + 1)}
+              disabled={activePhase === total - 1}
+              aria-label="Next phase"
+              className="w-8 h-8 flex items-center justify-center rounded-lg border border-line/50 bg-white text-ink disabled:opacity-30 disabled:cursor-not-allowed hover:bg-paper transition-colors"
+            >
+              <ChevronRight size={14} />
+            </button>
+          </div>
+        </div>
+
+        <PhasePanel key={activePhase} phase={phase} />
+
+        <p className="text-[10px] text-muted/70 text-center mt-4 sm:hidden">
+          Swipe to change phase
+        </p>
       </div>
 
-      {/* Swipe hint — mobile only */}
-      <p className="text-[9px] text-muted/50 text-center sm:hidden">
-        Swipe left/right to switch phases · {activePhase + 1} of {payload.phases.length}
-      </p>
+      {payload.products.length > 0 ? (
+        <div className="mx-3 sm:mx-4 mb-4 pt-4 border-t border-line/30">
+          <p className="text-[10px] font-bold text-moss uppercase tracking-[0.1em] mb-3">
+            Recommended treatments & products
+          </p>
+          <ProductRecommendation
+            payload={{
+              kind: "product-recommendations",
+              intro:
+                payload.productsIntro ??
+                "Treatments and products that support your recovery protocol.",
+              products: payload.products,
+              wellnessPath: "health-check",
+            }}
+            onExplainProduct={onExplainProduct}
+          />
+        </div>
+      ) : null}
 
-      {/* Closing message */}
-      <div className="rounded-xl bg-gradient-to-br from-moss to-moss-2 px-4 py-3 flex items-start gap-3">
-        <span className="text-[14px] mt-0.5">⭐</span>
-        <p className="text-[11px] text-cream/80 leading-[1.6]">
-          {payload.closingMessage}
-        </p>
+      {/* Closing insight */}
+      <div className="mx-3 sm:mx-4 mb-4 sm:mb-5 rounded-xl bg-ink text-cream px-4 py-4 flex gap-3">
+        <span className="w-9 h-9 rounded-lg bg-butter/20 flex items-center justify-center shrink-0">
+          <Sparkle size={16} className="text-butter" />
+        </span>
+        <div>
+          <p className="text-[9px] font-bold uppercase tracking-[0.12em] text-butter mb-1.5">
+            VitalNow AI insight
+          </p>
+          <p className="text-[12px] text-cream/85 leading-[1.65]">{payload.closingMessage}</p>
+        </div>
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ const columns = [
       "Regen & Functional Care",
     ],
   },
-  { t: "Platform", l: ["How It Works", "Vital AI", "For Providers", "Loyalty Rewards"] },
+  { t: "Platform", l: ["How It Works", "VitalNow AI", "For Providers", "Loyalty Rewards"] },
   { t: "Company", l: ["About", "Our Mission", "Careers", "Press", "Contact"] },
   { t: "Support", l: ["FAQ", "Dispute Resolution", "Privacy", "Terms of Service"] },
 ];

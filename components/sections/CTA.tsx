@@ -93,7 +93,7 @@ export function CTA() {
                 Create your <span className="ff text-moss">account</span>
               </div>
               <div className="text-[12px] lg:text-[13px] text-ink-2 leading-[1.5] max-w-[380px]">
-                Save providers, track bookings, and unlock Vital AI to read your labs. No credit card required.
+                Save providers, track bookings, and unlock VitalNow AI to read your labs. No credit card required.
               </div>
             </div>
             <div className="w-11 h-11 lg:w-14 lg:h-14 rounded-full bg-sage text-moss flex items-center justify-center border border-line-2 flex-shrink-0 relative z-[1]">

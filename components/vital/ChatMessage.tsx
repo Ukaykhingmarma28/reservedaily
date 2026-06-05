@@ -4,35 +4,22 @@ import { UploadPreview } from "./UploadPreview";
 import { AnalysisCard } from "./AnalysisCard";
 import { WellnessPathSelector } from "./WellnessPathSelector";
 import { ProductRecommendation } from "./ProductRecommendation";
-import { BookingForm } from "./BookingForm";
-import { BookingConfirmation, PaymentConfirmation } from "./BookingConfirmation";
-import { PaymentSummary } from "./PaymentSummary";
 import { RecoveryPlanCard } from "./RecoveryPlanCard";
 
 export function ChatMessage({
   message,
   onSelectWellnessPath,
   onBuildPlan,
-  onSelectProduct,
   onExplainProduct,
-  onSelectBookingSlot,
-  onConfirmPayment,
-  onBookFromPlan,
 }: {
   message: ChatMessageType;
   onSelectWellnessPath: (pathId: WellnessPathId) => void;
   onBuildPlan: () => void;
-  onSelectProduct: (rec: RecommendedProduct) => void;
   onExplainProduct: (rec: RecommendedProduct) => void;
-  onSelectBookingSlot: (slotId: string) => void;
-  onConfirmPayment: () => void;
-  onBookFromPlan?: (productId: string) => void;
 }) {
   const isUser = message.role === "user";
   const isRich = [
     "analysis", "wellness-paths", "recovery-plan", "product-recommendations",
-    "booking-form", "booking-confirmation",
-    "payment-summary", "payment-confirmation",
   ].includes(message.type);
 
   return (
@@ -41,7 +28,6 @@ export function ChatMessage({
         isUser ? "flex-row-reverse" : "flex-row"
       }`}
     >
-      {/* Avatar — hidden on mobile for rich cards to give more width */}
       <div
         className={`w-[30px] h-[30px] rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
           isRich && !isUser ? "hidden sm:flex" : ""
@@ -58,7 +44,6 @@ export function ChatMessage({
         )}
       </div>
 
-      {/* Bubble — full width on mobile for rich cards */}
       <div className={`min-w-0 ${isRich ? "w-full sm:max-w-[calc(100%-44px)]" : "max-w-[78%]"}`}>
         <div
           className={`${isRich ? "p-3 sm:p-4" : "px-4 py-2.5"} ${
@@ -73,11 +58,7 @@ export function ChatMessage({
             message={message}
             onSelectWellnessPath={onSelectWellnessPath}
             onBuildPlan={onBuildPlan}
-            onSelectProduct={onSelectProduct}
             onExplainProduct={onExplainProduct}
-            onSelectBookingSlot={onSelectBookingSlot}
-            onConfirmPayment={onConfirmPayment}
-            onBookFromPlan={onBookFromPlan}
           />
         </div>
 
@@ -93,20 +74,12 @@ function MessageContent({
   message,
   onSelectWellnessPath,
   onBuildPlan,
-  onSelectProduct,
   onExplainProduct,
-  onSelectBookingSlot,
-  onConfirmPayment,
-  onBookFromPlan,
 }: {
   message: ChatMessageType;
   onSelectWellnessPath: (pathId: WellnessPathId) => void;
   onBuildPlan: () => void;
-  onSelectProduct: (rec: RecommendedProduct) => void;
   onExplainProduct: (rec: RecommendedProduct) => void;
-  onSelectBookingSlot: (slotId: string) => void;
-  onConfirmPayment: () => void;
-  onBookFromPlan?: (productId: string) => void;
 }) {
   const { payload } = message;
 
@@ -124,22 +97,15 @@ function MessageContent({
       return <WellnessPathSelector payload={payload} onSelect={onSelectWellnessPath} onBuildPlan={onBuildPlan} />;
 
     case "recovery-plan":
-      return <RecoveryPlanCard payload={payload as RecoveryPlanPayload} onBook={onBookFromPlan} />;
+      return (
+        <RecoveryPlanCard
+          payload={payload as RecoveryPlanPayload}
+          onExplainProduct={onExplainProduct}
+        />
+      );
 
     case "product-recommendations":
-      return <ProductRecommendation payload={payload} onSelectProduct={onSelectProduct} onExplainProduct={onExplainProduct} />;
-
-    case "booking-form":
-      return <BookingForm payload={payload} onSelectSlot={onSelectBookingSlot} />;
-
-    case "booking-confirmation":
-      return <BookingConfirmation payload={payload} />;
-
-    case "payment-summary":
-      return <PaymentSummary payload={payload} onConfirmPayment={onConfirmPayment} />;
-
-    case "payment-confirmation":
-      return <PaymentConfirmation payload={payload} />;
+      return <ProductRecommendation payload={payload} onExplainProduct={onExplainProduct} />;
 
     case "typing":
       return null;

@@ -23,7 +23,7 @@ const slides: Slide[] = [
   {
     eyebrow: "Vol. 02 · Intelligence",
     title: ["Wellness, read from", "your blood", "."],
-    sub: "Upload your blood panel. Vital AI interprets your biomarkers and matches you with the exact providers your biology needs.",
+    sub: "Upload your blood panel. VitalNow AI interprets your biomarkers and matches you with the exact providers your biology needs.",
     cta: "TRY VITAL AI",
     img: "https://images.unsplash.com/photo-1579154204601-01588f351e67?w=1800&q=80&auto=format&fit=crop",
   },

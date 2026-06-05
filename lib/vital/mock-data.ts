@@ -2,7 +2,6 @@ import type {
   BiomarkerResult,
   WellnessPath,
   RecommendedProduct,
-  BookingSlot,
   KeyTakeaway,
   RecoveryPlanPhase,
 } from "./types";
@@ -314,143 +313,6 @@ export const PRODUCTS_BY_PATH: Record<string, RecommendedProduct[]> = Object.fro
   ]),
 );
 
-export const MOCK_BOOKING_SLOTS: BookingSlot[] = [
-  {
-    id: "s1",
-    date: "2026-05-02",
-    time: "10:00 AM",
-    practitioner: "Dr. Sarah Lim",
-    specialty: "IV Therapy Specialist",
-    available: true,
-  },
-  {
-    id: "s2",
-    date: "2026-05-02",
-    time: "2:30 PM",
-    practitioner: "Dr. Ahmad Razak",
-    specialty: "Functional Medicine",
-    available: true,
-  },
-  {
-    id: "s3",
-    date: "2026-05-03",
-    time: "9:00 AM",
-    practitioner: "Dr. Sarah Lim",
-    specialty: "IV Therapy Specialist",
-    available: true,
-  },
-  {
-    id: "s4",
-    date: "2026-05-03",
-    time: "11:30 AM",
-    practitioner: "Dr. Mei Chen",
-    specialty: "Nutritional Medicine",
-    available: true,
-  },
-  {
-    id: "s5",
-    date: "2026-05-05",
-    time: "10:00 AM",
-    practitioner: "Dr. Ahmad Razak",
-    specialty: "Functional Medicine",
-    available: false,
-  },
-  {
-    id: "s6",
-    date: "2026-05-05",
-    time: "3:00 PM",
-    practitioner: "Dr. Mei Chen",
-    specialty: "Nutritional Medicine",
-    available: true,
-  },
-];
-
-export const MOCK_NURSE_SLOTS: BookingSlot[] = [
-  {
-    id: "ns1",
-    date: "2026-05-02",
-    time: "9:00 AM",
-    practitioner: "Nurse Aisha Rahman",
-    specialty: "IV Therapy & Wellness",
-    available: true,
-  },
-  {
-    id: "ns2",
-    date: "2026-05-02",
-    time: "1:00 PM",
-    practitioner: "Nurse Priya Nair",
-    specialty: "Home Care & Injections",
-    available: true,
-  },
-  {
-    id: "ns3",
-    date: "2026-05-03",
-    time: "10:00 AM",
-    practitioner: "Nurse Aisha Rahman",
-    specialty: "IV Therapy & Wellness",
-    available: true,
-  },
-  {
-    id: "ns4",
-    date: "2026-05-03",
-    time: "3:00 PM",
-    practitioner: "Nurse Priya Nair",
-    specialty: "Home Care & Injections",
-    available: false,
-  },
-  {
-    id: "ns5",
-    date: "2026-05-05",
-    time: "11:00 AM",
-    practitioner: "Nurse Aisha Rahman",
-    specialty: "IV Therapy & Wellness",
-    available: true,
-  },
-];
-
-export const MOCK_DOCTOR_SLOTS: BookingSlot[] = [
-  {
-    id: "ds1",
-    date: "2026-05-02",
-    time: "10:00 AM",
-    practitioner: "Dr. Sarah Lim",
-    specialty: "Functional Medicine",
-    available: true,
-  },
-  {
-    id: "ds2",
-    date: "2026-05-02",
-    time: "3:00 PM",
-    practitioner: "Dr. Ahmad Razak",
-    specialty: "General Practitioner",
-    available: true,
-  },
-  {
-    id: "ds3",
-    date: "2026-05-03",
-    time: "9:30 AM",
-    practitioner: "Dr. Sarah Lim",
-    specialty: "Functional Medicine",
-    available: true,
-  },
-  {
-    id: "ds4",
-    date: "2026-05-03",
-    time: "2:00 PM",
-    practitioner: "Dr. Mei Chen",
-    specialty: "Nutritional Medicine",
-    available: true,
-  },
-  {
-    id: "ds5",
-    date: "2026-05-05",
-    time: "10:00 AM",
-    practitioner: "Dr. Ahmad Razak",
-    specialty: "General Practitioner",
-    available: false,
-  },
-];
-
 export const QA_RESPONSES: Record<string, string> = {
   price:
     "Our treatments range from RM 45 for supplements to RM 850 for premium IV therapy. Pricing depends on the treatment type and clinic. Would you like me to recommend something within your budget?",
@@ -459,7 +321,7 @@ export const QA_RESPONSES: Record<string, string> = {
   clinic:
     "We work with certified wellness clinics including Vitality Wellness KL, The Wellness Clinic PJ, GlowMed Clinic, and Reviv Malaysia. All practitioners are licensed medical professionals.",
   appointment:
-    "You can book appointments directly through Vital AI after selecting a treatment. I'll show you available time slots with our partner practitioners.",
+    "ReserveDaily lists partner clinics and practitioners on each treatment page. Browse recommendations here and open any product to see provider details and how to get started.",
   vitamin:
     "Vitamin deficiencies are very common and treatable. The most effective approach depends on the specific vitamin — IV therapy provides faster absorption than oral supplements. Upload your blood report and I can give you specific recommendations.",
   iv:
@@ -467,7 +329,7 @@ export const QA_RESPONSES: Record<string, string> = {
   supplement:
     "ReserveDaily offers both clinical treatments (IV drips, injections) and take-home supplements. Clinical treatments provide faster results, while supplements support long-term maintenance. I can help you find the right combination.",
   default:
-    "That's a great question. I can help with information about our wellness treatments, booking appointments, understanding blood test results, and general health guidance. Would you like to upload a blood report for a personalised analysis, or ask about a specific treatment?",
+    "That's a great question. I can help with information about our wellness treatments, understanding blood test results, and general health guidance. Would you like to upload a blood report for a personalised analysis, or ask about a specific treatment?",
 };
 
 export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
@@ -676,7 +538,7 @@ export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
       "Mediterranean diet as permanent lifestyle — not a temporary intervention",
       "Maintain 150+ min/week moderate exercise as lifelong habit",
       "Annual advanced cardiovascular screening (consider CAC score)",
-      "Quarterly Vital AI reassessment to track biomarker trends",
+      "Quarterly VitalNow AI reassessment to track biomarker trends",
       "Continue hydration and low-purine diet for uric acid maintenance",
     ],
     monitoring: [
@@ -689,3 +551,42 @@ export const MOCK_RECOVERY_PHASES: RecoveryPlanPhase[] = [
 
 export const MOCK_RECOVERY_CLOSING =
   "Your blood work reveals a clear and actionable path forward. With excellent kidney function (eGFR 101), healthy liver enzymes, and normal glucose levels, your body has an outstanding foundation for responding to targeted lipid therapy. Most patients with your profile see meaningful LDL reduction within the first 8 weeks. Your future cardiovascular health starts today.";
+
+export const MOCK_RECOVERY_OVERVIEW = {
+  title: "Cardiovascular lipid recovery protocol",
+  description:
+    "A structured programme built from your lipid panel and inflammatory markers. It combines evidence-based nutrition, daily nutraceuticals, periodic clinical IV support, and lab monitoring — designed to lower atherogenic cholesterol, reduce vascular oxidative stress, and improve long-term heart health without jumping straight to medication.",
+  duration: "24 weeks (6 months)",
+  phaseCount: 3,
+  focusLabel: "Cardiovascular & metabolic health",
+  focusAreas: [
+    "LDL & non-HDL cholesterol",
+    "Total cholesterol & TC/HDL ratio",
+    "Vascular inflammation & oxidative stress",
+    "Uric acid & metabolic balance",
+    "Sustained lifestyle habits & monitoring",
+  ],
+};
+
+/** Catalogue treatments linked from recovery plan phases (shown after planning overview). */
+export function getRecoveryPlanProducts(phases: RecoveryPlanPhase[]): RecommendedProduct[] {
+  const seen = new Set<string>();
+  const products: RecommendedProduct[] = [];
+
+  for (const phase of phases) {
+    for (const treatment of phase.treatments) {
+      if (!treatment.productId || seen.has(treatment.productId)) continue;
+      seen.add(treatment.productId);
+      const product = getProductById(treatment.productId);
+      if (!product) continue;
+      products.push({
+        product,
+        reason:
+          treatment.bullets[0] ??
+          `Supports ${phase.title.toLowerCase()} (${phase.weekRange}).`,
+      });
+    }
+  }
+
+  return products;
+}

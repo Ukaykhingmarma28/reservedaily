@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import type { ProductRecsPayload, RecommendedProduct } from "@/lib/vital/types";
 import type { Product } from "@/lib/data";
 import { Star, ArrowRight, ChevronRight, Sparkle } from "@/components/ui/icons";
@@ -16,12 +17,10 @@ function typeLabel(p: Product): string {
 
 function VitalProductCard({
   rec,
-  onSelect,
   onExplain,
   index,
 }: {
   rec: RecommendedProduct;
-  onSelect: () => void;
   onExplain: () => void;
   index: number;
 }) {
@@ -125,7 +124,7 @@ function VitalProductCard({
                 className="flex items-center gap-1 text-[9px] text-moss font-medium cursor-pointer"
               >
                 <Sparkle size={8} className="text-moss" />
-                Ask Vital AI
+                Ask VitalNow AI
               </button>
             </div>
           </div>
@@ -147,16 +146,13 @@ function VitalProductCard({
                 )}
               </div>
             </div>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect();
-              }}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-[9px] lg:text-[10px] font-semibold tracking-[0.06em] uppercase bg-moss text-cream rounded-lg transition-colors cursor-pointer whitespace-nowrap"
+            <Link
+              href={`/products/${p.id}`}
+              className="flex items-center gap-1 px-2.5 py-1.5 text-[9px] lg:text-[10px] font-semibold tracking-[0.06em] uppercase bg-moss text-cream rounded-lg transition-colors no-underline whitespace-nowrap"
             >
-              {isBookable ? "Reserve" : "Add"}
+              View
               <ArrowRight size={10} />
-            </button>
+            </Link>
           </div>
         </div>
       </article>
@@ -166,11 +162,9 @@ function VitalProductCard({
 
 export function ProductRecommendation({
   payload,
-  onSelectProduct,
   onExplainProduct,
 }: {
   payload: ProductRecsPayload;
-  onSelectProduct: (rec: RecommendedProduct) => void;
   onExplainProduct: (rec: RecommendedProduct) => void;
 }) {
   const railRef = useRef<HTMLDivElement>(null);
@@ -205,7 +199,6 @@ export function ProductRecommendation({
             <VitalProductCard
               key={rec.product.id}
               rec={rec}
-              onSelect={() => onSelectProduct(rec)}
               onExplain={() => onExplainProduct(rec)}
               index={i}
             />

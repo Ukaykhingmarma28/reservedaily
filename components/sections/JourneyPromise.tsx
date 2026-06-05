@@ -9,7 +9,7 @@ const pillars = [
   },
   {
     t: "Integrated journey",
-    d: "Medical, recovery, and daily habits in one account, Vital AI weaves your labs into every booking.",
+    d: "Medical, recovery, and daily habits in one account, VitalNow AI weaves your labs into every booking.",
   },
 ];
 

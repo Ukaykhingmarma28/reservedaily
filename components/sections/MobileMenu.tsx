@@ -234,7 +234,7 @@ export function MobileMenu({ open, onClose }: Props) {
                   className="inline-flex items-center justify-center gap-2 no-underline bg-ink text-cream px-4 py-3 text-[15px] font-semibold tracking-[0.04em] rounded-[2px]"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-butter" />
-                  Telehealth Vital AI
+                  Telehealth VitalNow AI
                 </a>
                 <MobileLoginButton />
               </div>
