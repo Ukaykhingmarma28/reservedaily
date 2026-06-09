@@ -21,7 +21,7 @@ export function MessageList({
   const bottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const userScrolledUp = useRef(false);
-  const [autoScroll, setAutoScroll] = useState(true);
+  const [autoScroll, setAutoScroll] = useState(false);
   const [showJump, setShowJump] = useState(false);
 
   function handleScroll() {
