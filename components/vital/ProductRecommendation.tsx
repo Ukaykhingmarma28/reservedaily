@@ -27,11 +27,8 @@ function VitalProductCard({
   const [expanded, setExpanded] = useState(false);
   const p = rec.product;
   const isBookable = p.type === "bookable";
-  const price = p.variations?.[0]?.price ?? p.price ?? "";
-  const was = p.variations?.[0]?.was ?? p.was;
   const meta = isBookable ? p.duration : p.size;
   const label = typeLabel(p);
-  const hasMultipleVariations = (p.variations?.length ?? 0) > 1;
 
   return (
     <div
@@ -39,7 +36,6 @@ function VitalProductCard({
       style={{ animationDelay: `${index * 120}ms` }}
     >
       <article className="flex flex-col bg-white border border-line-2 rounded-xl overflow-hidden shadow-[0_1px_4px_rgba(0,0,0,0.05)] flex-1">
-        {/* Header */}
         <div className="h-20 lg:h-24 relative overflow-hidden">
           {p.image ? (
             <Image src={p.image} alt={p.name} fill className="object-cover" sizes="260px" />
@@ -51,7 +47,6 @@ function VitalProductCard({
             </>
           )}
 
-          {/* Type badge */}
           <div className="absolute top-2.5 left-2.5">
             <span
               className="inline-flex items-center gap-1 text-[9px] lg:text-[10px] font-semibold tracking-[0.08em] uppercase px-2 py-[3px] rounded-full"
@@ -69,7 +64,6 @@ function VitalProductCard({
             </span>
           </div>
 
-          {/* Meta badge */}
           {meta && (
             <div className="absolute bottom-2.5 left-2.5">
               <span className="text-[9px] lg:text-[10px] font-medium text-ink/70 bg-white/80 backdrop-blur-sm px-2 py-[2px] rounded-full">
@@ -79,7 +73,6 @@ function VitalProductCard({
           )}
         </div>
 
-        {/* Content */}
         <div className="flex flex-col p-3 lg:p-3.5 flex-1">
           <div className="text-[9px] lg:text-[10px] text-muted truncate mb-0.5">
             {p.provider} · {p.location}
@@ -99,7 +92,6 @@ function VitalProductCard({
             <span className="text-muted">({p.reviews})</span>
           </div>
 
-          {/* AI match reason — inside the card */}
           <div className="rounded-lg bg-moss/[0.04] border border-moss/10 px-2.5 py-2 mb-3">
             <div className="flex items-start gap-1.5">
               <Sparkle size={11} className="text-moss shrink-0 mt-px" />
@@ -129,31 +121,13 @@ function VitalProductCard({
             </div>
           </div>
 
-          {/* Price + CTA */}
-          <div className="mt-auto flex items-end justify-between gap-2 pt-2.5 border-t border-line-2">
-            <div>
-              <div className="text-[8px] lg:text-[9px] text-muted tracking-[0.08em] uppercase">
-                {hasMultipleVariations ? "From" : "Price"}
-              </div>
-              <div className="flex items-baseline gap-1">
-                <span className="ff text-[15px] lg:text-[17px] font-semibold text-ink tracking-[-0.01em]">
-                  {price}
-                </span>
-                {was && (
-                  <span className="text-[9px] lg:text-[10px] text-muted line-through">
-                    {was}
-                  </span>
-                )}
-              </div>
-            </div>
-            <Link
-              href={`/products/${p.id}`}
-              className="flex items-center gap-1 px-2.5 py-1.5 text-[9px] lg:text-[10px] font-semibold tracking-[0.06em] uppercase bg-moss text-cream rounded-lg transition-colors no-underline whitespace-nowrap"
-            >
-              View
-              <ArrowRight size={10} />
-            </Link>
-          </div>
+          <Link
+            href={`/products/${p.id}`}
+            className="mt-auto flex items-center justify-center gap-1.5 w-full py-2 text-[10px] lg:text-[11px] font-semibold tracking-[0.04em] bg-moss text-cream rounded-lg transition-colors no-underline hover:bg-moss-2"
+          >
+            View Details
+            <ArrowRight size={11} />
+          </Link>
         </div>
       </article>
     </div>
