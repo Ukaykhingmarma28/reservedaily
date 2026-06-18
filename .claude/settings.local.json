@@ -2,17 +2,28 @@
   "permissions": {
     "allow": [
       "WebFetch(domain:stg-reservedaily.ukaykhing.com)",
-      "Bash(node -e \"const d=require\\('./data/products.json'\\); console.log\\('Total:', d.products.length\\); const sections={}; d.products.forEach\\(p => { const s = Array.isArray\\(p.section\\) ? p.section : [p.section]; s.forEach\\(sec => { sections[sec] = \\(sections[sec]||0\\)+1; }\\); }\\); console.log\\('By section:', sections\\); const cats={}; d.products.forEach\\(p => { if\\(p.category\\) cats[p.category]=\\(cats[p.category]||0\\)+1; }\\); console.log\\('By category:', cats\\); const types={}; d.products.forEach\\(p => { types[p.type]=\\(types[p.type]||0\\)+1; }\\); console.log\\('By type:', types\\); const arts={}; d.products.forEach\\(p => { arts[p.art]=\\(arts[p.art]||0\\)+1; }\\); console.log\\('By art:', arts\\);\")",
-      "Bash(node -e \"const d=require\\('./data/products.json'\\); const ids = d.products.map\\(p=>p.id\\); const dupes = ids.filter\\(\\(id,i\\) => ids.indexOf\\(id\\) !== i\\); console.log\\('Duplicate IDs:', dupes.length > 0 ? dupes : 'none'\\); console.log\\('Colors used:', [...new Set\\(d.products.map\\(p=>p.color\\)\\)]\\); console.log\\('Tags used:', [...new Set\\(d.products.map\\(p=>p.tag\\)\\)]\\); console.log\\('Providers used:', [...new Set\\(d.products.map\\(p=>p.provider\\)\\)]\\); console.log\\('Locations used:', [...new Set\\(d.products.map\\(p=>p.location\\)\\)]\\);\")",
-      "Bash(node -e ' *)",
       "mcp__plugin_claude-mem_mcp-search__smart_outline",
-      "Bash(npm run *)",
       "mcp__plugin_claude-mem_mcp-search__smart_unfold",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); prods=d['products']; print\\(f'Total: {len\\(prods\\)}'\\); print\\(f'With image: {sum\\(1 for p in prods if p.get\\(\\\\\"image\\\\\"\\)\\)}'\\); print\\(f'Types: {set\\(p[\\\\\"type\\\\\"] for p in prods\\)}'\\); print\\(f'Arts: {set\\(p[\\\\\"art\\\\\"] for p in prods\\)}'\\); cats={p.get\\('category','none'\\) for p in prods}; print\\(f'Categories: {cats}'\\); print\\(f'With variations: {sum\\(1 for p in prods if p.get\\(\\\\\"variations\\\\\"\\)\\)}'\\); print\\(f'Sample IDs:', [p['id'] for p in prods[:5]]\\)\")",
-      "Bash(curl *)"
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(npx tsc *)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(node -e *)",
+      "Bash(python3 -c *)",
+      "Bash(sudo *)",
+      "Bash(chmod 777 *)",
+      "Bash(ssh *)",
+      "Bash(* > /dev/*)"
     ]
   },
-  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "shadcn"
   ]

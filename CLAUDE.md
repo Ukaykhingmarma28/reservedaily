@@ -46,7 +46,7 @@ No test runner is configured. No `.env` file is needed — the app is entirely c
 
 ### Data
 
-- `data/products.json` — single source of truth for all product data (~196 products). Each product has an `id` (kebab-case slug) and `section` field indicating which UI section(s) it belongs to: `"featured-treatments"`, `"limited-offers"`, `"new-arrivals"`, `"featured-apothecary"`, `"vital"`.
+- `data/products.json` — single source of truth for all product data (196 products). The file is an object `{ "products": [...] }` (not a bare array) — `lib/products.ts` reads `productsJson.products`. Each product has an `id` (kebab-case slug) and a `section` field indicating which UI section(s) it belongs to. Sections currently assigned in the data: `"featured-treatments"`, `"limited-offers"`, `"new-arrivals"`, `"featured-apothecary"`. (VitalNow AI does not use `section`; it references products by `id` via `lib/vital/mock-data.ts`.)
 - `lib/products.ts` — typed accessor layer over the JSON. Exports `getAllProducts()`, `getProductById(id)`, `getProductsBySection(section)`, `getProductsByCategory(category)`. All components import from here, never from the JSON directly.
 - `lib/data.ts` — types (`Product`, `Category`, `Review`, `JournalPost`, `Variation`) and constants (`CATEGORIES`, `CATEGORY_STRIP_LINKS`). The `Product` type includes `id: string` and `section?: string | string[]`.
 - `lib/vital/` — VitalNow AI feature data layer:
@@ -86,3 +86,7 @@ The chat follows a linear phase machine: `greeting` → `upload` → `parsing` �
 ### Known gotcha
 
 An ancestor directory may contain a stray `package.json` and `node_modules/` that can intercept Node module resolution. The `turbopack.root` setting in `next.config.ts` works around this for the dev server. If you encounter resolution errors for installed packages, this ancestor `package.json` is likely the cause.
+
+### Knowledge graph (graphify)
+
+A graphify knowledge graph lives in `graphify-out/` (also referenced by `.cursor/rules/graphify.mdc`). For codebase/architecture questions, prefer `graphify query "<question>"` (returns a scoped subgraph) over grepping raw files; use `graphify explain "<concept>"` and `graphify path "<A>" "<B>"` for focused concepts and relationships, and read `graphify-out/GRAPH_REPORT.md` only for broad architecture review. After modifying code, run `graphify update .` to keep the graph current (AST-only, no API cost).
