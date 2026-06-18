@@ -5,6 +5,7 @@ import { AnalysisCard } from "./AnalysisCard";
 import { WellnessPathSelector } from "./WellnessPathSelector";
 import { ProductRecommendation } from "./ProductRecommendation";
 import { RecoveryPlanCard } from "./RecoveryPlanCard";
+import { BookingFlow } from "./BookingFlow";
 
 export function ChatMessage({
   message,
@@ -19,7 +20,7 @@ export function ChatMessage({
 }) {
   const isUser = message.role === "user";
   const isRich = [
-    "analysis", "wellness-paths", "recovery-plan", "product-recommendations",
+    "analysis", "wellness-paths", "recovery-plan", "product-recommendations", "booking",
   ].includes(message.type);
 
   return (
@@ -106,6 +107,9 @@ function MessageContent({
 
     case "product-recommendations":
       return <ProductRecommendation payload={payload} onExplainProduct={onExplainProduct} />;
+
+    case "booking":
+      return <BookingFlow service={payload.service} />;
 
     case "typing":
       return null;

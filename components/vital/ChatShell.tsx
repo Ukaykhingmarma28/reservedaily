@@ -9,6 +9,7 @@ import type {
   WellnessPathId,
   UserAction,
   RecommendedProduct,
+  BookingService,
 } from "@/lib/vital/types";
 import { generateResponse } from "@/lib/vital/mock-engine";
 import Image from "next/image";
@@ -107,6 +108,22 @@ export function ChatShell() {
   function handleBrowseTreatments() {
     dispatch({ type: "SET_PHASE", phase: "wellness-select" });
     sendAction({ type: "browse-treatments" }, "greeting");
+  }
+
+  function handleStartBooking(service: BookingService) {
+    dispatch({ type: "SET_PHASE", phase: "booking" });
+    const msg: ChatMessage = {
+      id: msgId(),
+      role: "user",
+      type: "text",
+      timestamp: new Date(),
+      payload: {
+        kind: "text",
+        text: service === "doctor" ? "Book an on-demand doctor" : "Book an on-demand nurse",
+      },
+    };
+    dispatch({ type: "ADD_MESSAGE", message: msg });
+    sendAction({ type: "start-booking", service }, "greeting");
   }
 
   function handleGreetingSend(text: string) {
@@ -289,6 +306,7 @@ export function ChatShell() {
             onStartUpload={handleStartUpload}
             onStartChat={handleStartChat}
             onBrowseTreatments={handleBrowseTreatments}
+            onStartBooking={handleStartBooking}
             onSend={handleGreetingSend}
           />
         ) : (

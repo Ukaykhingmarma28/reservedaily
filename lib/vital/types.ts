@@ -9,6 +9,7 @@ export type MessageType =
   | "wellness-paths"
   | "recovery-plan"
   | "product-recommendations"
+  | "booking"
   | "typing";
 
 export type ConversationPhase =
@@ -18,6 +19,7 @@ export type ConversationPhase =
   | "analysis"
   | "wellness-select"
   | "recommendations"
+  | "booking"
   | "free-chat";
 
 export interface ChatMessage {
@@ -35,7 +37,15 @@ export type MessagePayload =
   | WellnessPathsPayload
   | RecoveryPlanPayload
   | ProductRecsPayload
+  | BookingPayload
   | TypingPayload;
+
+export type BookingService = "doctor" | "nurse";
+
+export interface BookingPayload {
+  kind: "booking";
+  service: BookingService;
+}
 
 export interface TextPayload {
   kind: "text";
@@ -184,7 +194,8 @@ export type UserAction =
   | { type: "start-upload" }
   | { type: "start-chat" }
   | { type: "browse-treatments" }
-  | { type: "build-recovery-plan" };
+  | { type: "build-recovery-plan" }
+  | { type: "start-booking"; service: BookingService };
 
 export type ChatAction =
   | { type: "ADD_MESSAGE"; message: ChatMessage }

@@ -3,6 +3,7 @@
 import { useState, useRef, type KeyboardEvent } from "react";
 import { Upload, Send, Paperclip, User, Heart, Sparkle } from "@/components/ui/icons";
 import Image from "next/image";
+import type { BookingService } from "@/lib/vital/types";
 import { GREETING_TEXT } from "@/lib/vital/mock-data";
 
 const SUGGESTED_PROMPTS = [
@@ -15,11 +16,13 @@ export function GreetingView({
   onStartUpload,
   onStartChat,
   onBrowseTreatments,
+  onStartBooking,
   onSend,
 }: {
   onStartUpload: () => void;
   onStartChat: () => void;
   onBrowseTreatments: () => void;
+  onStartBooking: (service: BookingService) => void;
   onSend: (text: string) => void;
 }) {
   const [text, setText] = useState("");
@@ -90,14 +93,14 @@ export function GreetingView({
               bg="bg-moss-2"
               label="Book On-Demand Doctor"
               desc="Doctor consultations at home or hotel"
-              onClick={() => onSend("I'd like to book an on-demand doctor consultation")}
+              onClick={() => onStartBooking("doctor")}
             />
             <QuickAction
               icon={<Heart size={18} className="text-white" />}
               bg="bg-butter"
               label="Book On-Demand Nurse"
               desc="Certified nurse visits at your location"
-              onClick={() => onSend("I'd like to book an on-demand nurse visit")}
+              onClick={() => onStartBooking("nurse")}
             />
           </div>
         </div>

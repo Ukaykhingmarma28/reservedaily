@@ -22,6 +22,7 @@ import {
   getRecoveryPlanProducts,
   QA_RESPONSES,
 } from "./mock-data";
+import { SERVICE_CONFIG } from "./booking-data";
 
 let counter = 0;
 function msgId() {
@@ -78,6 +79,35 @@ export async function generateResponse(
   action: UserAction,
   _state: ChatState,
 ): Promise<{ messages: ChatMessage[]; nextPhase: ConversationPhase }> {
+  // On-Demand booking can be launched from any phase (quick actions / free chat).
+  if (action.type === "start-booking") {
+    const cfg = SERVICE_CONFIG[action.service];
+    await delay(700);
+    const bookingMsg: ChatMessage = {
+      id: msgId(),
+      role: "assistant",
+      type: "booking",
+      timestamp: new Date(),
+      payload: { kind: "booking", service: action.service },
+    };
+    return {
+      messages: [assistantText(cfg.intro), bookingMsg],
+      nextPhase: "booking",
+    };
+  }
+
+  if (phase === "booking") {
+    await delay(900);
+    return {
+      messages: [
+        assistantText(
+          "I'll keep your booking right here — carry on with the steps in the card above. You can ask me anything mid-flow and I'll answer without losing your progress.",
+        ),
+      ],
+      nextPhase: "booking",
+    };
+  }
+
   switch (phase) {
     case "greeting": {
       if (action.type === "start-upload") {
