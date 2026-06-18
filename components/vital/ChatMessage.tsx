@@ -1,5 +1,6 @@
 import type { ChatMessage as ChatMessageType, WellnessPathId, RecommendedProduct, RecoveryPlanPayload } from "@/lib/vital/types";
-import { Sparkle, User } from "@/components/ui/icons";
+import Image from "next/image";
+import { User } from "@/components/ui/icons";
 import { UploadPreview } from "./UploadPreview";
 import { AnalysisCard } from "./AnalysisCard";
 import { WellnessPathSelector } from "./WellnessPathSelector";
@@ -30,18 +31,14 @@ export function ChatMessage({
       }`}
     >
       <div
-        className={`w-[30px] h-[30px] rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+        className={`w-[30px] h-[30px] rounded-full flex items-center justify-center shrink-0 mt-0.5 overflow-hidden ${
           isRich && !isUser ? "hidden sm:flex" : ""
-        } ${
-          isUser
-            ? "bg-ink shadow-[0_2px_6px_rgba(20,26,58,0.18)]"
-            : "bg-gradient-to-br from-moss to-moss-2 shadow-[0_2px_8px_rgba(26,38,89,0.22)]"
-        }`}
+        } ${isUser ? "bg-ink shadow-[0_2px_6px_rgba(20,26,58,0.18)]" : ""}`}
       >
         {isUser ? (
           <User size={13} className="text-cream" />
         ) : (
-          <Sparkle size={13} className="text-cream" />
+          <Image src="/vital-logo.svg" alt="VitalNow AI" width={30} height={30} className="w-full h-full object-contain" />
         )}
       </div>
 

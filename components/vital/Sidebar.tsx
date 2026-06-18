@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { Plus, MessageSquare, Home, Settings, Sparkle, Close } from "@/components/ui/icons";
+import Image from "next/image";
+import { Plus, MessageSquare, Settings, Close } from "@/components/ui/icons";
 
 const MOCK_HISTORY = [
   { id: "today-1", title: "Blood Report Analysis", group: "Today" },
@@ -55,9 +55,7 @@ export function Sidebar({
         {/* Header */}
         <div className="flex items-center justify-between px-4 h-14 border-b border-line/20 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-[8px] bg-gradient-to-br from-moss to-moss-2 flex items-center justify-center shadow-sm">
-              <Sparkle size={13} className="text-cream" />
-            </span>
+            <Image src="/vital-logo.svg" alt="VitalNow AI" width={28} height={28} className="w-7 h-7 object-contain" />
             <span className="ff font-semibold text-[14px] text-ink tracking-[-0.01em]">VitalNow AI</span>
           </div>
           <button
@@ -107,13 +105,6 @@ export function Sidebar({
 
         {/* Bottom navigation */}
         <div className="border-t border-line/20 px-2 py-2 space-y-0.5 shrink-0">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 px-2.5 py-2 rounded-[6px] text-[13px] text-muted hover:bg-paper hover:text-ink transition-colors no-underline"
-          >
-            <Home size={15} className="shrink-0" />
-            Reserve Daily
-          </Link>
           <button className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-[6px] text-[13px] text-muted hover:bg-paper hover:text-ink transition-colors text-left">
             <Settings size={15} className="shrink-0" />
             Settings
