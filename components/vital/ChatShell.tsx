@@ -294,10 +294,6 @@ export function ChatShell() {
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-moss" />
             </span>
           </div>
-
-          <a href="/" className="inline-flex items-center no-underline">
-            <Image src="/logo.png" alt="Reserve Daily" width={100} height={25} className="h-6 w-auto block" />
-          </a>
         </header>
 
         {/* Content */}
